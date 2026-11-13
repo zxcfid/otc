@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>OTC Auto-Guarantor</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: rgba(22, 29, 47, 0.88);
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.35);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: radial-gradient(circle at top, #172554 0%, var(--bg) 55%); color: var(--text); min-height: 100vh; padding: 16px 16px 96px; }
+
+    .glass-card {
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .brand { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .support-chip {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #60a5fa;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .profile-hero { text-align: center; padding: 20px 16px; }
+    .avatar-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 700; margin: 0 auto 10px;
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+    .balance-val { font-size: 28px; font-weight: 800; margin: 10px 0 4px; letter-spacing: -0.5px; }
+    .currency-pills { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+    .curr-pill {
+      padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: 700;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); cursor: pointer;
+    }
+    .curr-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    .stat-box { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .stat-num { font-size: 18px; font-weight: 800; color: #fff; }
+
+    .btn {
+      width: 100%; padding: 13px; border-radius: 12px; border: none;
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s;
+      display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+    }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 16px var(--accent-glow); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-danger { background: rgba(239, 68, 68, 0.18); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); }
+    .btn-outline { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
+
+    .input-group { margin-bottom: 12px; }
+    .input-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .input-control {
+      width: 100%; padding: 12px 14px; border-radius: 12px;
+      background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border);
+      color: #fff; font-size: 14px; outline: none;
+    }
+    .input-control:focus { border-color: var(--accent); }
+
+    .role-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .role-btn {
+      padding: 11px; border-radius: 12px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03); color: var(--muted); font-weight: 700; cursor: pointer;
+    }
+    .role-btn.active { background: rgba(59, 130, 246, 0.2); border-color: var(--accent); color: #fff; }
+
+    .badge { padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+    .badge.pending { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
+    .badge.funded { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .badge.completed { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .badge.cancelled { background: rgba(239, 68, 68, 0.18); color: #f87171; }
+
+    .chat-box { height: 48vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 10px; background: rgba(11, 15, 25, 0.6); border-radius: 14px; margin-bottom: 10px; }
+    .msg { max-width: 80%; padding: 10px 12px; border-radius: 14px; font-size: 13px; line-height: 1.4; }
+    .msg.me { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+    .msg.other { align-self: flex-start; background: rgba(255,255,255,0.08); color: var(--text); border-bottom-left-radius: 4px; }
+    .msg-author { font-size: 10px; opacity: 0.75; margin-bottom: 3px; font-weight: 700; }
+
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      padding: 8px 10px 18px; z-index: 100;
+    }
+    .nav-item {
+      background: none; border: none; color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; cursor: pointer;
+    }
+    .nav-item.active { color: var(--accent); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="header-bar">
+    <div class="brand" id="ui-brand">🛡 OTC Автогарант</div>
+    <a onclick="openSupport()" class="support-chip">@ssupppoortt</a>
+  </div>
+
+  <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
+  <div id="tab-profile" class="tab-pane active">
+    <div class="glass-card profile-hero">
+      <div class="avatar-circle" id="prof-avatar">U</div>
+      <div style="font-size:17px; font-weight:700;" id="prof-username">@username</div>
+      <div style="font-size:12px; color:var(--muted); margin-top:2px;">Telegram ID: <span id="prof-id">0</span></div>
+
+      <div class="balance-val" id="prof-balance">0.00 TON</div>
+      <div style="font-size:12px; color:var(--muted);" id="ui-bal-sub">Мультивалютный баланс</div>
+
+      <div class="currency-pills">
+        <button class="curr-pill" onclick="changeCurrency('TON')" id="curr-TON">TON</button>
+        <button class="curr-pill" onclick="changeCurrency('USDT')" id="curr-USDT">USDT</button>
+        <button class="curr-pill" onclick="changeCurrency('RUB')" id="curr-RUB">RUB</button>
+        <button class="curr-pill" onclick="changeCurrency('UAH')" id="curr-UAH">UAH</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label" id="ui-deals-cnt-label">Количество сделок</div>
+        <div class="stat-num" id="prof-deals-count">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label" id="ui-vol-label">Общий объем</div>
+        <div class="stat-num" id="prof-volume">0.00 TON</div>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <div style="font-size:14px; font-weight:700; margin-bottom:10px;" id="ui-dep-title">Пополнение баланса</div>
+      <div style="display:flex; gap:8px;">
+        <input type="number" id="deposit-input" class="input-control" placeholder="100" />
+        <button class="btn btn-primary" style="width:auto; padding:0 20px;" onclick="depositBalance()" id="ui-dep-btn">Пополнить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ВКЛАДКА 2: МОИ СДЕЛКИ -->
+  <div id="tab-deals" class="tab-pane">
+    <div id="deals-list"></div>
+  </div>
+
+  <!-- ВКЛАДКА 3: СОЗДАТЬ СДЕЛКУ -->
+  <div id="tab-create" class="tab-pane">
+    <div class="glass-card">
+      <div style="font-size:16px; font-weight:700; margin-bottom:12px;" id="ui-create-title">💎 Создать NFT-сделку</div>
+      <div class="role-switch">
+        <button class="role-btn active" id="role-seller" onclick="setRole('seller')">📤 Я Продавец</button>
+        <button class="role-btn" id="role-buyer" onclick="setRole('buyer')">📥 Я Покупатель</button>
+      </div>
+
+      <div class="input-group">
+        <label id="ui-partner-label">Пригласить участника (@username или Telegram ID)</label>
+        <input type="text" id="deal-partner" class="input-control" placeholder="@username / ID" />
+      </div>
+
+      <div class="input-group">
+        <label id="ui-nft-label">Название NFT / Подарка / Аккаунта</label>
+        <input type="text" id="deal-nft-name" class="input-control" placeholder="Plush Pepe #412" />
+      </div>
+
+      <div class="input-group">
+        <label id="ui-link-label">Ссылка на NFT или описание</label>
+        <input type="text" id="deal-nft-link" class="input-control" placeholder="https://t.me/nft/..." />
+      </div>
+
+      <div class="input-group">
+        <label><span id="ui-price-label">Сумма сделки</span> (<span id="create-curr-label">TON</span>)</label>
+        <input type="number" id="deal-price" class="input-control" placeholder="100" />
+      </div>
+
+      <div style="font-size:12px; color:var(--muted); margin-bottom:12px; line-height:1.4;" id="ui-escrow-warn">
+        ⚠️ Передача товара осуществляется строго через аккаунт технической поддержки <b>@ssupppoortt</b> после заморозки оплаты.
+      </div>
+
+      <button class="btn btn-primary" onclick="createDeal()" id="ui-create-btn">Создать сделку и пригласить</button>
+    </div>
+  </div>
+
+  <!-- ВКЛАДКА 4: ЧАТ СДЕЛКИ -->
+  <div id="tab-chat" class="tab-pane">
+    <div class="glass-card">
+      <div style="font-size:14px; font-weight:700; margin-bottom:10px;" id="chat-title">Выберите сделку во вкладке «Сделки»</div>
+      <div class="chat-box" id="chat-messages"></div>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="chat-input" class="input-control" placeholder="Сообщение..." />
+        <button class="btn btn-primary" style="width:auto; padding:0 18px;" onclick="sendChatMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- НИЖНЯЯ НАВИГАЦИЯ -->
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('profile')" id="nav-profile">👤<span id="nav-lbl-profile">Профиль</span></button>
+    <button class="nav-item" onclick="switchTab('deals')" id="nav-deals">📂<span id="nav-lbl-deals">Сделки</span></button>
+    <button class="nav-item" onclick="switchTab('create')" id="nav-create">➕<span id="nav-lbl-create">Создать</span></button>
+    <button class="nav-item" onclick="switchTab('chat')" id="nav-chat">💬<span id="nav-lbl-chat">Чат</span></button>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const API_BASE = urlParams.get("api") || "http://localhost:8080";
+    const BOT_USERNAME = urlParams.get("bot") || "";
+
+    const I18N = {
+      ru: {
+        brand: "🛡 OTC Автогарант", balSub: "Баланс безопасных сделок", dealsCnt: "Количество сделок",
+        vol: "Общий объем", depTitle: "Пополнение баланса", depBtn: "Пополнить",
+        createTitle: "💎 Создать NFT-сделку", roleSeller: "📤 Я Продавец", roleBuyer: "📥 Я Покупатель",
+        partnerLbl: "Пригласить участника (@username или Telegram ID)", nftLbl: "Название NFT / Товара",
+        linkLbl: "Ссылка на NFT или описание", priceLbl: "Сумма сделки",
+        warn: "⚠️ Передача товара осуществляется строго через аккаунт поддержки <b>@ssupppoortt</b> после заморозки средств.",
+        createBtn: "Создать сделку и пригласить", navProfile: "Профиль", navDeals: "Сделки", navCreate: "Создать", navChat: "Чат",
+        noDeals: "У вас пока нет сделок. Создайте сделку во вкладке «Создать».",
+        st_pending: "Ожидает оплаты", st_funded: "Оплачена (Проверка @ssupppoortt)", st_completed: "Завершена", st_cancelled: "Отменена",
+        btnPay: "💳 Оплатить", btnDone: "✅ Товар получен от @ssupppoortt", btnCancel: "Отменить сделку", btnChat: "💬 Чат сделки"
+      },
+      en: {
+        brand: "🛡 OTC Auto-Guarantor", balSub: "Secure Escrow Balance", dealsCnt: "Total Deals",
+        vol: "Total Volume", depTitle: "Deposit Balance", depBtn: "Deposit",
+        createTitle: "💎 Create NFT Deal", roleSeller: "📤 I'm Seller", roleBuyer: "📥 I'm Buyer",
+        partnerLbl: "Invite Partner (@username or Telegram ID)", nftLbl: "NFT / Item Name",
+        linkLbl: "NFT Link or Description", priceLbl: "Deal Price",
+        warn: "⚠️ Item transfer is strictly handled via support <b>@ssupppoortt</b> after payment is frozen.",
+        createBtn: "Create Deal & Invite", navProfile: "Profile", navDeals: "Deals", navCreate: "Create", navChat: "Chat",
+        noDeals: "No active deals yet. Create one in the 'Create' tab.",
+        st_pending: "Awaiting Payment", st_funded: "Funded (@ssupppoortt check)", st_completed: "Completed", st_cancelled: "Cancelled",
+        btnPay: "💳 Pay & Freeze", btnDone: "✅ Received from @ssupppoortt", btnCancel: "Cancel Deal", btnChat: "💬 Deal Chat"
+      },
+      zh: {
+        brand: "🛡 OTC 自动担保", balSub: "安全托管余额", dealsCnt: "交易数量",
+        vol: "总交易量", depTitle: "充值余额", depBtn: "充值",
+        createTitle: "💎 创建 NFT 担保交易", roleSeller: "📤 我是卖家", roleBuyer: "📥 我是买家",
+        partnerLbl: "邀请交易方 (@username 或 Telegram ID)", nftLbl: "NFT / 商品名称",
+        linkLbl: "NFT 链接或描述", priceLbl: "交易金额",
+        warn: "⚠️ 资金冻结后，请务必将商品转交给客服 <b>@ssupppoortt</b> 进行核验。",
+        createBtn: "创建交易并邀请", navProfile: "个人中心", navDeals: "交易", navCreate: "创建", navChat: "聊天",
+        noDeals: "暂无交易，请在“创建”页面发起新交易。",
+        st_pending: "等待付款", st_funded: "已冻结 (@ssupppoortt 核验中)", st_completed: "已完成", st_cancelled: "已取消",
+        btnPay: "💳 支付并冻结", btnDone: "✅ 已从 @ssupppoortt 收到商品", btnCancel: "取消交易", btnChat: "💬 交易聊天"
+      },
+      uk: {
+        brand: "🛡 OTC Автогарант", balSub: "Баланс безпечних угод", dealsCnt: "Кількість угод",
+        vol: "Загальний обсяг", depTitle: "Поповнення балансу", depBtn: "Поповнити",
+        createTitle: "💎 Створити NFT-угоду", roleSeller: "📤 Я Продавець", roleBuyer: "📥 Я Покупець",
+        partnerLbl: "Запросити учасника (@username або Telegram ID)", nftLbl: "Назва NFT / Товару",
+        linkLbl: "Посилання на NFT або опис", priceLbl: "Сума угоди",
+        warn: "⚠️ Передача товару здійснюється суворо через підтримку <b>@ssupppoortt</b> після заморожування коштів.",
+        createBtn: "Створити угоду та запросити", navProfile: "Профіль", navDeals: "Угоди", navCreate: "Створити", navChat: "Чат",
+        noDeals: "У вас поки немає угод. Створіть угоду у вкладці «Створити».",
+        st_pending: "Очікує оплати", st_funded: "Оплачена (Перевірка @ssupppoortt)", st_completed: "Завершена", st_cancelled: "Скасована",
+        btnPay: "💳 Оплатити", btnDone: "✅ Товар отримано від @ssupppoortt", btnCancel: "Скасувати угоду", btnChat: "💬 Чат угоди"
+      }
+    };
+
+    const tgUser = tg.initDataUnsafe?.user || {
+      id: parseInt(urlParams.get("uid")) || 100001,
+      username: urlParams.get("uname") || "telegram_user"
+    };
+
+    // Декодируем сделки, переданные ботом из БД через параметр ?d=
+    function parseUrlDeals() {
+      const dParam = urlParams.get("d");
+      if (!dParam) return null;
+      try {
+        const b64 = dParam.replace(/-/g, "+").replace(/_/g, "/");
+        const raw = JSON.parse(decodeURIComponent(escape(atob(b64))));
+        return raw.map(x => ({
+          deal_id: x.id,
+          seller_id: x.s,
+          seller_username: x.su || "",
+          buyer_id: x.b,
+          buyer_username: x.bu || "",
+          nft_name: x.n,
+          nft_link: x.l,
+          price_usd: x.p,
+          status: x.st
+        }));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const savedLocal = JSON.parse(localStorage.getItem(`otc_state_${tgUser.id}`) || "null");
+    const urlDeals = parseUrlDeals();
+
+    let state = {
+      user: {
+        user_id: tgUser.id,
+        username: tgUser.username || urlParams.get("uname") || (savedLocal?.user?.username || ""),
+        balance_usd: urlParams.has("bal") ? parseFloat(urlParams.get("bal")) : (savedLocal?.user?.balance_usd || 0.0),
+        deals_count: urlParams.has("deals") ? parseInt(urlParams.get("deals")) : (savedLocal?.user?.deals_count || 0),
+        total_volume_usd: urlParams.has("vol") ? parseFloat(urlParams.get("vol")) : (savedLocal?.user?.total_volume_usd || 0.0),
+        currency: urlParams.get("curr") || (savedLocal?.user?.currency || "TON"),
+        language: urlParams.get("lang") || (savedLocal?.user?.language || "ru")
+      },
+      deals: urlDeals || (savedLocal?.deals || []),
+      chats: savedLocal?.chats || {},
+      rates: { USDT: 1.0, TON: 0.2, RUB: 95.0, UAH: 41.5 },
+      role: "seller",
+      activeChatDealId: null
+    };
+
+    function t(key) {
+      const lang = state.user.language || "ru";
+      return (I18N[lang] && I18N[lang][key]) || I18N.ru[key] || key;
+    }
+
+    function openSupport() {
+      if (tg.openTelegramLink) tg.openTelegramLink("https://t.me/ssupppoortt");
+      else window.open("https://t.me/ssupppoortt", "_blank");
+    }
+
+    function syncWithBotDb(payloadObj) {
+      if (!BOT_USERNAME) return;
+      try {
+        const jsonStr = JSON.stringify(payloadObj);
+        const b64 = btoa(unescape(encodeURIComponent(jsonStr))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+        tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=sync_${b64}`);
+      } catch (e) {}
+    }
+
+    function saveLocal() {
+      localStorage.setItem(`otc_state_${tgUser.id}`, JSON.stringify(state));
+    }
+
+    function formatCurr(usd) {
+      const curr = state.user.currency || "TON";
+      const rate = state.rates[curr] || 1;
+      return `${(usd * rate).toFixed(2)} ${curr}`;
+    }
+
+    function toUsd(val) {
+      const curr = state.user.currency || "TON";
+      const rate = state.rates[curr] || 1;
+      return val / rate;
+    }
+
+    async function apiCall(path, method = "POST", body = null) {
+      try {
+        const opts = { method, headers: { "Content-Type": "application/json" } };
+        if (body) opts.body = JSON.stringify(body);
+        const res = await fetch(`${API_BASE}${path}`, opts);
+        if (!res.ok) throw new Error("Offline");
+        return await res.json();
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function loadProfile() {
+      applyTranslations();
+      renderAll();
+      const data = await apiCall("/api/user", "POST", {
+        user_id: tgUser.id,
+        username: tgUser.username || state.user.username || ""
+      });
+      if (data && data.ok) {
+        state.user = data.user;
+        state.deals = data.deals;
+        state.rates = data.rates;
+        saveLocal();
+        applyTranslations();
+        renderAll();
+      }
+    }
+
+    function applyTranslations() {
+      document.getElementById("ui-brand").innerText = t("brand");
+      document.getElementById("ui-bal-sub").innerText = t("balSub");
+      document.getElementById("ui-deals-cnt-label").innerText = t("dealsCnt");
+      document.getElementById("ui-vol-label").innerText = t("vol");
+      document.getElementById("ui-dep-title").innerText = t("depTitle");
+      document.getElementById("ui-dep-btn").innerText = t("depBtn");
+      document.getElementById("ui-create-title").innerText = t("createTitle");
+      document.getElementById("role-seller").innerText = t("roleSeller");
+      document.getElementById("role-buyer").innerText = t("roleBuyer");
+      document.getElementById("ui-partner-label").innerText = t("partnerLbl");
+      document.getElementById("ui-nft-label").innerText = t("nftLbl");
+      document.getElementById("ui-link-label").innerText = t("linkLbl");
+      document.getElementById("ui-price-label").innerText = t("priceLbl");
+      document.getElementById("ui-escrow-warn").innerHTML = t("warn");
+      document.getElementById("ui-create-btn").innerText = t("createBtn");
+      document.getElementById("nav-lbl-profile").innerText = t("navProfile");
+      document.getElementById("nav-lbl-deals").innerText = t("navDeals");
+      document.getElementById("nav-lbl-create").innerText = t("navCreate");
+      document.getElementById("nav-lbl-chat").innerText = t("navChat");
+    }
+
+    function renderAll() {
+      const u = state.user;
+      document.getElementById("prof-avatar").innerText = (u.username || "U")[0].toUpperCase();
+      document.getElementById("prof-username").innerText = u.username ? `@${u.username.replace(/^@/, '')}` : `ID ${u.user_id}`;
+      document.getElementById("prof-id").innerText = u.user_id;
+      document.getElementById("prof-balance").innerText = formatCurr(u.balance_usd);
+      document.getElementById("prof-deals-count").innerText = u.deals_count;
+      document.getElementById("prof-volume").innerText = formatCurr(u.total_volume_usd);
+      document.getElementById("create-curr-label").innerText = u.currency;
+
+      ["TON", "USDT", "RUB", "UAH"].forEach(c => {
+        document.getElementById(`curr-${c}`).classList.toggle("active", u.currency === c);
+      });
+
+      renderDeals();
+    }
+
+    function renderDeals() {
+      const container = document.getElementById("deals-list");
+      if (!state.deals.length) {
+        container.innerHTML = `<div class="glass-card" style="text-align:center; color:var(--muted);">${t("noDeals")}</div>`;
+        return;
+      }
+
+      container.innerHTML = state.deals.map(d => {
+        const isBuyer = Number(d.buyer_id) === Number(state.user.user_id);
+        const stLabel = t(`st_${d.status}`);
+        let actions = `<button class="btn btn-outline" style="margin-top:8px;" onclick="openChat(${d.deal_id})">${t("btnChat")}</button>`;
+
+        if (d.status === "pending") {
+          if (isBuyer) {
+            actions = `<button class="btn btn-primary" onclick="dealAction(${d.deal_id}, 'pay')">${t("btnPay")} (${formatCurr(d.price_usd)})</button>` + actions;
+          }
+          actions += `<button class="btn btn-danger" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">${t("btnCancel")}</button>`;
+        } else if (d.status === "funded") {
+          if (isBuyer) {
+            actions = `<button class="btn btn-success" onclick="dealAction(${d.deal_id}, 'complete')">${t("btnDone")}</button>` + actions;
+          }
+        }
+
+        const sellerDisplay = d.seller_username ? `@${d.seller_username}` : d.seller_id;
+        const buyerDisplay = d.buyer_username ? `@${d.buyer_username}` : d.buyer_id;
+
+        return `
+          <div class="glass-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <b>#${d.deal_id} — ${d.nft_name}</b>
+              <span class="badge ${d.status}">${stLabel}</span>
+            </div>
+            <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">🔗 ${d.nft_link || "—"}</div>
+            <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">
+              📤 <code>${sellerDisplay}</code> | 📥 <code>${buyerDisplay}</code>
+            </div>
+            <div style="font-size:16px; font-weight:800; margin-bottom:10px;">${formatCurr(d.price_usd)}</div>
+            ${actions}
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function changeCurrency(curr) {
+      state.user.currency = curr;
+      saveLocal();
+      renderAll();
+      await apiCall("/api/currency", "POST", { user_id: state.user.user_id, currency: curr });
+    }
+
+    async function depositBalance() {
+      const val = parseFloat(document.getElementById("deposit-input").value);
+      if (!val || val <= 0) return alert("Введите корректную сумму");
+      const addUsd = toUsd(val);
+
+      const data = await apiCall("/api/deposit", "POST", { user_id: state.user.user_id, amount_usd: addUsd });
+      if (data && data.ok) {
+        state.user = data.user;
+      } else {
+        state.user.balance_usd += addUsd;
+        syncWithBotDb({ a: "dep", amt: addUsd.toFixed(2) });
+      }
+      document.getElementById("deposit-input").value = "";
+      saveLocal();
+      renderAll();
+    }
+
+    function setRole(role) {
+      state.role = role;
+      document.getElementById("role-seller").classList.toggle("active", role === "seller");
+      document.getElementById("role-buyer").classList.toggle("active", role === "buyer");
+    }
+
+    async function createDeal() {
+      const partner = document.getElementById("deal-partner").value.trim();
+      const nft_name = document.getElementById("deal-nft-name").value.trim();
+      const nft_link = document.getElementById("deal-nft-link").value.trim();
+      const priceVal = parseFloat(document.getElementById("deal-price").value);
+
+      if (!partner || !nft_name || !priceVal || priceVal <= 0) {
+        return alert("Заполните участника (@username или ID), название NFT и сумму сделки");
+      }
+
+      const price_usd = toUsd(priceVal);
+      const data = await apiCall("/api/deals/create", "POST", {
+        creator_id: state.user.user_id,
+        role: state.role,
+        partner,
+        nft_name,
+        nft_link,
+        price_usd
+      });
+
+      if (data) {
+        if (!data.ok) return alert(data.error);
+        state.deals = data.deals;
+      } else {
+        const newId = state.deals.length ? Math.max(...state.deals.map(d => d.deal_id)) + 1 : 101;
+        state.deals.unshift({
+          deal_id: newId,
+          seller_id: state.role === "seller" ? state.user.user_id : partner,
+          seller_username: state.role === "seller" ? state.user.username : partner.replace(/^@/, ""),
+          buyer_id: state.role === "buyer" ? state.user.user_id : partner,
+          buyer_username: state.role === "buyer" ? state.user.username : partner.replace(/^@/, ""),
+          nft_name,
+          nft_link,
+          price_usd,
+          status: "pending"
+        });
+        syncWithBotDb({ a: "new", r: state.role, p: partner, n: nft_name, l: nft_link, pr: price_usd.toFixed(2) });
+      }
+
+      saveLocal();
+      renderAll();
+      switchTab("deals");
+    }
+
+    async function dealAction(deal_id, action) {
+      const data = await apiCall("/api/deals/action", "POST", { user_id: state.user.user_id, deal_id, action });
+      if (data) {
+        if (!data.ok) return alert(data.error);
+        state.user = data.user;
+        state.deals = data.deals;
+      } else {
+        const deal = state.deals.find(d => d.deal_id === deal_id);
+        if (!deal) return;
+        if (action === "pay") {
+          if (state.user.balance_usd < deal.price_usd) return alert("Недостаточно средств на балансе!");
+          state.user.balance_usd -= deal.price_usd;
+          deal.status = "funded";
+          syncWithBotDb({ a: "pay", id: deal_id });
+        } else if (action === "complete") {
+          deal.status = "completed";
+          state.user.deals_count += 1;
+          state.user.total_volume_usd += deal.price_usd;
+          syncWithBotDb({ a: "done", id: deal_id });
+        } else if (action === "cancel") {
+          deal.status = "cancelled";
+        }
+      }
+      saveLocal();
+      renderAll();
+    }
+
+    async function openChat(dealId) {
+      state.activeChatDealId = dealId;
+      switchTab("chat");
+      await fetchChat();
+    }
+
+    async function fetchChat() {
+      if (!state.activeChatDealId) return;
+      const deal = state.deals.find(d => d.deal_id === state.activeChatDealId);
+      if (deal) {
+        document.getElementById("chat-title").innerText = `#${deal.deal_id} — ${deal.nft_name}`;
+      }
+
+      const data = await apiCall(`/api/chat/${state.activeChatDealId}`, "GET");
+      const msgs = (data && data.ok) ? data.messages : (state.chats[state.activeChatDealId] || []);
+
+      const box = document.getElementById("chat-messages");
+      box.innerHTML = msgs.map(m => {
+        const isMe = Number(m.sender_id) === Number(state.user.user_id);
+        return `
+          <div class="msg ${isMe ? 'me' : 'other'}">
+            <div class="msg-author">${m.sender_name}</div>
+            <div>${m.message_text}</div>
+          </div>
+        `;
+      }).join("");
+      box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendChatMessage() {
+      if (!state.activeChatDealId) return alert("Сначала выберите сделку во вкладке «Сделки»");
+      const input = document.getElementById("chat-input");
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+
+      const sender_name = state.user.username ? `@${state.user.username.replace(/^@/, '')}` : `ID ${state.user.user_id}`;
+      const data = await apiCall("/api/chat/send", "POST", {
+        deal_id: state.activeChatDealId,
+        sender_id: state.user.user_id,
+        sender_name,
+        text
+      });
+
+      if (!data) {
+        if (!state.chats[state.activeChatDealId]) state.chats[state.activeChatDealId] = [];
+        state.chats[state.activeChatDealId].push({ sender_id: state.user.user_id, sender_name, message_text: text });
+        saveLocal();
+      }
+      await fetchChat();
+    }
+
+    function switchTab(tab) {
+      ["profile", "deals", "create", "chat"].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
+        document.getElementById(`nav-${t}`).classList.toggle("active", t === tab);
+      });
+    }
+
+    loadProfile();
+  </script>
+</body>
+</html>
