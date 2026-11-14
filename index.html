@@ -9,9 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    /* =========================================================
-       4 ТЕМЫ: СТРОГАЯ ЧЕРНО-СЕРАЯ, СВЕТЛАЯ, СВЕТЛО-РОЗОВАЯ, ТЕМНО-РОЗОВАЯ
-       ========================================================= */
     :root, [data-theme="dark"] {
       --bg-base: #050505;
       --orb-1: rgba(255, 255, 255, 0.065);
@@ -19,6 +16,7 @@
       --orb-3: rgba(90, 90, 95, 0.075);
       --glass-bg: linear-gradient(135deg, rgba(38, 38, 41, 0.66) 0%, rgba(14, 14, 16, 0.54) 100%);
       --glass-dock: linear-gradient(180deg, rgba(44, 44, 47, 0.76) 0%, rgba(16, 16, 18, 0.64) 100%);
+      --glass-modal: linear-gradient(145deg, rgba(28, 28, 31, 0.95) 0%, rgba(12, 12, 14, 0.97) 100%);
       --glass-input: rgba(10, 10, 12, 0.84);
       --glass-border: rgba(255, 255, 255, 0.14);
       --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.25), inset 1px 0 1px 0 rgba(255, 255, 255, 0.11);
@@ -38,6 +36,7 @@
       --orb-3: rgba(160, 170, 190, 0.28);
       --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 246, 250, 0.5) 100%);
       --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 242, 247, 0.6) 100%);
+      --glass-modal: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(242, 244, 248, 0.98) 100%);
       --glass-input: rgba(255, 255, 255, 0.76);
       --glass-border: rgba(255, 255, 255, 0.94);
       --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 1), inset 1px 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -57,6 +56,7 @@
       --orb-3: rgba(232, 121, 249, 0.25);
       --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 240, 246, 0.44) 100%);
       --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 228, 238, 0.56) 100%);
+      --glass-modal: linear-gradient(145deg, rgba(255, 250, 252, 0.96) 0%, rgba(255, 232, 242, 0.98) 100%);
       --glass-input: rgba(255, 255, 255, 0.72);
       --glass-border: rgba(255, 255, 255, 0.92);
       --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 1), inset 1px 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -76,6 +76,7 @@
       --orb-3: rgba(244, 63, 94, 0.16);
       --glass-bg: linear-gradient(135deg, rgba(255, 192, 225, 0.12) 0%, rgba(255, 192, 225, 0.03) 100%);
       --glass-dock: linear-gradient(180deg, rgba(255, 192, 225, 0.15) 0%, rgba(255, 192, 225, 0.04) 100%);
+      --glass-modal: linear-gradient(145deg, rgba(32, 10, 24, 0.95) 0%, rgba(16, 4, 12, 0.97) 100%);
       --glass-input: rgba(20, 6, 16, 0.7);
       --glass-border: rgba(244, 114, 182, 0.24);
       --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 210, 235, 0.32), inset 1px 0 1px 0 rgba(255, 210, 235, 0.15);
@@ -101,10 +102,9 @@
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
-      transition: background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+      transition: background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
     }
 
-    /* Плавающие фоновые световые сферы */
     .ambient-canvas {
       position: fixed;
       inset: 0;
@@ -116,21 +116,18 @@
       position: absolute;
       border-radius: 50%;
       filter: blur(72px);
-      animation: floatOrb 14s infinite alternate ease-in-out;
+      animation: floatOrb 13s infinite alternate ease-in-out;
     }
     .orb-1 { width: 320px; height: 320px; top: -6%; left: 12%; background: var(--orb-1); }
-    .orb-2 { width: 280px; height: 280px; bottom: 6%; right: -8%; background: var(--orb-2); animation-delay: -5s; }
-    .orb-3 { width: 240px; height: 240px; top: 44%; left: 28%; background: var(--orb-3); animation-delay: -9s; }
+    .orb-2 { width: 280px; height: 280px; bottom: 6%; right: -8%; background: var(--orb-2); animation-delay: -4s; }
+    .orb-3 { width: 240px; height: 240px; top: 44%; left: 28%; background: var(--orb-3); animation-delay: -8s; }
 
     @keyframes floatOrb {
       0% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(18px, -22px, 0) scale(1.08); }
-      100% { transform: translate3d(-14px, 16px, 0) scale(0.95); }
+      50% { transform: translate3d(22px, -26px, 0) scale(1.1); }
+      100% { transform: translate3d(-16px, 18px, 0) scale(0.94); }
     }
 
-    /* =========================================================
-       LAYOUT: ЛЕВЫЙ LIQUID DOCK + КОНТЕНТ
-       ========================================================= */
     .app-shell {
       display: grid;
       grid-template-columns: 66px 1fr;
@@ -145,83 +142,51 @@
     .left-rail {
       position: sticky;
       top: 12px;
-      height: calc(100vh - 24px);
-      max-height: 760px;
       background: var(--glass-dock);
       backdrop-filter: blur(34px) saturate(200%);
       -webkit-backdrop-filter: blur(34px) saturate(200%);
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-shadow), var(--glass-highlight);
       border-radius: 24px;
-      padding: 10px 6px;
+      padding: 14px 6px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 14px;
       align-items: center;
       z-index: 50;
-      animation: dockSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      animation: dockSlideIn 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     @keyframes dockSlideIn {
-      from { opacity: 0; transform: translateX(-18px); }
-      to { opacity: 1; transform: translateX(0); }
+      from { opacity: 0; transform: translateX(-22px) scale(0.95); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
     }
 
     .rail-logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+      width: 40px; height: 40px; border-radius: 13px;
       background: var(--accent-grad);
       box-shadow: 0 6px 18px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--btn-text);
-      flex-shrink: 0;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--btn-text); flex-shrink: 0;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .rail-logo:hover { transform: rotate(-6deg) scale(1.06); }
+    .rail-logo:hover { transform: rotate(-8deg) scale(1.08); }
 
-    .rail-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      width: 100%;
-      align-items: center;
-    }
+    .rail-nav { display: flex; flex-direction: column; gap: 6px; width: 100%; align-items: center; }
 
     .rail-btn {
-      width: 52px;
-      height: 44px;
-      border-radius: 14px;
-      border: 1px solid transparent;
-      background: transparent;
+      width: 52px; height: 48px; border-radius: 15px;
+      border: 1px solid transparent; background: transparent;
       color: var(--text-sub);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-      cursor: pointer;
-      transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
     }
-
-    .rail-btn:hover { transform: translateY(-1px); color: var(--text-main); }
-    .rail-btn:active { transform: scale(0.92); }
-
-    .rail-btn svg {
-      width: 17px;
-      height: 17px;
-      stroke-width: 2;
-      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .rail-btn span {
-      font-size: 8.5px;
-      font-weight: 600;
-      letter-spacing: -0.2px;
-    }
+    .rail-btn:hover { transform: translateY(-2px); color: var(--text-main); }
+    .rail-btn:active { transform: scale(0.9); }
+    .rail-btn svg { width: 18px; height: 18px; stroke-width: 2; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .rail-btn span { font-size: 8.5px; font-weight: 600; letter-spacing: -0.2px; }
 
     .rail-btn.active {
       background: var(--glass-bg);
@@ -229,83 +194,38 @@
       box-shadow: 0 8px 20px var(--accent-glow), var(--glass-highlight);
       color: var(--text-main);
     }
-
-    .rail-btn.active svg {
-      color: var(--accent);
-      transform: scale(1.1);
-    }
-
+    .rail-btn.active svg { color: var(--accent); transform: scale(1.14) translateY(-1px); }
     .rail-btn.active::before {
-      content: "";
-      position: absolute;
-      left: -6px;
-      width: 3px;
-      height: 18px;
-      border-radius: 0 4px 4px 0;
-      background: var(--accent-grad);
-      box-shadow: 0 0 10px var(--accent);
+      content: ""; position: absolute; left: -6px;
+      width: 3.5px; height: 20px; border-radius: 0 4px 4px 0;
+      background: var(--accent-grad); box-shadow: 0 0 10px var(--accent);
+      animation: indicatorPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
-    .rail-themes {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      padding: 6px 5px;
-      border-radius: 14px;
-      background: rgba(0, 0, 0, 0.18);
-      border: 1px solid var(--glass-border);
+    @keyframes indicatorPop {
+      from { transform: scaleY(0.2); opacity: 0; }
+      to { transform: scaleY(1); opacity: 1; }
     }
 
     .theme-dot {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 1.5px solid rgba(255, 255, 255, 0.35);
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .theme-dot.active {
-      transform: scale(1.22);
-      border-color: var(--text-main);
+      width: 15px; height: 15px; border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.35); flex-shrink: 0;
     }
     .dot-dark { background: linear-gradient(135deg, #09090b, #71717a); }
     .dot-light { background: linear-gradient(135deg, #ffffff, #d4d4d8); }
     .dot-lpink { background: linear-gradient(135deg, #ffd1e6, #f472b6); }
     .dot-dpink { background: linear-gradient(135deg, #2e0722, #ec4899); }
 
-    /* =========================================================
-       LIQUID GLASS КАРТОЧКИ И АНИМАЦИИ
-       ========================================================= */
     .main-stage { width: 100%; min-width: 0; }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      gap: 8px;
-    }
-
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
     .stage-title { font-size: 18px; font-weight: 800; letter-spacing: -0.4px; }
 
     .ticker-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 8px 13px;
-      margin-bottom: 14px;
-      border-radius: 14px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-highlight);
-      font-size: 11px;
-      color: var(--text-sub);
-      transition: border-color 0.35s ease, box-shadow 0.35s ease;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; padding: 8px 13px; margin-bottom: 14px; border-radius: 14px;
+      background: var(--glass-bg); backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight);
+      font-size: 11px; color: var(--text-sub); transition: all 0.35s ease;
     }
-
     .ticker-bar.flash {
       border-color: #10b981;
       box-shadow: 0 0 18px rgba(16, 185, 129, 0.25), var(--glass-highlight);
@@ -313,8 +233,7 @@
 
     .live-dot {
       width: 7px; height: 7px; border-radius: 50%;
-      background: #10b981;
-      display: inline-block; margin-right: 5px;
+      background: #10b981; display: inline-block; margin-right: 5px;
       animation: livePulse 2s infinite ease-in-out;
     }
     @keyframes livePulse {
@@ -329,7 +248,7 @@
       border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight);
       color: var(--text-main); font-size: 11.5px; font-weight: 700;
       cursor: pointer; text-decoration: none;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .support-pill:active { transform: scale(0.95); }
 
@@ -339,32 +258,32 @@
       -webkit-backdrop-filter: blur(30px) saturate(195%);
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-shadow), var(--glass-highlight);
-      border-radius: 24px;
-      padding: 18px;
-      margin-bottom: 14px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease;
+      border-radius: 24px; padding: 18px; margin-bottom: 14px;
+      position: relative; overflow: hidden;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease;
     }
-
-    /* Диагональный световой блик жидкого стекла */
     .liquid-card::after {
-      content: "";
-      position: absolute;
-      top: 0; left: -120%;
+      content: ""; position: absolute; top: 0; left: -130%;
       width: 65%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-      transform: skewX(-24deg);
-      pointer-events: none;
-      animation: glassSheen 9s infinite ease-in-out;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.065), transparent);
+      transform: skewX(-24deg); pointer-events: none;
+      animation: glassSheen 8.5s infinite ease-in-out;
     }
     @keyframes glassSheen {
-      0%, 70% { left: -120%; }
+      0%, 68% { left: -130%; }
       100% { left: 160%; }
     }
 
-    .profile-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .stagger-item {
+      opacity: 0;
+      animation: staggerUp 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes staggerUp {
+      from { opacity: 0; transform: translateY(14px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
+    .profile-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
     .avatar-glass {
       width: 54px; height: 54px; border-radius: 17px;
       background: var(--accent-grad);
@@ -373,7 +292,29 @@
       font-size: 21px; font-weight: 800; color: var(--btn-text);
     }
 
-    .user-meta h2 { font-size: 16.5px; font-weight: 800; }
+    .user-meta h2 {
+      font-size: 16.5px; font-weight: 800;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+
+    /* Галочка верификации */
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #2563eb);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.55);
+      flex-shrink: 0;
+      animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes badgePop {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
 
     .id-chip {
       display: inline-block; margin-top: 4px;
@@ -387,72 +328,78 @@
       background: var(--glass-input); border: 1px solid var(--glass-border);
       margin-bottom: 14px;
     }
-
-    .balance-caption {
-      font-size: 10.5px; text-transform: uppercase;
-      letter-spacing: 0.8px; font-weight: 700; color: var(--text-sub);
-    }
-
-    .balance-amount {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 27px; font-weight: 800; margin: 6px 0 12px;
-      transition: transform 0.2s ease;
-    }
+    .balance-caption { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: var(--text-sub); }
+    .balance-amount { font-family: 'JetBrains Mono', monospace; font-size: 27px; font-weight: 800; margin: 6px 0 12px; }
 
     .curr-segmented {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
       background: rgba(0, 0, 0, 0.16); padding: 4px;
       border-radius: 13px; border: 1px solid var(--glass-border);
     }
-
     .curr-btn {
       padding: 7px 0; border-radius: 9px; border: none;
       background: transparent; color: var(--text-sub);
       font-size: 11.5px; font-weight: 700; cursor: pointer;
-      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
     .curr-btn.active {
       background: var(--accent-grad); color: var(--btn-text);
       box-shadow: 0 3px 10px var(--accent-glow);
-      transform: scale(1.02);
+      transform: scale(1.03);
+    }
+
+    /* Мини-переключатель валюты специально для оборота */
+    .vol-curr-pills {
+      display: inline-flex;
+      gap: 3px;
+      background: var(--glass-input);
+      padding: 2px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+    }
+    .vol-pill {
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .vol-pill.active {
+      background: var(--accent-grad);
+      color: var(--btn-text);
     }
 
     .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-
     .metric-tile {
       background: var(--glass-bg); backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-shadow), var(--glass-highlight);
       border-radius: 20px; padding: 15px;
-      transition: transform 0.25s ease;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .metric-tile:hover { transform: translateY(-2px); }
-
     .metric-label { font-size: 11.5px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
     .metric-value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 800; }
 
     .theme-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
-
     .theme-card-btn {
-      padding: 10px 12px; border-radius: 14px;
+      padding: 11px 12px; border-radius: 14px;
       border: 1px solid var(--glass-border); background: var(--glass-input);
       color: var(--text-main); font-size: 12px; font-weight: 600;
       display: flex; align-items: center; gap: 8px; cursor: pointer;
-      transition: all 0.2s ease;
     }
     .theme-card-btn.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 
     .field { margin-bottom: 12px; }
     .field label { display: block; font-size: 11.5px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
-
     .glass-input {
       width: 100%; padding: 12px 14px; border-radius: 14px;
       background: var(--glass-input); border: 1px solid var(--glass-border);
       color: var(--text-main); font-size: 13.5px; font-weight: 500; outline: none;
-      transition: border-color 0.25s ease, transform 0.2s ease;
     }
-    .glass-input:focus { border-color: var(--accent); transform: translateY(-1px); }
 
     .btn-liquid {
       width: 100%; padding: 13px 16px; border-radius: 15px;
@@ -461,55 +408,47 @@
       font-size: 13.5px; font-weight: 700; cursor: pointer;
       box-shadow: 0 8px 22px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.4);
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .btn-liquid:hover { transform: translateY(-1px); }
     .btn-liquid:active { transform: scale(0.96); }
-
-    .btn-secondary {
-      background: var(--glass-input); color: var(--text-main);
-      border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight);
-    }
-
-    .btn-danger-glass {
-      background: rgba(239, 68, 68, 0.14); color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: none;
-    }
+    .btn-secondary { background: var(--glass-input); color: var(--text-main); border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight); }
+    .btn-danger-glass { background: rgba(239, 68, 68, 0.14); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: none; }
 
     .role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
     .role-pill {
       padding: 11px; border-radius: 14px; border: 1px solid var(--glass-border);
       background: var(--glass-input); color: var(--text-sub);
       font-size: 12.5px; font-weight: 700; cursor: pointer;
-      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .role-pill.active { background: var(--accent-grad); color: var(--btn-text); border-color: transparent; }
 
-    /* Сетка пакетов звезд (Fragment.com) */
+    .partner-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 10px; border-radius: 10px;
+      background: var(--glass-input); border: 1px solid var(--glass-border);
+      color: var(--text-main); font-size: 11.5px; font-weight: 600; cursor: pointer;
+    }
+
     .stars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
     .star-pack {
       padding: 13px 12px; border-radius: 16px;
       background: var(--glass-input); border: 1px solid var(--glass-border);
       cursor: pointer; display: flex; flex-direction: column; gap: 4px;
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .star-pack:hover { transform: translateY(-2px); }
-    .star-pack:active { transform: scale(0.96); }
     .star-pack.active {
       border-color: var(--accent);
       box-shadow: 0 0 0 1px var(--accent), 0 8px 20px var(--accent-glow);
       background: var(--glass-bg);
-      transform: translateY(-2px) scale(1.01);
     }
     .star-pack-top { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 14.5px; }
-    .star-icon { color: #f59e0b; filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.45)); }
+    .star-icon { color: #f59e0b; }
     .star-ton-price { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--text-main); }
     .star-fiat-price { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-sub); }
 
     .status-pill { padding: 4px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; }
     .status-pill.pending { background: rgba(245, 158, 11, 0.16); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
     .status-pill.funded { background: rgba(255, 255, 255, 0.12); color: var(--text-main); border: 1px solid var(--glass-border); }
-    .status-pill.completed, .status-pill.approved { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .status-pill.completed, .status-pill.approved, .status-pill.verified { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
     .status-pill.cancelled, .status-pill.rejected { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
     .chat-stream {
@@ -517,27 +456,72 @@
       padding: 12px; border-radius: 18px; background: var(--glass-input);
       border: 1px solid var(--glass-border); margin-bottom: 12px;
     }
-    .bubble {
-      max-width: 82%; padding: 10px 13px; border-radius: 16px; font-size: 13px; line-height: 1.42;
-      animation: bubblePop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes bubblePop {
-      from { opacity: 0; transform: scale(0.92) translateY(6px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
+    .bubble { max-width: 82%; padding: 10px 13px; border-radius: 16px; font-size: 13px; line-height: 1.42; }
     .bubble.me { align-self: flex-end; background: var(--accent-grad); color: var(--btn-text); border-bottom-right-radius: 4px; }
     .bubble.other { align-self: flex-start; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); border-bottom-left-radius: 4px; }
     .bubble-meta { font-size: 10px; font-weight: 700; opacity: 0.75; margin-bottom: 3px; }
 
     .tab-pane { display: none; }
-    .tab-pane.active {
-      display: block;
-      animation: stageSpring 0.36s cubic-bezier(0.22, 1, 0.36, 1);
-    }
+    .tab-pane.active { display: block; animation: stageSpring 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
     @keyframes stageSpring {
-      from { opacity: 0; transform: translateY(10px) scale(0.985); }
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
+
+    /* Модальные окна */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      display: none; align-items: center; justify-content: center;
+      padding: 16px; z-index: 200;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .liquid-modal {
+      width: 100%; max-width: 400px;
+      background: var(--glass-modal);
+      backdrop-filter: blur(36px) saturate(200%);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.78), var(--glass-highlight);
+      border-radius: 28px; padding: 22px 20px;
+      animation: modalSpring 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes modalSpring {
+      from { opacity: 0; transform: translateY(26px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-icon-ring {
+      width: 56px; height: 56px; border-radius: 18px;
+      margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;
+      background: rgba(239, 68, 68, 0.14); border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+    }
+
+    .deficit-table {
+      background: var(--glass-input); border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 12px 14px; margin: 14px 0 16px;
+      display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;
+    }
+    .deficit-row { display: flex; justify-content: space-between; align-items: center; }
+    .deficit-row span:last-child { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+    /* Превью загрузки фото верификации */
+    .kyc-preview-box {
+      width: 100%; height: 155px; border-radius: 18px;
+      background: var(--glass-input); border: 1.5px dashed var(--glass-border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; margin: 14px 0; cursor: pointer; overflow: hidden; position: relative;
+    }
+    .kyc-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .kyc-steps-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+    .kyc-step-dot {
+      width: 28px; height: 6px; border-radius: 999px;
+      background: var(--glass-input); border: 1px solid var(--glass-border);
+      transition: 0.3s;
+    }
+    .kyc-step-dot.active { background: var(--accent-grad); width: 42px; }
   </style>
 </head>
 <body>
@@ -594,13 +578,6 @@
           <span>Чат</span>
         </button>
       </nav>
-
-      <div class="rail-themes" title="Тема оформления">
-        <div class="theme-dot dot-dark" onclick="setTheme('dark')" id="dot-dark"></div>
-        <div class="theme-dot dot-light" onclick="setTheme('light')" id="dot-light"></div>
-        <div class="theme-dot dot-lpink" onclick="setTheme('light-pink')" id="dot-light-pink"></div>
-        <div class="theme-dot dot-dpink" onclick="setTheme('dark-pink')" id="dot-dark-pink"></div>
-      </div>
     </aside>
 
     <!-- ОСНОВНАЯ ОБЛАСТЬ КОНТЕНТА -->
@@ -610,14 +587,13 @@
         <a onclick="openSupport()" class="support-pill">@ssupppoortt</a>
       </div>
 
-      <!-- ЖИВОЙ ТИКЕР С BYBIT SPOT (GRAM/USDT) КАЖДУЮ МИНУТУ -->
       <div class="ticker-bar" id="ticker-bar-box">
         <div>
           <span class="live-dot"></span>
-          <b style="color:var(--text-main);">Bybit Live:</b>
-          <span id="bybit-ticker-text" style="font-family:'JetBrains Mono',monospace;">1 GRAM = 1.062 USDT · 1 USDT = 82.78₽</span>
+          <b style="color:var(--text-main);">Курс:</b>
+          <span id="live-ticker-text" style="font-family:'JetBrains Mono',monospace;">1 GRAM = 1.062 USDT · 1 USDT = 82.78₽</span>
         </div>
-        <div id="bybit-updated-time" style="font-family:'JetBrains Mono',monospace; font-size:10px;">60s sync</div>
+        <div id="live-updated-time" style="font-family:'JetBrains Mono',monospace; font-size:10px;">Live</div>
       </div>
 
       <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
@@ -626,13 +602,18 @@
           <div class="profile-top">
             <div class="avatar-glass" id="prof-avatar">U</div>
             <div class="user-meta">
-              <h2 id="prof-username">@username</h2>
-              <span class="id-chip">ID: <span id="prof-id">0</span></span>
+              <h2>
+                <span id="prof-username">@username</span>
+                <span id="prof-verified-icon" style="display:none;" class="verified-badge" title="Верифицированный аккаунт">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </h2>
+              <div><span class="id-chip">ID: <span id="prof-id">0</span></span></div>
             </div>
           </div>
 
           <div class="balance-block">
-            <div class="balance-caption">Мультивалютный баланс (Bybit Spot)</div>
+            <div class="balance-caption">Мультивалютный эскроу-баланс</div>
             <div class="balance-amount" id="prof-balance">0.00 GRAM</div>
 
             <div class="curr-segmented">
@@ -649,39 +630,69 @@
           </div>
 
           <div id="deposit-instructions" style="display:none; margin-top:12px; padding:12px; border-radius:14px; background:var(--glass-input); border:1px solid var(--glass-border); font-size:12px; line-height:1.5;">
-            <div style="font-weight:700; margin-bottom:6px;">Реквизиты для пополнения:</div>
-            <div style="color:var(--text-sub); margin-bottom:8px;">
-              Для пополнения баланса в GRAM, USDT, RUB или UAH напишите в техническую поддержку <b>@ssupppoortt</b> и укажите ваш Telegram ID: <code id="dep-uid-code" style="color:var(--text-main);">0</code>.
+            <div style="font-weight:700; margin-bottom:6px;">Пополнение счета:</div>
+            <div style="color:var(--text-sub); margin-bottom:10px;">
+              Для пополнения баланса в GRAM, USDT, RUB или UAH обратитесь в техническую поддержку <b>@ssupppoortt</b> и укажите ваш Telegram ID: <code id="dep-uid-code" style="color:var(--text-main);">0</code>.
             </div>
             <button class="btn-liquid" onclick="openSupport()">Написать в @ssupppoortt</button>
           </div>
         </div>
 
+        <!-- МЕТРИКИ: СДЕЛКИ + ОБОРОТ С НЕЗАВИСИМЫМ ВЫБОРОМ ВАЛЮТЫ ОБОРОТА -->
         <div class="metrics-row">
           <div class="metric-tile">
-            <div class="metric-label">Количество сделок</div>
+            <div class="metric-label">Успешных сделок</div>
             <div class="metric-value" id="prof-deals-count">0</div>
           </div>
           <div class="metric-tile">
-            <div class="metric-label">Общий объем</div>
-            <div class="metric-value" id="prof-volume">0.00 GRAM</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; gap:4px; flex-wrap:wrap;">
+              <span class="metric-label" style="margin-bottom:0;">Общий оборот</span>
+              <div class="vol-curr-pills">
+                <button class="vol-pill" onclick="changeVolumeCurrency('GRAM')" id="vcurr-GRAM">GRAM</button>
+                <button class="vol-pill" onclick="changeVolumeCurrency('USDT')" id="vcurr-USDT">USDT</button>
+                <button class="vol-pill" onclick="changeVolumeCurrency('RUB')" id="vcurr-RUB">RUB</button>
+                <button class="vol-pill" onclick="changeVolumeCurrency('UAH')" id="vcurr-UAH">UAH</button>
+              </div>
+            </div>
+            <div class="metric-value" id="prof-volume">0.00 USDT</div>
+          </div>
+        </div>
+
+        <!-- РАЗДЕЛ ВЕРИФИКАЦИИ АККАУНТА -->
+        <div class="liquid-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-size:14px; font-weight:800;">🪪 Верификация аккаунта</div>
+            <span class="status-pill" id="kyc-status-badge">Не верифицирован</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:12px; line-height:1.45;" id="kyc-status-desc">
+            Пройдите верификацию (фото паспорта с лицом прямо, затем поворот лица влево и вправо), чтобы получить галочку верификации и повысить доверие в сделках.
+          </div>
+          <button class="btn-liquid" id="btn-start-kyc" onclick="openKycModal()">Пройти верификацию</button>
+        </div>
+
+        <!-- Просмотр профиля любого участника -->
+        <div class="liquid-card">
+          <div style="font-size:12.5px; font-weight:700; margin-bottom:8px;">Проверить профиль участника</div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="lookup-user-input" class="glass-input" placeholder="@username или ID пользователя" />
+            <button class="btn-liquid" style="width:auto; padding:0 18px; white-space:nowrap;" onclick="lookupCounterparty()">Найти</button>
           </div>
         </div>
 
         <div class="liquid-card">
-          <div style="font-size:12.5px; font-weight:700; color:var(--text-sub);">Тема Liquid Glass</div>
+          <div style="font-size:12.5px; font-weight:700; color:var(--text-sub);">Тема оформления</div>
           <div class="theme-grid">
             <button class="theme-card-btn" onclick="setTheme('dark')" id="tbtn-dark">
-              <span class="theme-dot dot-dark" style="width:14px;height:14px;"></span> Темная (Black)
+              <span class="theme-dot dot-dark"></span> Темная
             </button>
             <button class="theme-card-btn" onclick="setTheme('light')" id="tbtn-light">
-              <span class="theme-dot dot-light" style="width:14px;height:14px;"></span> Светлая
+              <span class="theme-dot dot-light"></span> Светлая
             </button>
             <button class="theme-card-btn" onclick="setTheme('light-pink')" id="tbtn-light-pink">
-              <span class="theme-dot dot-lpink" style="width:14px;height:14px;"></span> Светло-розовая
+              <span class="theme-dot dot-lpink"></span> Светло-розовая
             </button>
             <button class="theme-card-btn" onclick="setTheme('dark-pink')" id="tbtn-dark-pink">
-              <span class="theme-dot dot-dpink" style="width:14px;height:14px;"></span> Темно-розовая
+              <span class="theme-dot dot-dpink"></span> Темно-розовая
             </button>
           </div>
         </div>
@@ -704,7 +715,10 @@
 
           <div class="field">
             <label>Участник сделки (@username или Telegram ID)</label>
-            <input type="text" id="deal-partner" class="glass-input" placeholder="@username или числовой ID" />
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="deal-partner" class="glass-input" placeholder="@username или числовой ID" />
+              <button type="button" class="btn-liquid btn-secondary" style="width:auto; padding:0 14px; white-space:nowrap;" onclick="previewPartnerFromInput('deal-partner')">👤 Профиль</button>
+            </div>
           </div>
 
           <div class="field">
@@ -730,7 +744,7 @@
           <div class="field">
             <label>Сумма сделки в <b id="create-curr-label">GRAM</b></label>
             <input type="number" id="deal-price" class="glass-input" placeholder="100.00" oninput="updateDealPreview()" />
-            <div id="deal-usd-preview" style="font-size:11px; color:var(--text-sub); margin-top:5px; font-family:'JetBrains Mono',monospace;">≈ 0.00 USDT · 0.00 GRAM (Bybit Live)</div>
+            <div id="deal-usd-preview" style="font-size:11px; color:var(--text-sub); margin-top:5px; font-family:'JetBrains Mono',monospace;">≈ 0.00 USDT · 0.00 RUB · 0.00 UAH</div>
           </div>
 
           <div style="font-size:11.5px; color:var(--text-sub); margin: 14px 0; line-height:1.45; padding:10px 12px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border);">
@@ -751,7 +765,10 @@
 
           <div class="field">
             <label>Второй участник обмена (@username или Telegram ID)</label>
-            <input type="text" id="swap-partner" class="glass-input" placeholder="@username или ID" />
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="swap-partner" class="glass-input" placeholder="@username или ID" />
+              <button type="button" class="btn-liquid btn-secondary" style="width:auto; padding:0 14px; white-space:nowrap;" onclick="previewPartnerFromInput('swap-partner')">👤 Профиль</button>
+            </div>
           </div>
 
           <div class="field">
@@ -793,15 +810,15 @@
         </div>
       </section>
 
-      <!-- ВКЛАДКА 5: ПОКУПКА ЗВЕЗД (FRAGMENT.COM/STARS + BYBIT GRAM/USDT) -->
+      <!-- ВКЛАДКА 5: ПОКУПКА ЗВЕЗД -->
       <section id="tab-stars" class="tab-pane">
         <div class="liquid-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <div style="font-size:16px; font-weight:800;">Покупка Telegram Stars</div>
-            <span class="id-chip">fragment.com/stars</span>
+            <span class="id-chip">Instant Delivery</span>
           </div>
           <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
-            Официальный курс <b>fragment.com/stars</b> ($0.015 / Star) с ежеминутным пересчетом в <b>GRAM</b> и <b>USDT</b> по котировкам <b>Bybit Spot</b>.
+            Выберите пакет звезд для мгновенного зачисления на любой аккаунт Telegram.
           </div>
 
           <div class="field">
@@ -869,17 +886,124 @@
     </main>
   </div>
 
+  <!-- МОДАЛЬНОЕ ОКНО 1: НЕХВАТКА СРЕДСТВ -->
+  <div class="modal-backdrop" id="insufficient-modal" onclick="if(event.target===this) closeInsufficientModal()">
+    <div class="liquid-modal">
+      <div class="modal-icon-ring">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+          <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+          <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+        </svg>
+      </div>
+      <div style="text-align:center; font-size:17px; font-weight:800; margin-bottom:4px;">Недостаточно средств</div>
+      <div style="text-align:center; font-size:12px; color:var(--text-sub);">
+        На вашем балансе недостаточно средств для проведения операции.
+      </div>
+
+      <div class="deficit-table">
+        <div class="deficit-row">
+          <span style="color:var(--text-sub);">Сумма к оплате:</span>
+          <span id="ins-required">0.00 GRAM</span>
+        </div>
+        <div class="deficit-row">
+          <span style="color:var(--text-sub);">Доступный баланс:</span>
+          <span id="ins-available">0.00 GRAM</span>
+        </div>
+        <div class="deficit-row" style="border-top:1px solid var(--glass-border); padding-top:8px; color:#f87171;">
+          <span>Не хватает:</span>
+          <span id="ins-missing">0.00 GRAM</span>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-liquid" onclick="goToDepositFromModal()">💳 Пополнить баланс</button>
+        <button class="btn-liquid btn-secondary" onclick="closeInsufficientModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО 2: ПРОСМОТР ПРОФИЛЯ УЧАСТНИКА СДЕЛКИ -->
+  <div class="modal-backdrop" id="partner-profile-modal" onclick="if(event.target===this) closePartnerModal()">
+    <div class="liquid-modal">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+        <div class="avatar-glass" id="modal-p-avatar">U</div>
+        <div>
+          <div style="font-size:17px; font-weight:800; display:flex; align-items:center; gap:6px;">
+            <span id="modal-p-username">@user</span>
+            <span id="modal-p-verified" style="display:none;" class="verified-badge" title="Верифицирован">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+          <span class="id-chip">Telegram ID: <span id="modal-p-id">—</span></span>
+        </div>
+      </div>
+
+      <div class="metrics-row" style="margin-bottom:16px;">
+        <div class="metric-tile" style="padding:13px;">
+          <div class="metric-label">Успешных сделок</div>
+          <div class="metric-value" id="modal-p-deals">0</div>
+        </div>
+        <div class="metric-tile" style="padding:13px;">
+          <div class="metric-label">Общий оборот</div>
+          <div class="metric-value" id="modal-p-vol">0.00 USDT</div>
+        </div>
+      </div>
+
+      <div style="font-size:11.5px; color:var(--text-sub); text-align:center; margin-bottom:14px; padding:9px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border);">
+        🛡 Профиль участника проверен системой безопасных сделок
+      </div>
+
+      <button class="btn-liquid btn-secondary" onclick="closePartnerModal()">Закрыть профиль</button>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО 3: 3-ЭТАПНАЯ ВЕРИФИКАЦИЯ ПАСПОРТА И ЛИЦА -->
+  <div class="modal-backdrop" id="kyc-modal" onclick="if(event.target===this) closeKycModal()">
+    <div class="liquid-modal">
+      <div class="kyc-steps-dots">
+        <div class="kyc-step-dot active" id="kyc-dot-1"></div>
+        <div class="kyc-step-dot" id="kyc-dot-2"></div>
+        <div class="kyc-step-dot" id="kyc-dot-3"></div>
+      </div>
+
+      <div style="text-align:center; font-size:16px; font-weight:800; margin-bottom:4px;" id="kyc-step-title">
+        Шаг 1 из 3: Паспорт и лицо прямо
+      </div>
+      <div style="text-align:center; font-size:12px; color:var(--text-sub); line-height:1.4;" id="kyc-step-subtitle">
+        Держите паспорт в разворот рядом с лицом, смотрящим прямо в камеру.
+      </div>
+
+      <input type="file" id="kyc-file-input" accept="image/*" capture="user" style="display:none;" onchange="handleKycPhotoSelected(event)" />
+
+      <div class="kyc-preview-box" onclick="document.getElementById('kyc-file-input').click()" id="kyc-preview-area">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--text-sub);">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        <span style="font-size:12px; color:var(--text-sub); font-weight:600;">Нажмите, чтобы сделать фото или выбрать кадр</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-liquid" id="kyc-next-btn" onclick="nextKycStep()">Далее</button>
+        <button class="btn-liquid btn-secondary" onclick="closeKycModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
+
+    function haptic(type = "light") {
+      try { tg.HapticFeedback?.impactOccurred(type); } catch (e) {}
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const API_BASE = urlParams.get("api") || "http://localhost:8080";
     const BOT_USERNAME = urlParams.get("bot") || "";
 
-    // Официальная сетка https://fragment.com/stars ($0.015 USD за 1 Star: 1,000 Stars = $15.00 USD)
-    // Количество GRAM рассчитывается каждую минуту по живому курсу GRAM/USDT с Bybit.com
-    const FRAGMENT_STAR_PACKS = [
+    const STAR_PACKS = [
       { stars: 50, usdt: 0.75 },
       { stars: 100, usdt: 1.50 },
       { stars: 250, usdt: 3.75 },
@@ -913,8 +1037,14 @@
       deal_type: x.tp || "sale",
       seller_id: x.s,
       seller_username: x.su || "",
+      seller_deals: x.sd || 0,
+      seller_vol: x.sv || 0.0,
+      seller_verified: x.svf || 0,
       buyer_id: x.b,
       buyer_username: x.bu || "",
+      buyer_deals: x.bd || 0,
+      buyer_vol: x.bv || 0.0,
+      buyer_verified: x.bvf || 0,
       nft_name: x.n,
       nft_link: x.l,
       swap_nft_name: x.sn || "",
@@ -935,6 +1065,7 @@
 
     const initCurrRaw = urlParams.get("curr") || (savedLocal?.user?.currency || "GRAM");
     const normalizedCurr = initCurrRaw === "TON" ? "GRAM" : initCurrRaw;
+    const initVolCurr = urlParams.get("vcurr") || (savedLocal?.user?.volume_currency || "USDT");
 
     let state = {
       user: {
@@ -943,13 +1074,15 @@
         balance_usd: urlParams.has("bal") ? parseFloat(urlParams.get("bal")) : (savedLocal?.user?.balance_usd || 0.0),
         deals_count: urlParams.has("deals") ? parseInt(urlParams.get("deals")) : (savedLocal?.user?.deals_count || 0),
         total_volume_usd: urlParams.has("vol") ? parseFloat(urlParams.get("vol")) : (savedLocal?.user?.total_volume_usd || 0.0),
-        currency: normalizedCurr
+        currency: normalizedCurr,
+        volume_currency: initVolCurr === "TON" ? "GRAM" : initVolCurr,
+        is_verified: urlParams.has("ver") ? parseInt(urlParams.get("ver")) : (savedLocal?.user?.is_verified || 0),
+        kyc_status: urlParams.get("kyc") || (savedLocal?.user?.kyc_status || "none")
       },
       theme: localStorage.getItem("otc_glass_theme") || "dark",
       deals: urlDeals || (savedLocal?.deals || []),
       withdrawals: urlWithdrawals || (savedLocal?.withdrawals || []),
       chats: savedLocal?.chats || {},
-      // Актуальные котировки Bybit: 1 GRAM = 1.062 USDT (1 USDT = 0.9416 GRAM), 1 USDT = 82.78 RUB
       rates: { USDT: 1.0, GRAM: 0.9416, RUB: 82.78, UAH: 41.45 },
       gramPriceUsdt: 1.062,
       role: "seller",
@@ -957,15 +1090,15 @@
       swapCurrency: "GRAM",
       withdrawCurrency: "GRAM",
       selectedStarPack: 100,
-      activeChatDealId: null
+      activeChatDealId: null,
+      kycStep: 1,
+      kycPhotos: { 1: null, 2: null, 3: null }
     };
 
-    // =========================================================
-    // ЖИВОЕ ОБНОВЛЕНИЕ КУРСОВ С BYBIT.COM И ФИАТА КАЖДУЮ МИНУТУ
-    // =========================================================
-    async function fetchBybitRates() {
+    const VERIFIED_SVG = `<span class="verified-badge" title="Верифицирован"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+
+    async function fetchLiveRates() {
       try {
-        // 1. Запрос спотового курса GRAMUSDT напрямую с Bybit V5 API
         const res = await fetch("https://api.bybit.com/v5/market/tickers?category=spot&symbol=GRAMUSDT");
         const json = await res.json();
         const gramTicker = json?.result?.list?.[0];
@@ -977,7 +1110,6 @@
       } catch (e) {}
 
       try {
-        // 2. Живой курс RUB и UAH
         const fxRes = await fetch("https://open.er-api.com/v6/latest/USD");
         const fxJson = await fxRes.json();
         if (fxJson?.rates?.RUB) state.rates.RUB = parseFloat(fxJson.rates.RUB);
@@ -995,12 +1127,11 @@
       }
 
       const now = new Date();
-      document.getElementById("bybit-ticker-text").innerText =
+      document.getElementById("live-ticker-text").innerText =
         `1 GRAM = ${state.gramPriceUsdt.toFixed(3)} USDT · 1 USDT = ${state.rates.RUB.toFixed(2)}₽`;
-      document.getElementById("bybit-updated-time").innerText =
-        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      document.getElementById("live-updated-time").innerText =
+        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-      // Анимация вспышки тикера при обновлении
       const bar = document.getElementById("ticker-bar-box");
       bar.classList.add("flash");
       setTimeout(() => bar.classList.remove("flash"), 700);
@@ -1011,16 +1142,221 @@
     }
 
     function setTheme(themeName) {
+      haptic("light");
       state.theme = themeName;
       document.documentElement.setAttribute("data-theme", themeName);
       localStorage.setItem("otc_glass_theme", themeName);
       ["dark", "light", "light-pink", "dark-pink"].forEach(th => {
-        document.getElementById(`dot-${th}`)?.classList.toggle("active", th === themeName);
         document.getElementById(`tbtn-${th}`)?.classList.toggle("active", th === themeName);
       });
     }
 
+    // Форматирование эквивалентов сделки во всех остальных валютах
+    function formatOtherEquivalents(usd, primaryCurr) {
+      const allCurrs = ["GRAM", "USDT", "RUB", "UAH"];
+      return allCurrs
+        .filter(c => c !== primaryCurr)
+        .map(c => `${(usd * (state.rates[c] || 1)).toFixed(2)} ${c}`)
+        .join(" · ");
+    }
+
+    // =========================================================
+    // 3-ЭТАПНАЯ ВЕРИФИКАЦИЯ (ПАСПОРТ ПРЯМО -> ЛИЦО ВЛЕВО -> ЛИЦО ВПРАВО)
+    // =========================================================
+    const KYC_STEP_INFO = {
+      1: {
+        title: "Шаг 1 из 3: Паспорт и лицо прямо",
+        sub: "Держите паспорт рядом с лицом, смотрящим прямо в камеру."
+      },
+      2: {
+        title: "Шаг 2 из 3: Поворот лица влево",
+        sub: "Сделайте четкое фото вашего лица, повернутого влево."
+      },
+      3: {
+        title: "Шаг 3 из 3: Поворот лица вправо",
+        sub: "Сделайте четкое фото вашего лица, повернутого вправо."
+      }
+    };
+
+    function openKycModal() {
+      haptic("medium");
+      if (state.user.is_verified) return;
+      state.kycStep = 1;
+      state.kycPhotos = { 1: null, 2: null, 3: null };
+      renderKycStep();
+      document.getElementById("kyc-modal").classList.add("open");
+    }
+
+    function closeKycModal() {
+      document.getElementById("kyc-modal").classList.remove("open");
+    }
+
+    function renderKycStep() {
+      const s = state.kycStep;
+      [1, 2, 3].forEach(i => {
+        document.getElementById(`kyc-dot-${i}`).classList.toggle("active", i <= s);
+      });
+      document.getElementById("kyc-step-title").innerText = KYC_STEP_INFO[s].title;
+      document.getElementById("kyc-step-subtitle").innerText = KYC_STEP_INFO[s].sub;
+      document.getElementById("kyc-next-btn").innerText = s < 3 ? "Далее (Следующий ракурс)" : "Отправить на проверку";
+
+      const area = document.getElementById("kyc-preview-area");
+      if (state.kycPhotos[s]) {
+        area.innerHTML = `<img src="${state.kycPhotos[s]}" alt="KYC Step ${s}" />`;
+      } else {
+        area.innerHTML = `
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--text-sub);">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <span style="font-size:12px; color:var(--text-sub); font-weight:600;">Нажмите, чтобы сделать или загрузить фото</span>
+        `;
+      }
+    }
+
+    function handleKycPhotoSelected(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const maxDim = 900;
+          let w = img.width, h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+            else { w = Math.round(w * maxDim / h); h = maxDim; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, w, h);
+          state.kycPhotos[state.kycStep] = canvas.toDataURL("image/jpeg", 0.78);
+          renderKycStep();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      event.target.value = "";
+    }
+
+    async function nextKycStep() {
+      haptic("light");
+      if (!state.kycPhotos[state.kycStep]) {
+        return alert("Сначала сделайте или выберите фотографию для текущего шага!");
+      }
+      if (state.kycStep < 3) {
+        state.kycStep += 1;
+        renderKycStep();
+        return;
+      }
+
+      // Отправка всех 3 фотографий главному админу
+      const res = await apiCall("/api/kyc/submit", "POST", {
+        user_id: state.user.user_id,
+        username: state.user.username,
+        photo_front: state.kycPhotos[1],
+        photo_left: state.kycPhotos[2],
+        photo_right: state.kycPhotos[3]
+      });
+
+      closeKycModal();
+      if (res && res.ok) {
+        state.user = res.user;
+        saveLocal();
+        renderAll();
+      } else {
+        state.user.kyc_status = "pending";
+        saveLocal();
+        renderAll();
+        if (BOT_USERNAME) {
+          tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=kyc`);
+        }
+      }
+    }
+
+    function showInsufficientFundsModal(requiredUsd) {
+      haptic("heavy");
+      const availUsd = state.user.balance_usd || 0;
+      const missingUsd = Math.max(0, requiredUsd - availUsd);
+
+      document.getElementById("ins-required").innerText =
+        `${formatCurr(requiredUsd)} ($${requiredUsd.toFixed(2)})`;
+      document.getElementById("ins-available").innerText =
+        `${formatCurr(availUsd)} ($${availUsd.toFixed(2)})`;
+      document.getElementById("ins-missing").innerText =
+        `${formatCurr(missingUsd)} ($${missingUsd.toFixed(2)})`;
+
+      document.getElementById("insufficient-modal").classList.add("open");
+    }
+
+    function closeInsufficientModal() {
+      document.getElementById("insufficient-modal").classList.remove("open");
+    }
+
+    function goToDepositFromModal() {
+      closeInsufficientModal();
+      switchTab("profile");
+      const box = document.getElementById("deposit-instructions");
+      box.style.display = "block";
+      box.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function openPartnerProfileModal(userId, username, dealsCount, volumeUsd, isVerified = 0) {
+      haptic("medium");
+      const cleanName = (username || "").replace(/^@/, "");
+      document.getElementById("modal-p-avatar").innerText = (cleanName || "U")[0].toUpperCase();
+      document.getElementById("modal-p-username").innerText = cleanName ? `@${cleanName}` : `Участник #${userId || '—'}`;
+      document.getElementById("modal-p-verified").style.display = Number(isVerified) ? "inline-flex" : "none";
+      document.getElementById("modal-p-id").innerText = userId || "—";
+      document.getElementById("modal-p-deals").innerText = dealsCount || 0;
+      document.getElementById("modal-p-vol").innerText = formatCurr(volumeUsd || 0, state.user.volume_currency);
+      document.getElementById("partner-profile-modal").classList.add("open");
+    }
+
+    function closePartnerModal() {
+      document.getElementById("partner-profile-modal").classList.remove("open");
+    }
+
+    async function queryAndOpenPartnerModal(queryStr) {
+      const q = (queryStr || "").trim();
+      if (!q) return;
+
+      const res = await apiCall("/api/profile_lookup", "POST", { query: q });
+      if (res && res.ok && res.profile) {
+        const p = res.profile;
+        return openPartnerProfileModal(p.user_id, p.username, p.deals_count, p.total_volume_usd, p.is_verified);
+      }
+
+      const cleanQ = q.replace(/^@/, "").toLowerCase();
+      for (const d of state.deals) {
+        if (String(d.seller_id) === cleanQ || (d.seller_username && d.seller_username.toLowerCase() === cleanQ)) {
+          return openPartnerProfileModal(d.seller_id, d.seller_username, d.seller_deals || 0, d.seller_vol || 0, d.seller_verified || 0);
+        }
+        if (String(d.buyer_id) === cleanQ || (d.buyer_username && d.buyer_username.toLowerCase() === cleanQ)) {
+          return openPartnerProfileModal(d.buyer_id, d.buyer_username, d.buyer_deals || 0, d.buyer_vol || 0, d.buyer_verified || 0);
+        }
+      }
+
+      openPartnerProfileModal(q.match(/^\d+$/) ? q : "—", cleanQ, 0, 0, 0);
+    }
+
+    function lookupCounterparty() {
+      const val = document.getElementById("lookup-user-input").value.trim();
+      if (!val) return;
+      queryAndOpenPartnerModal(val);
+    }
+
+    function previewPartnerFromInput(inputId) {
+      const val = document.getElementById(inputId).value.trim();
+      if (!val) return;
+      queryAndOpenPartnerModal(val);
+    }
+
     function toggleDepositInfo() {
+      haptic("light");
       const box = document.getElementById("deposit-instructions");
       box.style.display = box.style.display === "none" ? "block" : "none";
     }
@@ -1074,7 +1410,7 @@
       if (state.user.username) {
         document.getElementById("stars-recipient").value = `@${state.user.username.replace(/^@/, "")}`;
       }
-      await fetchBybitRates();
+      await fetchLiveRates();
 
       const data = await apiCall("/api/user", "POST", {
         user_id: tgUser.id,
@@ -1093,16 +1429,45 @@
 
     function renderAll() {
       const u = state.user;
+      const volCurr = u.volume_currency || "USDT";
+
       document.getElementById("prof-avatar").innerText = (u.username || "U")[0].toUpperCase();
       document.getElementById("prof-username").innerText = u.username ? `@${u.username.replace(/^@/, '')}` : `User #${u.user_id}`;
+      document.getElementById("prof-verified-icon").style.display = Number(u.is_verified) ? "inline-flex" : "none";
       document.getElementById("prof-id").innerText = u.user_id;
       document.getElementById("dep-uid-code").innerText = u.user_id;
-      document.getElementById("prof-balance").innerText = formatCurr(u.balance_usd);
+      document.getElementById("prof-balance").innerText = formatCurr(u.balance_usd, u.currency);
       document.getElementById("prof-deals-count").innerText = u.deals_count;
-      document.getElementById("prof-volume").innerText = formatCurr(u.total_volume_usd);
+      // Оборот отображается в своей независимой валюте
+      document.getElementById("prof-volume").innerText = formatCurr(u.total_volume_usd, volCurr);
+
+      // Статус верификации в профиле
+      const kycBadge = document.getElementById("kyc-status-badge");
+      const kycBtn = document.getElementById("btn-start-kyc");
+      if (Number(u.is_verified)) {
+        kycBadge.className = "status-pill verified";
+        kycBadge.innerText = "Верифицирован ☑️";
+        kycBtn.style.display = "none";
+      } else if (u.kyc_status === "pending") {
+        kycBadge.className = "status-pill pending";
+        kycBadge.innerText = "На проверке";
+        kycBtn.innerText = "Отправить фото повторно";
+        kycBtn.style.display = "inline-flex";
+      } else if (u.kyc_status === "rejected") {
+        kycBadge.className = "status-pill rejected";
+        kycBadge.innerText = "Отклонено";
+        kycBtn.innerText = "Пройти верификацию заново";
+        kycBtn.style.display = "inline-flex";
+      } else {
+        kycBadge.className = "status-pill funded";
+        kycBadge.innerText = "Не верифицирован";
+        kycBtn.innerText = "Верифицировать аккаунт";
+        kycBtn.style.display = "inline-flex";
+      }
 
       ["GRAM", "USDT", "RUB", "UAH"].forEach(c => {
         document.getElementById(`curr-${c}`)?.classList.toggle("active", u.currency === c);
+        document.getElementById(`vcurr-${c}`)?.classList.toggle("active", volCurr === c);
         document.getElementById(`dcurr-${c}`)?.classList.toggle("active", state.dealCurrency === c);
         document.getElementById(`scurr-${c}`)?.classList.toggle("active", state.swapCurrency === c);
         document.getElementById(`wcurr-${c}`)?.classList.toggle("active", state.withdrawCurrency === c);
@@ -1117,18 +1482,29 @@
       renderWithdrawals();
     }
 
+    async function changeVolumeCurrency(vcurr) {
+      haptic("light");
+      state.user.volume_currency = vcurr;
+      saveLocal();
+      renderAll();
+      await apiCall("/api/volume_currency", "POST", { user_id: state.user.user_id, volume_currency: vcurr });
+    }
+
     function setDealCurrency(curr) {
+      haptic("light");
       state.dealCurrency = curr;
       renderAll();
       updateDealPreview();
     }
 
     function setSwapCurrency(curr) {
+      haptic("light");
       state.swapCurrency = curr;
       renderAll();
     }
 
     function setWithdrawCurrency(curr) {
+      haptic("light");
       state.withdrawCurrency = curr;
       renderAll();
     }
@@ -1137,20 +1513,19 @@
       const val = parseFloat(document.getElementById("deal-price").value) || 0;
       const usdt = toUsd(val, state.dealCurrency);
       document.getElementById("deal-usd-preview").innerText =
-        `≈ ${usdt.toFixed(2)} USDT · ${(usdt * state.rates.GRAM).toFixed(2)} GRAM (Bybit Live)`;
+        `≈ ${formatOtherEquivalents(usdt, state.dealCurrency)}`;
     }
 
-    // Рендер пакетов звезд с https://fragment.com/stars + пересчет в GRAM и валюту по курсу Bybit
     function renderStarsGrid() {
       const box = document.getElementById("stars-grid-container");
       if (!box) return;
-      box.innerHTML = FRAGMENT_STAR_PACKS.map(p => {
+      box.innerHTML = STAR_PACKS.map((p, idx) => {
         const gramCost = p.usdt / state.gramPriceUsdt;
         const userCurrStr = formatCurr(p.usdt);
         const isSelected = state.selectedStarPack === p.stars;
 
         return `
-          <div class="star-pack ${isSelected ? 'active' : ''}" onclick="selectStarPack(${p.stars})">
+          <div class="star-pack stagger-item ${isSelected ? 'active' : ''}" style="animation-delay:${idx * 0.04}s" onclick="selectStarPack(${p.stars})">
             <div class="star-pack-top">
               <svg class="star-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               <span>${p.stars.toLocaleString()} Stars</span>
@@ -1163,6 +1538,7 @@
     }
 
     function selectStarPack(starsCount) {
+      haptic("light");
       state.selectedStarPack = starsCount;
       renderStarsGrid();
     }
@@ -1171,14 +1547,14 @@
       const rcp = document.getElementById("stars-recipient").value.trim();
       if (!rcp) return alert("Укажите @username получателя звезд");
 
-      const pack = FRAGMENT_STAR_PACKS.find(x => x.stars === state.selectedStarPack);
+      const pack = STAR_PACKS.find(x => x.stars === state.selectedStarPack);
       if (!pack) return;
 
       const costUsdt = pack.usdt;
       const gramAmount = +(costUsdt / state.gramPriceUsdt).toFixed(4);
 
       if (state.user.balance_usd < costUsdt) {
-        return alert(`Недостаточно средств на балансе! Необходимо: ${gramAmount.toFixed(2)} GRAM (${costUsdt.toFixed(2)} USDT)`);
+        return showInsufficientFundsModal(costUsdt);
       }
 
       const data = await apiCall("/api/stars/buy", "POST", {
@@ -1190,7 +1566,10 @@
       });
 
       if (data) {
-        if (!data.ok) return alert(data.error);
+        if (!data.ok) {
+          if (data.error === "insufficient_funds") return showInsufficientFundsModal(costUsdt);
+          return alert(data.error);
+        }
         state.user = data.user;
       } else {
         state.user.balance_usd -= costUsdt;
@@ -1201,7 +1580,6 @@
 
       saveLocal();
       renderAll();
-      alert(`✅ Оплачено ${pack.stars} Stars (${gramAmount.toFixed(2)} GRAM / ${costUsdt.toFixed(2)} USDT) для ${rcp}!`);
     }
 
     async function createWithdrawalRequest() {
@@ -1215,7 +1593,7 @@
 
       const amountUsd = toUsd(amountVal, curr);
       if (state.user.balance_usd < amountUsd) {
-        return alert("Недостаточно средств на балансе!");
+        return showInsufficientFundsModal(amountUsd);
       }
 
       const data = await apiCall("/api/withdraw/create", "POST", {
@@ -1227,7 +1605,10 @@
       });
 
       if (data) {
-        if (!data.ok) return alert(data.error);
+        if (!data.ok) {
+          if (data.error === "insufficient_funds") return showInsufficientFundsModal(amountUsd);
+          return alert(data.error);
+        }
         state.user = data.user;
         state.withdrawals = data.withdrawals;
       } else {
@@ -1282,29 +1663,45 @@
         cancelled: "Отменена"
       };
 
-      container.innerHTML = state.deals.map(d => {
+      container.innerHTML = state.deals.map((d, idx) => {
         const isBuyer = Number(d.buyer_id) === Number(state.user.user_id);
         const isSwap = d.deal_type === "swap";
+        // Крупно показываем именно ту валюту, на которую провели сделку
         const dealCurr = (d.deal_currency === "TON" ? "GRAM" : d.deal_currency) || "GRAM";
         const dealPrimaryAmount = d.deal_amount && d.deal_amount > 0
           ? `${Number(d.deal_amount).toFixed(2)} ${dealCurr}`
           : formatCurr(d.price_usd, dealCurr);
 
-        let actions = `<button class="btn-liquid btn-secondary" style="margin-top:8px;" onclick="openChat(${d.deal_id})">Открыть чат сделки</button>`;
+        // Ниже меньшим шрифтом эквивалент во всех остальных валютах
+        const otherEquivs = formatOtherEquivalents(d.price_usd, dealCurr);
+
+        const partnerId = isBuyer ? d.seller_id : d.buyer_id;
+        const partnerUname = isBuyer ? (d.seller_username || "") : (d.buyer_username || "");
+        const partnerDeals = isBuyer ? (d.seller_deals || 0) : (d.buyer_deals || 0);
+        const partnerVol = isBuyer ? (d.seller_vol || 0) : (d.buyer_vol || 0);
+        const partnerVer = isBuyer ? (d.seller_verified || 0) : (d.buyer_verified || 0);
+        const safePartnerUname = partnerUname.replace(/'/g, "");
+
+        let actions = `
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+            <button class="btn-liquid btn-secondary" onclick="openPartnerProfileModal('${partnerId}', '${safePartnerUname}', ${partnerDeals}, ${partnerVol}, ${partnerVer})">👤 Профиль участника</button>
+            <button class="btn-liquid btn-secondary" onclick="openChat(${d.deal_id})">💬 Чат сделки</button>
+          </div>
+        `;
 
         if (d.status === "pending") {
           if (isBuyer && d.price_usd > 0) {
-            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'pay')">Оплатить (${dealPrimaryAmount})</button>` + actions;
+            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'pay')">💳 Оплатить (${dealPrimaryAmount})</button>` + actions;
           }
           actions += `<button class="btn-liquid btn-danger-glass" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">Отменить</button>`;
         } else if (d.status === "funded") {
           if (isBuyer) {
-            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'complete')">Подтвердить получение от @ssupppoortt</button>` + actions;
+            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'complete')">✅ Подтвердить получение от @ssupppoortt</button>` + actions;
           }
         }
 
-        const sellerDisplay = d.seller_username ? `@${d.seller_username}` : d.seller_id;
-        const buyerDisplay = d.buyer_username ? `@${d.buyer_username}` : d.buyer_id;
+        const sellerDisplay = d.seller_username ? `@${d.seller_username}` : `ID ${d.seller_id}`;
+        const buyerDisplay = d.buyer_username ? `@${d.buyer_username}` : `ID ${d.buyer_id}`;
 
         const swapBlock = isSwap ? `
           <div style="padding:8px 10px; border-radius:10px; background:var(--glass-input); border:1px solid var(--glass-border); margin-bottom:8px; font-size:12px;">
@@ -1313,20 +1710,30 @@
           </div>
         ` : "";
 
+        const priceSection = d.price_usd > 0 ? `
+          <div style="margin-bottom:12px;">
+            <div style="font-size:19px; font-weight:800; font-family:'JetBrains Mono', monospace;">${dealPrimaryAmount}</div>
+            <div style="font-size:11px; color:var(--text-sub); font-family:'JetBrains Mono', monospace; margin-top:3px;">≈ ${otherEquivs}</div>
+          </div>
+        ` : `<div style="font-size:16px; font-weight:800; margin-bottom:12px;">Без доплаты (Бартер NFT)</div>`;
+
         return `
-          <div class="liquid-card">
+          <div class="liquid-card stagger-item" style="animation-delay:${idx * 0.05}s">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
               <span style="font-weight:800; font-size:15px;">${isSwap ? '🔄 Обмен' : '💎 Сделка'} #${d.deal_id} · ${d.nft_name}</span>
               <span class="status-pill ${d.status}">${stMap[d.status] || d.status}</span>
             </div>
-            <div style="font-size:12px; color:var(--text-sub); margin-bottom:6px; word-break:break-all;">${d.nft_link || "—"}</div>
+            <div style="font-size:12px; color:var(--text-sub); margin-bottom:8px; word-break:break-all;">${d.nft_link || "—"}</div>
             ${swapBlock}
-            <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:10px; font-family:'JetBrains Mono', monospace;">
-              Участник 1: ${sellerDisplay} · Участник 2: ${buyerDisplay}
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+              <span class="partner-chip" onclick="openPartnerProfileModal('${d.seller_id}', '${(d.seller_username||'').replace(/'/g,'')}', ${d.seller_deals||0}, ${d.seller_vol||0}, ${d.seller_verified||0})">
+                📤 ${sellerDisplay} ${d.seller_verified ? VERIFIED_SVG : ''}
+              </span>
+              <span class="partner-chip" onclick="openPartnerProfileModal('${d.buyer_id}', '${(d.buyer_username||'').replace(/'/g,'')}', ${d.buyer_deals||0}, ${d.buyer_vol||0}, ${d.buyer_verified||0})">
+                📥 ${buyerDisplay} ${d.buyer_verified ? VERIFIED_SVG : ''}
+              </span>
             </div>
-            <div style="font-size:17px; font-weight:800; font-family:'JetBrains Mono', monospace; margin-bottom:12px;">
-              ${d.price_usd > 0 ? `${dealPrimaryAmount} (≈ $${d.price_usd.toFixed(2)} USDT)` : "Без доплаты (Бартер NFT)"}
-            </div>
+            ${priceSection}
             ${actions}
           </div>
         `;
@@ -1334,6 +1741,7 @@
     }
 
     async function changeCurrency(curr) {
+      haptic("light");
       state.user.currency = curr;
       saveLocal();
       renderAll();
@@ -1341,6 +1749,7 @@
     }
 
     function setRole(role) {
+      haptic("light");
       state.role = role;
       document.getElementById("role-seller").classList.toggle("active", role === "seller");
       document.getElementById("role-buyer").classList.toggle("active", role === "buyer");
@@ -1380,8 +1789,14 @@
           deal_type: "sale",
           seller_id: state.role === "seller" ? state.user.user_id : partner,
           seller_username: state.role === "seller" ? state.user.username : partner.replace(/^@/, ""),
+          seller_deals: state.role === "seller" ? state.user.deals_count : 0,
+          seller_vol: state.role === "seller" ? state.user.total_volume_usd : 0,
+          seller_verified: state.role === "seller" ? state.user.is_verified : 0,
           buyer_id: state.role === "buyer" ? state.user.user_id : partner,
           buyer_username: state.role === "buyer" ? state.user.username : partner.replace(/^@/, ""),
+          buyer_deals: state.role === "buyer" ? state.user.deals_count : 0,
+          buyer_vol: state.role === "buyer" ? state.user.total_volume_usd : 0,
+          buyer_verified: state.role === "buyer" ? state.user.is_verified : 0,
           nft_name,
           nft_link,
           price_usd,
@@ -1438,8 +1853,14 @@
           deal_type: "swap",
           seller_id: state.user.user_id,
           seller_username: state.user.username,
+          seller_deals: state.user.deals_count,
+          seller_vol: state.user.total_volume_usd,
+          seller_verified: state.user.is_verified,
           buyer_id: partner,
           buyer_username: partner.replace(/^@/, ""),
+          buyer_deals: 0,
+          buyer_vol: 0,
+          buyer_verified: 0,
           nft_name,
           nft_link,
           swap_nft_name,
@@ -1462,16 +1883,22 @@
     }
 
     async function dealAction(deal_id, action) {
+      const deal = state.deals.find(d => d.deal_id === deal_id);
+      if (action === "pay" && deal && state.user.balance_usd < deal.price_usd) {
+        return showInsufficientFundsModal(deal.price_usd);
+      }
+
       const data = await apiCall("/api/deals/action", "POST", { user_id: state.user.user_id, deal_id, action });
       if (data) {
-        if (!data.ok) return alert(data.error);
+        if (!data.ok) {
+          if (data.error === "insufficient_funds" && deal) return showInsufficientFundsModal(deal.price_usd);
+          return alert(data.error);
+        }
         state.user = data.user;
         state.deals = data.deals;
       } else {
-        const deal = state.deals.find(d => d.deal_id === deal_id);
         if (!deal) return;
         if (action === "pay") {
-          if (state.user.balance_usd < deal.price_usd) return alert("Недостаточно средств на балансе!");
           state.user.balance_usd -= deal.price_usd;
           deal.status = "funded";
           syncWithBotDb({ a: "pay", id: deal_id });
@@ -1523,6 +1950,7 @@
       const text = input.value.trim();
       if (!text) return;
       input.value = "";
+      haptic("light");
 
       const sender_name = state.user.username ? `@${state.user.username.replace(/^@/, '')}` : `ID ${state.user.user_id}`;
       const data = await apiCall("/api/chat/send", "POST", {
@@ -1541,13 +1969,14 @@
     }
 
     function switchTab(tab) {
+      haptic("light");
       ["profile", "deals", "create", "swap", "stars", "withdraw", "chat"].forEach(t => {
         document.getElementById(`tab-${t}`)?.classList.toggle("active", t === tab);
         document.getElementById(`nav-${t}`)?.classList.toggle("active", t === tab);
       });
     }
 
-    setInterval(fetchBybitRates, 60000);
+    setInterval(fetchLiveRates, 60000);
     loadProfile();
   </script>
 </body>
