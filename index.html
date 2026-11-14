@@ -10,43 +10,43 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     /* =========================================================
-       4 ТЕМЫ: ТЕМНАЯ, СВЕТЛАЯ, СВЕТЛО-РОЗОВАЯ, ТЕМНО-РОЗОВАЯ
+       4 ТЕМЫ: СТРОГАЯ ЧЕРНО-СЕРАЯ, СВЕТЛАЯ, СВЕТЛО-РОЗОВАЯ, ТЕМНО-РОЗОВАЯ
        ========================================================= */
     :root, [data-theme="dark"] {
-      --bg-base: #07090e;
-      --orb-1: rgba(56, 189, 248, 0.22);
-      --orb-2: rgba(99, 102, 241, 0.22);
-      --orb-3: rgba(16, 185, 129, 0.14);
-      --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%);
-      --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.04) 100%);
-      --glass-input: rgba(10, 14, 23, 0.55);
-      --glass-border: rgba(255, 255, 255, 0.14);
-      --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.28), inset 1px 0 1px 0 rgba(255, 255, 255, 0.12);
-      --glass-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.65);
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      --accent: #38bdf8;
-      --accent-grad: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
-      --accent-glow: rgba(56, 189, 248, 0.35);
-      --btn-text: #ffffff;
+      --bg-base: #050505;
+      --orb-1: rgba(255, 255, 255, 0.06);
+      --orb-2: rgba(150, 150, 155, 0.05);
+      --orb-3: rgba(85, 85, 90, 0.07);
+      --glass-bg: linear-gradient(135deg, rgba(36, 36, 38, 0.65) 0%, rgba(15, 15, 17, 0.52) 100%);
+      --glass-dock: linear-gradient(180deg, rgba(42, 42, 44, 0.75) 0%, rgba(16, 16, 18, 0.62) 100%);
+      --glass-input: rgba(10, 10, 12, 0.82);
+      --glass-border: rgba(255, 255, 255, 0.13);
+      --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.24), inset 1px 0 1px 0 rgba(255, 255, 255, 0.1);
+      --glass-shadow: 0 22px 48px -14px rgba(0, 0, 0, 0.9);
+      --text-main: #f4f4f6;
+      --text-sub: #8e8e93;
+      --accent: #e4e4e7;
+      --accent-grad: linear-gradient(135deg, #f4f4f6 0%, #a1a1aa 100%);
+      --accent-glow: rgba(255, 255, 255, 0.15);
+      --btn-text: #09090b;
     }
 
     [data-theme="light"] {
-      --bg-base: #eef2f9;
-      --orb-1: rgba(59, 130, 246, 0.25);
-      --orb-2: rgba(147, 197, 253, 0.45);
-      --orb-3: rgba(167, 243, 208, 0.35);
-      --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.38) 100%);
-      --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.5) 100%);
-      --glass-input: rgba(255, 255, 255, 0.65);
-      --glass-border: rgba(255, 255, 255, 0.85);
-      --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95), inset 1px 0 1px 0 rgba(255, 255, 255, 0.7);
-      --glass-shadow: 0 16px 36px -10px rgba(30, 64, 175, 0.1);
-      --text-main: #0f172a;
-      --text-sub: #475569;
-      --accent: #2563eb;
-      --accent-grad: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
-      --accent-glow: rgba(37, 99, 235, 0.25);
+      --bg-base: #f2f3f7;
+      --orb-1: rgba(180, 185, 200, 0.35);
+      --orb-2: rgba(210, 215, 228, 0.5);
+      --orb-3: rgba(160, 170, 190, 0.28);
+      --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(245, 246, 250, 0.48) 100%);
+      --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(240, 242, 247, 0.58) 100%);
+      --glass-input: rgba(255, 255, 255, 0.74);
+      --glass-border: rgba(255, 255, 255, 0.92);
+      --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 1), inset 1px 0 1px 0 rgba(255, 255, 255, 0.8);
+      --glass-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.08);
+      --text-main: #111827;
+      --text-sub: #6b7280;
+      --accent: #18181b;
+      --accent-grad: linear-gradient(135deg, #27272a 0%, #09090b 100%);
+      --accent-glow: rgba(24, 24, 27, 0.18);
       --btn-text: #ffffff;
     }
 
@@ -62,7 +62,7 @@
       --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 1), inset 1px 0 1px 0 rgba(255, 255, 255, 0.8);
       --glass-shadow: 0 18px 40px -12px rgba(219, 39, 119, 0.14);
       --text-main: #3b0722;
-      --text-sub: #831843;
+      --text-sub: #9d174d;
       --accent: #ec4899;
       --accent-grad: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
       --accent-glow: rgba(236, 72, 153, 0.3);
@@ -70,21 +70,21 @@
     }
 
     [data-theme="dark-pink"] {
-      --bg-base: #120610;
-      --orb-1: rgba(236, 72, 153, 0.28);
-      --orb-2: rgba(192, 38, 211, 0.24);
-      --orb-3: rgba(244, 63, 94, 0.18);
+      --bg-base: #0d050a;
+      --orb-1: rgba(236, 72, 153, 0.25);
+      --orb-2: rgba(192, 38, 211, 0.2);
+      --orb-3: rgba(244, 63, 94, 0.16);
       --glass-bg: linear-gradient(135deg, rgba(255, 192, 225, 0.11) 0%, rgba(255, 192, 225, 0.03) 100%);
       --glass-dock: linear-gradient(180deg, rgba(255, 192, 225, 0.14) 0%, rgba(255, 192, 225, 0.04) 100%);
-      --glass-input: rgba(24, 7, 20, 0.6);
+      --glass-input: rgba(20, 6, 16, 0.68);
       --glass-border: rgba(244, 114, 182, 0.24);
       --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 210, 235, 0.32), inset 1px 0 1px 0 rgba(255, 210, 235, 0.15);
-      --glass-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.75);
+      --glass-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.8);
       --text-main: #fdf2f8;
       --text-sub: #f472b6;
       --accent: #f472b6;
-      --accent-grad: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
-      --accent-glow: rgba(244, 114, 182, 0.38);
+      --accent-grad: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+      --accent-glow: rgba(244, 114, 182, 0.35);
       --btn-text: #ffffff;
     }
 
@@ -101,10 +101,9 @@
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
-      transition: background-color 0.35s ease, color 0.35s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Анимированные глубинные сферы под жидким стеклом */
     .ambient-canvas {
       position: fixed;
       inset: 0;
@@ -115,16 +114,16 @@
     .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(65px);
-      animation: floatOrb 14s infinite alternate ease-in-out;
+      filter: blur(70px);
+      animation: floatOrb 15s infinite alternate ease-in-out;
     }
-    .orb-1 { width: 320px; height: 320px; top: -8%; left: 10%; background: var(--orb-1); }
-    .orb-2 { width: 280px; height: 280px; bottom: 5%; right: -10%; background: var(--orb-2); animation-delay: -5s; }
-    .orb-3 { width: 240px; height: 240px; top: 42%; left: 30%; background: var(--orb-3); animation-delay: -9s; }
+    .orb-1 { width: 320px; height: 320px; top: -6%; left: 12%; background: var(--orb-1); }
+    .orb-2 { width: 280px; height: 280px; bottom: 6%; right: -8%; background: var(--orb-2); animation-delay: -5s; }
+    .orb-3 { width: 240px; height: 240px; top: 44%; left: 28%; background: var(--orb-3); animation-delay: -9s; }
 
     @keyframes floatOrb {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(24px, -28px) scale(1.12); }
+      100% { transform: translate(22px, -24px) scale(1.1); }
     }
 
     /* =========================================================
@@ -132,28 +131,27 @@
        ========================================================= */
     .app-shell {
       display: grid;
-      grid-template-columns: 68px 1fr;
-      gap: 14px;
-      max-width: 680px;
+      grid-template-columns: 66px 1fr;
+      gap: 12px;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 14px 14px 28px 12px;
+      padding: 12px 12px 28px 10px;
       min-height: 100vh;
       align-items: start;
     }
 
-    /* Левая стеклянная панель навигации */
     .left-rail {
       position: sticky;
-      top: 14px;
-      height: calc(100vh - 28px);
-      max-height: 680px;
+      top: 12px;
+      height: calc(100vh - 24px);
+      max-height: 760px;
       background: var(--glass-dock);
-      backdrop-filter: blur(30px) saturate(200%);
-      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      backdrop-filter: blur(32px) saturate(190%);
+      -webkit-backdrop-filter: blur(32px) saturate(190%);
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-shadow), var(--glass-highlight);
-      border-radius: 26px;
-      padding: 14px 8px;
+      border-radius: 24px;
+      padding: 10px 6px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -162,29 +160,30 @@
     }
 
     .rail-logo {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
       background: var(--accent-grad);
       box-shadow: 0 6px 18px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      color: var(--btn-text);
+      flex-shrink: 0;
     }
 
     .rail-nav {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 4px;
       width: 100%;
       align-items: center;
     }
 
     .rail-btn {
-      width: 50px;
-      height: 54px;
-      border-radius: 18px;
+      width: 52px;
+      height: 44px;
+      border-radius: 14px;
       border: 1px solid transparent;
       background: transparent;
       color: var(--text-sub);
@@ -192,21 +191,20 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
+      gap: 2px;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
       position: relative;
     }
 
     .rail-btn svg {
-      width: 20px;
-      height: 20px;
+      width: 17px;
+      height: 17px;
       stroke-width: 2;
-      transition: transform 0.25s ease;
     }
 
     .rail-btn span {
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 600;
       letter-spacing: -0.2px;
     }
@@ -214,93 +212,94 @@
     .rail-btn.active {
       background: var(--glass-bg);
       border-color: var(--glass-border);
-      box-shadow: 0 8px 20px var(--accent-glow), var(--glass-highlight);
+      box-shadow: 0 6px 16px var(--accent-glow), var(--glass-highlight);
       color: var(--text-main);
     }
 
     .rail-btn.active::before {
       content: "";
       position: absolute;
-      left: -8px;
-      width: 4px;
-      height: 22px;
+      left: -6px;
+      width: 3px;
+      height: 18px;
       border-radius: 0 4px 4px 0;
       background: var(--accent-grad);
-      box-shadow: 0 0 10px var(--accent);
+      box-shadow: 0 0 8px var(--accent);
     }
 
-    .rail-btn.active svg {
-      color: var(--accent);
-      transform: translateY(-1px);
-    }
+    .rail-btn.active svg { color: var(--accent); }
 
-    /* Переключатель 4 тем внизу левого дока */
     .rail-themes {
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      padding: 8px 6px;
-      border-radius: 18px;
-      background: rgba(0, 0, 0, 0.12);
+      gap: 5px;
+      padding: 6px 5px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.18);
       border: 1px solid var(--glass-border);
     }
 
     .theme-dot {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       cursor: pointer;
-      border: 2px solid rgba(255, 255, 255, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      transition: transform 0.2s ease;
     }
     .theme-dot.active {
-      transform: scale(1.2);
+      transform: scale(1.18);
       border-color: var(--text-main);
-      box-shadow: 0 0 10px var(--accent);
     }
-    .dot-dark { background: linear-gradient(135deg, #0f172a, #38bdf8); }
-    .dot-light { background: linear-gradient(135deg, #ffffff, #93c5fd); }
+    .dot-dark { background: linear-gradient(135deg, #09090b, #71717a); }
+    .dot-light { background: linear-gradient(135deg, #ffffff, #d4d4d8); }
     .dot-lpink { background: linear-gradient(135deg, #ffd1e6, #f472b6); }
     .dot-dpink { background: linear-gradient(135deg, #2e0722, #ec4899); }
 
     /* =========================================================
-       LIQUID GLASS КАРТОЧКИ И ЭЛЕМЕНТЫ
+       LIQUID GLASS КАРТОЧКИ
        ========================================================= */
-    .main-stage {
-      width: 100%;
-      min-width: 0;
-    }
+    .main-stage { width: 100%; min-width: 0; }
 
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      padding: 4px 2px;
+      margin-bottom: 10px;
+      gap: 8px;
     }
 
-    .stage-title {
-      font-size: 19px;
-      font-weight: 800;
-      letter-spacing: -0.4px;
+    .stage-title { font-size: 18px; font-weight: 800; letter-spacing: -0.4px; }
+
+    .ticker-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 13px;
+      margin-bottom: 14px;
+      border-radius: 14px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(22px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-highlight);
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #10b981; box-shadow: 0 0 8px #10b981;
+      display: inline-block; margin-right: 5px;
     }
 
     .support-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 13px;
-      border-radius: 999px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-highlight);
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 999px;
+      background: var(--glass-bg); backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight);
+      color: var(--text-main); font-size: 11.5px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
     }
 
     .liquid-card {
@@ -313,314 +312,158 @@
       padding: 18px;
       margin-bottom: 14px;
       position: relative;
-      overflow: hidden;
     }
 
-    /* Профиль */
-    .profile-top {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
+    .profile-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
 
     .avatar-glass {
-      width: 56px;
-      height: 56px;
-      border-radius: 18px;
+      width: 54px; height: 54px; border-radius: 17px;
       background: var(--accent-grad);
       box-shadow: 0 8px 24px var(--accent-glow), inset 0 1.5px 2px rgba(255,255,255,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 800;
-      color: #fff;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 21px; font-weight: 800; color: var(--btn-text);
     }
 
-    .user-meta h2 {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-    }
+    .user-meta h2 { font-size: 16.5px; font-weight: 800; }
 
     .id-chip {
-      display: inline-block;
-      margin-top: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-sub);
-      padding: 3px 8px;
-      border-radius: 8px;
-      background: var(--glass-input);
-      border: 1px solid var(--glass-border);
+      display: inline-block; margin-top: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      color: var(--text-sub); padding: 3px 8px; border-radius: 8px;
+      background: var(--glass-input); border: 1px solid var(--glass-border);
     }
 
     .balance-block {
-      padding: 16px;
-      border-radius: 20px;
-      background: var(--glass-input);
-      border: 1px solid var(--glass-border);
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+      padding: 15px; border-radius: 20px;
+      background: var(--glass-input); border: 1px solid var(--glass-border);
       margin-bottom: 14px;
     }
 
     .balance-caption {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      font-weight: 700;
-      color: var(--text-sub);
+      font-size: 10.5px; text-transform: uppercase;
+      letter-spacing: 0.8px; font-weight: 700; color: var(--text-sub);
     }
 
     .balance-amount {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 28px;
-      font-weight: 800;
-      margin: 6px 0 12px;
-      letter-spacing: -0.8px;
+      font-size: 27px; font-weight: 800; margin: 6px 0 12px;
     }
 
     .curr-segmented {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      background: rgba(0, 0, 0, 0.12);
-      padding: 4px;
-      border-radius: 13px;
-      border: 1px solid var(--glass-border);
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
+      background: rgba(0, 0, 0, 0.16); padding: 4px;
+      border-radius: 13px; border: 1px solid var(--glass-border);
     }
 
     .curr-btn {
-      padding: 7px 0;
-      border-radius: 9px;
-      border: none;
-      background: transparent;
-      color: var(--text-sub);
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
+      padding: 7px 0; border-radius: 9px; border: none;
+      background: transparent; color: var(--text-sub);
+      font-size: 11.5px; font-weight: 700; cursor: pointer; transition: 0.2s;
     }
 
     .curr-btn.active {
-      background: var(--accent-grad);
-      color: var(--btn-text);
+      background: var(--accent-grad); color: var(--btn-text);
       box-shadow: 0 3px 10px var(--accent-glow);
     }
 
-    /* Статистика профиля */
-    .metrics-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
+    .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
 
     .metric-tile {
-      background: var(--glass-bg);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: var(--glass-bg); backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
       box-shadow: var(--glass-shadow), var(--glass-highlight);
-      border-radius: 20px;
-      padding: 15px;
+      border-radius: 20px; padding: 15px;
     }
 
-    .metric-label {
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
+    .metric-label { font-size: 11.5px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
+    .metric-value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 800; }
 
-    .metric-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 19px;
-      font-weight: 800;
-    }
-
-    /* Селектор тем в профиле с подписями */
-    .theme-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-top: 10px;
-    }
+    .theme-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
 
     .theme-card-btn {
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--glass-border);
-      background: var(--glass-input);
-      color: var(--text-main);
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: 0.2s;
+      padding: 10px 12px; border-radius: 14px;
+      border: 1px solid var(--glass-border); background: var(--glass-input);
+      color: var(--text-main); font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px; cursor: pointer;
     }
+    .theme-card-btn.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 
-    .theme-card-btn.active {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent), 0 6px 16px var(--accent-glow);
-    }
-
-    /* Инпуты и кнопки */
     .field { margin-bottom: 12px; }
-    .field label {
-      display: block;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
+    .field label { display: block; font-size: 11.5px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
 
     .glass-input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: var(--glass-input);
-      border: 1px solid var(--glass-border);
-      color: var(--text-main);
-      font-size: 13.5px;
-      font-weight: 500;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%; padding: 12px 14px; border-radius: 14px;
+      background: var(--glass-input); border: 1px solid var(--glass-border);
+      color: var(--text-main); font-size: 13.5px; font-weight: 500; outline: none;
     }
-    .glass-input::placeholder { color: var(--text-sub); opacity: 0.65; }
-    .glass-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
+    .glass-input:focus { border-color: var(--accent); }
 
     .btn-liquid {
-      width: 100%;
-      padding: 13px 16px;
-      border-radius: 15px;
+      width: 100%; padding: 13px 16px; border-radius: 15px;
       border: 1px solid rgba(255,255,255,0.22);
-      background: var(--accent-grad);
-      color: var(--btn-text);
-      font-size: 13.5px;
-      font-weight: 700;
-      cursor: pointer;
+      background: var(--accent-grad); color: var(--btn-text);
+      font-size: 13.5px; font-weight: 700; cursor: pointer;
       box-shadow: 0 8px 22px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.4);
-      transition: transform 0.15s ease, opacity 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .btn-liquid:active { transform: scale(0.98); }
 
     .btn-secondary {
-      background: var(--glass-input);
-      color: var(--text-main);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-highlight);
+      background: var(--glass-input); color: var(--text-main);
+      border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight);
     }
 
     .btn-danger-glass {
-      background: rgba(239, 68, 68, 0.14);
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      box-shadow: none;
+      background: rgba(239, 68, 68, 0.14); color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: none;
     }
 
-    .role-selector {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
+    .role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
     .role-pill {
-      padding: 11px;
-      border-radius: 14px;
-      border: 1px solid var(--glass-border);
-      background: var(--glass-input);
-      color: var(--text-sub);
-      font-size: 12.5px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.2s;
+      padding: 11px; border-radius: 14px; border: 1px solid var(--glass-border);
+      background: var(--glass-input); color: var(--text-sub);
+      font-size: 12.5px; font-weight: 700; cursor: pointer;
     }
-    .role-pill.active {
-      background: var(--accent-grad);
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 6px 18px var(--accent-glow);
-    }
+    .role-pill.active { background: var(--accent-grad); color: var(--btn-text); border-color: transparent; }
 
-    /* Бейджи сделок */
-    .status-pill {
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
+    .stars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+    .star-pack {
+      padding: 13px 12px; border-radius: 16px;
+      background: var(--glass-input); border: 1px solid var(--glass-border);
+      cursor: pointer; display: flex; flex-direction: column; gap: 4px;
     }
-    .status-pill.pending { background: rgba(245, 158, 11, 0.16); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
-    .status-pill.funded { background: rgba(56, 189, 248, 0.18); color: var(--accent); border: 1px solid var(--glass-border); }
-    .status-pill.completed { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
-    .status-pill.cancelled { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-
-    /* Чат */
-    .chat-stream {
-      height: 54vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 12px;
-      border-radius: 18px;
-      background: var(--glass-input);
-      border: 1px solid var(--glass-border);
-      margin-bottom: 12px;
-    }
-
-    .bubble {
-      max-width: 82%;
-      padding: 10px 13px;
-      border-radius: 16px;
-      font-size: 13px;
-      line-height: 1.42;
-    }
-    .bubble.me {
-      align-self: flex-end;
-      background: var(--accent-grad);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 4px 14px var(--accent-glow);
-    }
-    .bubble.other {
-      align-self: flex-start;
+    .star-pack.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 8px 20px var(--accent-glow);
       background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--text-main);
-      border-bottom-left-radius: 4px;
     }
-    .bubble-meta {
-      font-size: 10px;
-      font-weight: 700;
-      opacity: 0.78;
-      margin-bottom: 3px;
-    }
+    .star-pack-top { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 14.5px; }
+    .star-icon { color: #f59e0b; }
+    .star-ton-price { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--text-main); }
+    .star-fiat-price { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-sub); }
 
-    .tab-pane { display: none; animation: fadeIn 0.22s ease; }
-    .tab-pane.active { display: block; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+    .status-pill { padding: 4px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; }
+    .status-pill.pending { background: rgba(245, 158, 11, 0.16); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .status-pill.funded { background: rgba(255, 255, 255, 0.12); color: var(--text-main); border: 1px solid var(--glass-border); }
+    .status-pill.completed, .status-pill.approved { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .status-pill.cancelled, .status-pill.rejected { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .chat-stream {
+      height: 52vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
+      padding: 12px; border-radius: 18px; background: var(--glass-input);
+      border: 1px solid var(--glass-border); margin-bottom: 12px;
     }
+    .bubble { max-width: 82%; padding: 10px 13px; border-radius: 16px; font-size: 13px; line-height: 1.42; }
+    .bubble.me { align-self: flex-end; background: var(--accent-grad); color: var(--btn-text); border-bottom-right-radius: 4px; }
+    .bubble.other { align-self: flex-start; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); border-bottom-left-radius: 4px; }
+    .bubble-meta { font-size: 10px; font-weight: 700; opacity: 0.75; margin-bottom: 3px; }
+
+    .tab-pane { display: none; animation: fadeIn 0.2s ease; }
+    .tab-pane.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-  <!-- Фоновое световое поле для преломления жидкого стекла -->
   <div class="ambient-canvas">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
@@ -628,10 +471,10 @@
   </div>
 
   <div class="app-shell">
-    <!-- ЛЕВАЯ СТРОКА ВЫБОРА (LIQUID GLASS SIDEBAR) -->
+    <!-- ЛЕВАЯ СТРОКА ВЫБОРА (SIDEBAR DOCK) -->
     <aside class="left-rail">
       <div class="rail-logo" title="OTC Escrow">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           <path d="m9 12 2 2 4-4"/>
         </svg>
@@ -639,39 +482,41 @@
 
       <nav class="rail-nav">
         <button class="rail-btn active" onclick="switchTab('profile')" id="nav-profile">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-          <span id="nav-lbl-profile">Профиль</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Профиль</span>
         </button>
 
         <button class="rail-btn" onclick="switchTab('deals')" id="nav-deals">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-          </svg>
-          <span id="nav-lbl-deals">Сделки</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          <span>Сделки</span>
         </button>
 
         <button class="rail-btn" onclick="switchTab('create')" id="nav-create">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="16"/>
-            <line x1="8" y1="12" x2="16" y2="12"/>
-          </svg>
-          <span id="nav-lbl-create">Создать</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span>Создать</span>
+        </button>
+
+        <button class="rail-btn" onclick="switchTab('swap')" id="nav-swap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span>Обмен</span>
+        </button>
+
+        <button class="rail-btn" onclick="switchTab('stars')" id="nav-stars">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Звезды</span>
+        </button>
+
+        <button class="rail-btn" onclick="switchTab('withdraw')" id="nav-withdraw">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/></svg>
+          <span>Вывод</span>
         </button>
 
         <button class="rail-btn" onclick="switchTab('chat')" id="nav-chat">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-          <span id="nav-lbl-chat">Чат</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Чат</span>
         </button>
       </nav>
 
-      <!-- Быстрый переключатель 4 тем прямо на левой панели -->
       <div class="rail-themes" title="Тема оформления">
         <div class="theme-dot dot-dark" onclick="setTheme('dark')" id="dot-dark"></div>
         <div class="theme-dot dot-light" onclick="setTheme('light')" id="dot-light"></div>
@@ -683,11 +528,18 @@
     <!-- ОСНОВНАЯ ОБЛАСТЬ КОНТЕНТА -->
     <main class="main-stage">
       <div class="top-bar">
-        <div class="stage-title" id="ui-brand">OTC Автогарант</div>
-        <a onclick="openSupport()" class="support-pill">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          @ssupppoortt
-        </a>
+        <div class="stage-title">OTC Автогарант</div>
+        <a onclick="openSupport()" class="support-pill">@ssupppoortt</a>
+      </div>
+
+      <!-- ИНДИКАТОР КУРСОВ BYBIT LIVE -->
+      <div class="ticker-bar">
+        <div>
+          <span class="live-dot"></span>
+          <b style="color:var(--text-main);">Bybit Live:</b>
+          <span id="bybit-ticker-text" style="font-family:'JetBrains Mono',monospace;">1 TON = $5.25 USDT</span>
+        </div>
+        <div id="bybit-updated-time" style="font-family:'JetBrains Mono',monospace; font-size:10px;">60s sync</div>
       </div>
 
       <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
@@ -702,7 +554,7 @@
           </div>
 
           <div class="balance-block">
-            <div class="balance-caption" id="ui-bal-sub">Мультивалютный баланс</div>
+            <div class="balance-caption">Мультивалютный баланс (Bybit курс)</div>
             <div class="balance-amount" id="prof-balance">0.00 TON</div>
 
             <div class="curr-segmented">
@@ -713,28 +565,37 @@
             </div>
           </div>
 
-          <div style="display:flex; gap:8px;">
-            <input type="number" id="deposit-input" class="glass-input" placeholder="Сумма пополнения..." />
-            <button class="btn-liquid" style="width:auto; padding:0 20px; white-space:nowrap;" onclick="depositBalance()" id="ui-dep-btn">Пополнить</button>
+          <!-- Пополнение без автовыдачи баланса -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="btn-liquid" onclick="toggleDepositInfo()">Пополнить баланс</button>
+            <button class="btn-liquid btn-secondary" onclick="switchTab('withdraw')">Вывести средства</button>
+          </div>
+
+          <div id="deposit-instructions" style="display:none; margin-top:12px; padding:12px; border-radius:14px; background:var(--glass-input); border:1px solid var(--glass-border); font-size:12px; line-height:1.5;">
+            <div style="font-weight:700; margin-bottom:6px;">Реквизиты для пополнения:</div>
+            <div style="color:var(--text-sub); margin-bottom:8px;">
+              Для пополнения баланса в TON, USDT, RUB или UAH напишите в техническую поддержку <b>@ssupppoortt</b> и укажите ваш Telegram ID: <code id="dep-uid-code" style="color:var(--text-main);">0</code>. После проверки перевода администратор зачислит средства на ваш счет.
+            </div>
+            <button class="btn-liquid" onclick="openSupport()">Написать в @ssupppoortt для пополнения</button>
           </div>
         </div>
 
         <div class="metrics-row">
           <div class="metric-tile">
-            <div class="metric-label" id="ui-deals-cnt-label">Количество сделок</div>
+            <div class="metric-label">Количество сделок</div>
             <div class="metric-value" id="prof-deals-count">0</div>
           </div>
           <div class="metric-tile">
-            <div class="metric-label" id="ui-vol-label">Общий объем</div>
+            <div class="metric-label">Общий объем</div>
             <div class="metric-value" id="prof-volume">0.00 TON</div>
           </div>
         </div>
 
         <div class="liquid-card">
-          <div style="font-size:13px; font-weight:700; color:var(--text-sub);" id="ui-theme-title">Оформление Liquid Glass</div>
+          <div style="font-size:12.5px; font-weight:700; color:var(--text-sub);">Тема Liquid Glass</div>
           <div class="theme-grid">
             <button class="theme-card-btn" onclick="setTheme('dark')" id="tbtn-dark">
-              <span class="theme-dot dot-dark" style="width:14px;height:14px;"></span> Темная
+              <span class="theme-dot dot-dark" style="width:14px;height:14px;"></span> Темная (Black)
             </button>
             <button class="theme-card-btn" onclick="setTheme('light')" id="tbtn-light">
               <span class="theme-dot dot-light" style="width:14px;height:14px;"></span> Светлая
@@ -754,10 +615,10 @@
         <div id="deals-list"></div>
       </section>
 
-      <!-- ВКЛАДКА 3: СОЗДАТЬ СДЕЛКУ -->
+      <!-- ВКЛАДКА 3: СОЗДАТЬ СДЕЛКУ ПОКУПКИ/ПРОДАЖИ -->
       <section id="tab-create" class="tab-pane">
         <div class="liquid-card">
-          <div style="font-size:16px; font-weight:800; margin-bottom:14px;" id="ui-create-title">Новая NFT-сделка</div>
+          <div style="font-size:16px; font-weight:800; margin-bottom:14px;">Создать NFT-сделку</div>
 
           <div class="role-selector">
             <button class="role-pill active" id="role-seller" onclick="setRole('seller')">Я Продавец</button>
@@ -765,43 +626,166 @@
           </div>
 
           <div class="field">
-            <label id="ui-partner-label">Участник сделки (@username или Telegram ID)</label>
+            <label>Участник сделки (@username или Telegram ID)</label>
             <input type="text" id="deal-partner" class="glass-input" placeholder="@username или числовой ID" />
           </div>
 
           <div class="field">
-            <label id="ui-nft-label">Название NFT / Цифрового актива</label>
+            <label>Название NFT / Цифрового товара</label>
             <input type="text" id="deal-nft-name" class="glass-input" placeholder="Plush Pepe #412" />
           </div>
 
           <div class="field">
-            <label id="ui-link-label">Ссылка на NFT или условия</label>
+            <label>Ссылка на NFT или условия</label>
             <input type="text" id="deal-nft-link" class="glass-input" placeholder="https://t.me/nft/..." />
           </div>
 
           <div class="field">
-            <label><span id="ui-price-label">Сумма сделки</span> (<span id="create-curr-label">TON</span>)</label>
-            <input type="number" id="deal-price" class="glass-input" placeholder="100.00" />
+            <label>Валюта сделки</label>
+            <div class="curr-segmented" style="margin-bottom:10px;">
+              <button type="button" class="curr-btn active" onclick="setDealCurrency('TON')" id="dcurr-TON">TON</button>
+              <button type="button" class="curr-btn" onclick="setDealCurrency('USDT')" id="dcurr-USDT">USDT</button>
+              <button type="button" class="curr-btn" onclick="setDealCurrency('RUB')" id="dcurr-RUB">RUB</button>
+              <button type="button" class="curr-btn" onclick="setDealCurrency('UAH')" id="dcurr-UAH">UAH</button>
+            </div>
           </div>
 
-          <div style="font-size:11.5px; color:var(--text-sub); margin: 14px 0; line-height:1.45; padding:10px 12px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border);" id="ui-escrow-warn">
-            Проверка и передача актива выполняется строго через аккаунт поддержки <b>@ssupppoortt</b> после депонирования оплаты.
+          <div class="field">
+            <label>Сумма сделки в <b id="create-curr-label">TON</b></label>
+            <input type="number" id="deal-price" class="glass-input" placeholder="100.00" oninput="updateDealPreview()" />
+            <div id="deal-usd-preview" style="font-size:11px; color:var(--text-sub); margin-top:5px; font-family:'JetBrains Mono',monospace;">≈ $0.00 USDT (по курсу Bybit)</div>
           </div>
 
-          <button class="btn-liquid" onclick="createDeal()" id="ui-create-btn">Создать сделку и пригласить</button>
+          <div style="font-size:11.5px; color:var(--text-sub); margin: 14px 0; line-height:1.45; padding:10px 12px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border);">
+            Передача товара выполняется строго через аккаунт поддержки <b>@ssupppoortt</b> после заморозки средств.
+          </div>
+
+          <button class="btn-liquid" onclick="createDeal()">Создать сделку и пригласить</button>
         </div>
       </section>
 
-      <!-- ВКЛАДКА 4: ЧАТ СДЕЛКИ -->
+      <!-- ВКЛАДКА 4: ОБМЕН NFT (NFT SWAP) -->
+      <section id="tab-swap" class="tab-pane">
+        <div class="liquid-card">
+          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">🔄 Безопасный Обмен NFT</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
+            Обмен NFT на NFT (с возможной доплатой) через проверку обоих подарков у <b>@ssupppoortt</b>.
+          </div>
+
+          <div class="field">
+            <label>Второй участник обмена (@username или Telegram ID)</label>
+            <input type="text" id="swap-partner" class="glass-input" placeholder="@username или ID" />
+          </div>
+
+          <div class="field">
+            <label>Ваш NFT (который вы отдаете)</label>
+            <input type="text" id="swap-my-nft" class="glass-input" placeholder="Например: Durov's Cap #12" />
+          </div>
+
+          <div class="field">
+            <label>Ссылка на ваш NFT</label>
+            <input type="text" id="swap-my-link" class="glass-input" placeholder="https://t.me/nft/..." />
+          </div>
+
+          <div class="field">
+            <label>NFT партнера (который вы получаете взамен)</label>
+            <input type="text" id="swap-their-nft" class="glass-input" placeholder="Например: Plush Pepe #88" />
+          </div>
+
+          <div class="field">
+            <label>Ссылка на NFT партнера</label>
+            <input type="text" id="swap-their-link" class="glass-input" placeholder="https://t.me/nft/..." />
+          </div>
+
+          <div class="field">
+            <label>Валюта доплаты (если есть)</label>
+            <div class="curr-segmented" style="margin-bottom:8px;">
+              <button type="button" class="curr-btn active" onclick="setSwapCurrency('TON')" id="scurr-TON">TON</button>
+              <button type="button" class="curr-btn" onclick="setSwapCurrency('USDT')" id="scurr-USDT">USDT</button>
+              <button type="button" class="curr-btn" onclick="setSwapCurrency('RUB')" id="scurr-RUB">RUB</button>
+              <button type="button" class="curr-btn" onclick="setSwapCurrency('UAH')" id="scurr-UAH">UAH</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Сумма доплаты в <b id="swap-curr-label">TON</b> (0 — если обмен без доплаты)</label>
+            <input type="number" id="swap-surcharge" class="glass-input" value="0" placeholder="0" />
+          </div>
+
+          <button class="btn-liquid" onclick="createSwapDeal()">Создать сделку обмена NFT</button>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 5: ПОКУПКА ЗВЕЗД (FRAGMENT + BYBIT USDT) -->
+      <section id="tab-stars" class="tab-pane">
+        <div class="liquid-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-size:16px; font-weight:800;">Покупка Telegram Stars</div>
+            <span class="id-chip">Fragment + Bybit USDT</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
+            Цены в TON взяты с Fragment.com, а стоимость в <b>USDT</b> пересчитывается каждую минуту по спотовому курсу Bybit.
+          </div>
+
+          <div class="field">
+            <label>Получатель звезд (@username)</label>
+            <input type="text" id="stars-recipient" class="glass-input" placeholder="@username получателя" />
+          </div>
+
+          <div class="field">
+            <label>Выберите пакет Telegram Stars</label>
+            <div class="stars-grid" id="stars-grid-container"></div>
+          </div>
+
+          <button class="btn-liquid" onclick="buyStars()">Купить выбранный пакет</button>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 6: ВЫВОД СРЕДСТВ -->
+      <section id="tab-withdraw" class="tab-pane">
+        <div class="liquid-card">
+          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">📤 Вывод средств</div>
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
+            Создайте заявку на вывод. Средства будут отправлены на указанные реквизиты после проверки.
+          </div>
+
+          <div class="field">
+            <label>Валюта вывода</label>
+            <div class="curr-segmented" style="margin-bottom:10px;">
+              <button type="button" class="curr-btn active" onclick="setWithdrawCurrency('TON')" id="wcurr-TON">TON</button>
+              <button type="button" class="curr-btn" onclick="setWithdrawCurrency('USDT')" id="wcurr-USDT">USDT</button>
+              <button type="button" class="curr-btn" onclick="setWithdrawCurrency('RUB')" id="wcurr-RUB">RUB</button>
+              <button type="button" class="curr-btn" onclick="setWithdrawCurrency('UAH')" id="wcurr-UAH">UAH</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Сумма вывода в <b id="withdraw-curr-label">TON</b></label>
+            <input type="number" id="withdraw-amount" class="glass-input" placeholder="50.00" />
+          </div>
+
+          <div class="field">
+            <label>Кошелек (TON / USDT TRC20) или номер карты</label>
+            <input type="text" id="withdraw-requisites" class="glass-input" placeholder="UQ... / T... / 2200..." />
+          </div>
+
+          <button class="btn-liquid" onclick="createWithdrawalRequest()">Создать заявку на вывод</button>
+        </div>
+
+        <div class="liquid-card">
+          <div style="font-size:14px; font-weight:800; margin-bottom:10px;">История ваших заявок на вывод</div>
+          <div id="withdrawals-list"></div>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 7: ЧАТ СДЕЛКИ -->
       <section id="tab-chat" class="tab-pane">
         <div class="liquid-card">
           <div style="font-size:14px; font-weight:800; margin-bottom:10px;" id="chat-title">Выберите сделку во вкладке «Сделки»</div>
           <div class="chat-stream" id="chat-messages"></div>
           <div style="display:flex; gap:8px;">
             <input type="text" id="chat-input" class="glass-input" placeholder="Написать сообщение..." />
-            <button class="btn-liquid" style="width:auto; padding:0 18px;" onclick="sendChatMessage()">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            </button>
+            <button class="btn-liquid" style="width:auto; padding:0 18px;" onclick="sendChatMessage()">➤</button>
           </div>
         </div>
       </section>
@@ -816,86 +800,60 @@
     const API_BASE = urlParams.get("api") || "http://localhost:8080";
     const BOT_USERNAME = urlParams.get("bot") || "";
 
-    const I18N = {
-      ru: {
-        brand: "OTC Автогарант", balSub: "Мультивалютный баланс", dealsCnt: "Количество сделок",
-        vol: "Общий объем", depBtn: "Пополнить", createTitle: "Новая NFT-сделка",
-        roleSeller: "Я Продавец", roleBuyer: "Я Покупатель",
-        partnerLbl: "Участник сделки (@username или Telegram ID)", nftLbl: "Название NFT / Цифрового актива",
-        linkLbl: "Ссылка на NFT или условия", priceLbl: "Сумма сделки",
-        warn: "Проверка и передача актива выполняется строго через аккаунт поддержки <b>@ssupppoortt</b> после заморозки средств.",
-        createBtn: "Создать сделку и пригласить", navProfile: "Профиль", navDeals: "Сделки", navCreate: "Создать", navChat: "Чат",
-        noDeals: "Активных сделок пока нет. Создайте новую сделку в меню слева.",
-        st_pending: "Ожидает оплаты", st_funded: "В холде (@ssupppoortt)", st_completed: "Завершена", st_cancelled: "Отменена",
-        btnPay: "Оплатить сделку", btnDone: "Подтвердить получение NFT", btnCancel: "Отменить", btnChat: "Открыть чат"
-      },
-      en: {
-        brand: "OTC Auto-Guarantor", balSub: "Multi-Currency Escrow", dealsCnt: "Total Deals",
-        vol: "Total Volume", depBtn: "Deposit", createTitle: "New NFT Deal",
-        roleSeller: "I'm Seller", roleBuyer: "I'm Buyer",
-        partnerLbl: "Counterparty (@username or Telegram ID)", nftLbl: "NFT / Digital Asset Name",
-        linkLbl: "Asset Link or Terms", priceLbl: "Deal Amount",
-        warn: "Asset verification and transfer is strictly handled via support <b>@ssupppoortt</b> after payment is frozen.",
-        createBtn: "Create & Invite", navProfile: "Profile", navDeals: "Deals", navCreate: "Create", navChat: "Chat",
-        noDeals: "No active deals yet. Create one using the left dock.",
-        st_pending: "Awaiting Payment", st_funded: "Funded (@ssupppoortt)", st_completed: "Completed", st_cancelled: "Cancelled",
-        btnPay: "Fund Escrow", btnDone: "Confirm Receipt", btnCancel: "Cancel", btnChat: "Open Chat"
-      },
-      zh: {
-        brand: "OTC 自动担保", balSub: "多币种安全托管余额", dealsCnt: "交易数量",
-        vol: "总交易量", depBtn: "充值", createTitle: "创建 NFT 担保交易",
-        roleSeller: "我是卖家", roleBuyer: "我是买家",
-        partnerLbl: "交易对方 (@username 或 Telegram ID)", nftLbl: "NFT / 数字商品名称",
-        linkLbl: "NFT 链接或条款", priceLbl: "交易金额",
-        warn: "资金冻结后，请务必将商品转交给客服账号 <b>@ssupppoortt</b> 进行核验交割。",
-        createBtn: "创建并邀请", navProfile: "个人", navDeals: "交易", navCreate: "创建", navChat: "聊天",
-        noDeals: "暂无交易，请在左侧导航栏创建新交易。",
-        st_pending: "等待付款", st_funded: "已冻结 (@ssupppoortt)", st_completed: "已完成", st_cancelled: "已取消",
-        btnPay: "支付并冻结", btnDone: "确认收货", btnCancel: "取消交易", btnChat: "进入聊天"
-      },
-      uk: {
-        brand: "OTC Автогарант", balSub: "Мультивалютний баланс", dealsCnt: "Кількість угод",
-        vol: "Загальний обсяг", depBtn: "Поповнити", createTitle: "Нова NFT-угода",
-        roleSeller: "Я Продавець", roleBuyer: "Я Покупець",
-        partnerLbl: "Учасник угоди (@username або Telegram ID)", nftLbl: "Назва NFT / Цифрового активу",
-        linkLbl: "Посилання на NFT або умови", priceLbl: "Сума угоди",
-        warn: "Перевірка та передача товару виконується суворо через підтримку <b>@ssupppoortt</b> після заморожування коштів.",
-        createBtn: "Створити та запросити", navProfile: "Профіль", navDeals: "Угоди", navCreate: "Створити", navChat: "Чат",
-        noDeals: "Активних угод поки немає. Створіть нову в меню зліва.",
-        st_pending: "Очікує оплати", st_funded: "У холді (@ssupppoortt)", st_completed: "Завершена", st_cancelled: "Скасована",
-        btnPay: "Оплатити угоду", btnDone: "Підтвердити отримання", btnCancel: "Скасувати", btnChat: "Відкрити чат"
-      }
-    };
+    // Пакеты звезд с Fragment.com (фиксированная цена в TON, цена в USDT считается по живому курсу Bybit TON/USDT)
+    const FRAGMENT_STAR_PACKS = [
+      { stars: 50, ton: 0.1405 },
+      { stars: 100, ton: 0.2810 },
+      { stars: 250, ton: 0.7025 },
+      { stars: 500, ton: 1.4050 },
+      { stars: 1000, ton: 2.8100 },
+      { stars: 2500, ton: 7.0250 },
+      { stars: 5000, ton: 14.050 },
+      { stars: 10000, ton: 28.100 }
+    ];
 
     const tgUser = tg.initDataUnsafe?.user || {
       id: parseInt(urlParams.get("uid")) || 100001,
       username: urlParams.get("uname") || "telegram_user"
     };
 
-    function parseUrlDeals() {
-      const dParam = urlParams.get("d");
-      if (!dParam) return null;
+    function parseUrlList(paramName, mapper) {
+      const p = urlParams.get(paramName);
+      if (!p) return null;
       try {
-        const b64 = dParam.replace(/-/g, "+").replace(/_/g, "/");
+        const b64 = p.replace(/-/g, "+").replace(/_/g, "/");
         const raw = JSON.parse(decodeURIComponent(escape(atob(b64))));
-        return raw.map(x => ({
-          deal_id: x.id,
-          seller_id: x.s,
-          seller_username: x.su || "",
-          buyer_id: x.b,
-          buyer_username: x.bu || "",
-          nft_name: x.n,
-          nft_link: x.l,
-          price_usd: x.p,
-          status: x.st
-        }));
+        return raw.map(mapper);
       } catch (e) {
         return null;
       }
     }
 
     const savedLocal = JSON.parse(localStorage.getItem(`otc_state_${tgUser.id}`) || "null");
-    const urlDeals = parseUrlDeals();
+    const urlDeals = parseUrlList("d", x => ({
+      deal_id: x.id,
+      deal_type: x.tp || "sale",
+      seller_id: x.s,
+      seller_username: x.su || "",
+      buyer_id: x.b,
+      buyer_username: x.bu || "",
+      nft_name: x.n,
+      nft_link: x.l,
+      swap_nft_name: x.sn || "",
+      swap_nft_link: x.sl || "",
+      price_usd: x.p,
+      deal_currency: x.dc || "TON",
+      deal_amount: x.da || 0,
+      status: x.st
+    }));
+
+    const urlWithdrawals = parseUrlList("w", x => ({
+      withdraw_id: x.id,
+      amount_curr: x.ac,
+      currency: x.c,
+      requisites: x.rq,
+      status: x.st
+    }));
 
     let state = {
       user: {
@@ -904,31 +862,65 @@
         balance_usd: urlParams.has("bal") ? parseFloat(urlParams.get("bal")) : (savedLocal?.user?.balance_usd || 0.0),
         deals_count: urlParams.has("deals") ? parseInt(urlParams.get("deals")) : (savedLocal?.user?.deals_count || 0),
         total_volume_usd: urlParams.has("vol") ? parseFloat(urlParams.get("vol")) : (savedLocal?.user?.total_volume_usd || 0.0),
-        currency: urlParams.get("curr") || (savedLocal?.user?.currency || "TON"),
-        language: urlParams.get("lang") || (savedLocal?.user?.language || "ru")
+        currency: urlParams.get("curr") || (savedLocal?.user?.currency || "TON")
       },
       theme: localStorage.getItem("otc_glass_theme") || "dark",
       deals: urlDeals || (savedLocal?.deals || []),
+      withdrawals: urlWithdrawals || (savedLocal?.withdrawals || []),
       chats: savedLocal?.chats || {},
-      rates: { USDT: 1.0, TON: 0.2, RUB: 95.0, UAH: 41.5 },
+      rates: { USDT: 1.0, TON: 0.1905, RUB: 96.5, UAH: 41.6 },
+      tonPriceUsdt: 5.25,
       role: "seller",
+      dealCurrency: "TON",
+      swapCurrency: "TON",
+      withdrawCurrency: "TON",
+      selectedStarPack: 100,
       activeChatDealId: null
     };
+
+    // Живой курс TON/USDT с Bybit каждую минуту
+    async function fetchBybitRates() {
+      try {
+        const res = await fetch("https://api.bybit.com/v5/market/tickers?category=spot&symbol=TONUSDT");
+        const json = await res.json();
+        const tonTicker = json?.result?.list?.[0];
+        if (tonTicker && parseFloat(tonTicker.lastPrice) > 0) {
+          const tonUsdt = parseFloat(tonTicker.lastPrice);
+          state.tonPriceUsdt = tonUsdt;
+          state.rates.TON = 1 / tonUsdt;
+        }
+      } catch (e) {}
+
+      const backendRates = await apiCall("/api/rates", "GET");
+      if (backendRates && backendRates.ok && backendRates.rates) {
+        state.rates = backendRates.rates;
+        state.tonPriceUsdt = +(1 / state.rates.TON).toFixed(4);
+      }
+
+      const now = new Date();
+      document.getElementById("bybit-ticker-text").innerText =
+        `1 TON = ${state.tonPriceUsdt.toFixed(3)} USDT · 1 USDT = ${state.rates.RUB.toFixed(1)}₽`;
+      document.getElementById("bybit-updated-time").innerText =
+        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+      renderAll();
+      renderStarsGrid();
+      updateDealPreview();
+    }
 
     function setTheme(themeName) {
       state.theme = themeName;
       document.documentElement.setAttribute("data-theme", themeName);
       localStorage.setItem("otc_glass_theme", themeName);
-
       ["dark", "light", "light-pink", "dark-pink"].forEach(th => {
         document.getElementById(`dot-${th}`)?.classList.toggle("active", th === themeName);
         document.getElementById(`tbtn-${th}`)?.classList.toggle("active", th === themeName);
       });
     }
 
-    function t(key) {
-      const lang = state.user.language || "ru";
-      return (I18N[lang] && I18N[lang][key]) || I18N.ru[key] || key;
+    function toggleDepositInfo() {
+      const box = document.getElementById("deposit-instructions");
+      box.style.display = box.style.display === "none" ? "block" : "none";
     }
 
     function openSupport() {
@@ -949,14 +941,14 @@
       localStorage.setItem(`otc_state_${tgUser.id}`, JSON.stringify(state));
     }
 
-    function formatCurr(usd) {
-      const curr = state.user.currency || "TON";
+    function formatCurr(usd, customCurr = null) {
+      const curr = customCurr || state.user.currency || "TON";
       const rate = state.rates[curr] || 1;
       return `${(usd * rate).toFixed(2)} ${curr}`;
     }
 
-    function toUsd(val) {
-      const curr = state.user.currency || "TON";
+    function toUsd(val, customCurr = null) {
+      const curr = customCurr || state.user.currency || "TON";
       const rate = state.rates[curr] || 1;
       return val / rate;
     }
@@ -975,8 +967,10 @@
 
     async function loadProfile() {
       setTheme(state.theme);
-      applyTranslations();
-      renderAll();
+      if (state.user.username) {
+        document.getElementById("stars-recipient").value = `@${state.user.username.replace(/^@/, "")}`;
+      }
+      await fetchBybitRates();
 
       const data = await apiCall("/api/user", "POST", {
         user_id: tgUser.id,
@@ -985,32 +979,11 @@
       if (data && data.ok) {
         state.user = data.user;
         state.deals = data.deals;
-        state.rates = data.rates;
+        if (data.withdrawals) state.withdrawals = data.withdrawals;
+        if (data.rates) state.rates = data.rates;
         saveLocal();
-        applyTranslations();
         renderAll();
       }
-    }
-
-    function applyTranslations() {
-      document.getElementById("ui-brand").innerText = t("brand");
-      document.getElementById("ui-bal-sub").innerText = t("balSub");
-      document.getElementById("ui-deals-cnt-label").innerText = t("dealsCnt");
-      document.getElementById("ui-vol-label").innerText = t("vol");
-      document.getElementById("ui-dep-btn").innerText = t("depBtn");
-      document.getElementById("ui-create-title").innerText = t("createTitle");
-      document.getElementById("role-seller").innerText = t("roleSeller");
-      document.getElementById("role-buyer").innerText = t("roleBuyer");
-      document.getElementById("ui-partner-label").innerText = t("partnerLbl");
-      document.getElementById("ui-nft-label").innerText = t("nftLbl");
-      document.getElementById("ui-link-label").innerText = t("linkLbl");
-      document.getElementById("ui-price-label").innerText = t("priceLbl");
-      document.getElementById("ui-escrow-warn").innerHTML = t("warn");
-      document.getElementById("ui-create-btn").innerText = t("createBtn");
-      document.getElementById("nav-lbl-profile").innerText = t("navProfile");
-      document.getElementById("nav-lbl-deals").innerText = t("navDeals");
-      document.getElementById("nav-lbl-create").innerText = t("navCreate");
-      document.getElementById("nav-lbl-chat").innerText = t("navChat");
     }
 
     function renderAll() {
@@ -1018,55 +991,235 @@
       document.getElementById("prof-avatar").innerText = (u.username || "U")[0].toUpperCase();
       document.getElementById("prof-username").innerText = u.username ? `@${u.username.replace(/^@/, '')}` : `User #${u.user_id}`;
       document.getElementById("prof-id").innerText = u.user_id;
+      document.getElementById("dep-uid-code").innerText = u.user_id;
       document.getElementById("prof-balance").innerText = formatCurr(u.balance_usd);
       document.getElementById("prof-deals-count").innerText = u.deals_count;
       document.getElementById("prof-volume").innerText = formatCurr(u.total_volume_usd);
-      document.getElementById("create-curr-label").innerText = u.currency;
 
       ["TON", "USDT", "RUB", "UAH"].forEach(c => {
-        document.getElementById(`curr-${c}`).classList.toggle("active", u.currency === c);
+        document.getElementById(`curr-${c}`)?.classList.toggle("active", u.currency === c);
+        document.getElementById(`dcurr-${c}`)?.classList.toggle("active", state.dealCurrency === c);
+        document.getElementById(`scurr-${c}`)?.classList.toggle("active", state.swapCurrency === c);
+        document.getElementById(`wcurr-${c}`)?.classList.toggle("active", state.withdrawCurrency === c);
       });
 
+      document.getElementById("create-curr-label").innerText = state.dealCurrency;
+      document.getElementById("swap-curr-label").innerText = state.swapCurrency;
+      document.getElementById("withdraw-curr-label").innerText = state.withdrawCurrency;
+
       renderDeals();
+      renderStarsGrid();
+      renderWithdrawals();
+    }
+
+    function setDealCurrency(curr) {
+      state.dealCurrency = curr;
+      renderAll();
+      updateDealPreview();
+    }
+
+    function setSwapCurrency(curr) {
+      state.swapCurrency = curr;
+      renderAll();
+    }
+
+    function setWithdrawCurrency(curr) {
+      state.withdrawCurrency = curr;
+      renderAll();
+    }
+
+    function updateDealPreview() {
+      const val = parseFloat(document.getElementById("deal-price").value) || 0;
+      const usdt = toUsd(val, state.dealCurrency);
+      document.getElementById("deal-usd-preview").innerText =
+        `≈ ${usdt.toFixed(2)} USDT · ${(usdt * state.rates.TON).toFixed(2)} TON (Bybit Live)`;
+    }
+
+    // Рендер пакетов звезд: цена в USDT считается строго по курсу Bybit (p.ton * state.tonPriceUsdt)
+    function renderStarsGrid() {
+      const box = document.getElementById("stars-grid-container");
+      if (!box) return;
+      box.innerHTML = FRAGMENT_STAR_PACKS.map(p => {
+        const costUsdt = p.ton * state.tonPriceUsdt;
+        const userCurrStr = formatCurr(costUsdt);
+        const isSelected = state.selectedStarPack === p.stars;
+
+        return `
+          <div class="star-pack ${isSelected ? 'active' : ''}" onclick="selectStarPack(${p.stars})">
+            <div class="star-pack-top">
+              <svg class="star-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>${p.stars.toLocaleString()} Stars</span>
+            </div>
+            <div class="star-ton-price">${p.ton} TON · ${costUsdt.toFixed(2)} USDT</div>
+            <div class="star-fiat-price">В вашей валюте: ${userCurrStr}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function selectStarPack(starsCount) {
+      state.selectedStarPack = starsCount;
+      renderStarsGrid();
+    }
+
+    async function buyStars() {
+      const rcp = document.getElementById("stars-recipient").value.trim();
+      if (!rcp) return alert("Укажите @username получателя звезд");
+
+      const pack = FRAGMENT_STAR_PACKS.find(x => x.stars === state.selectedStarPack);
+      if (!pack) return;
+
+      const costUsdt = +(pack.ton * state.tonPriceUsdt).toFixed(4);
+      if (state.user.balance_usd < costUsdt) {
+        return alert(`Недостаточно средств на балансе! Необходимо: ${costUsdt.toFixed(2)} USDT (${formatCurr(costUsdt)})`);
+      }
+
+      const data = await apiCall("/api/stars/buy", "POST", {
+        user_id: state.user.user_id,
+        recipient: rcp,
+        stars: pack.stars,
+        ton_amount: pack.ton,
+        cost_usd: costUsdt
+      });
+
+      if (data) {
+        if (!data.ok) return alert(data.error);
+        state.user = data.user;
+      } else {
+        state.user.balance_usd -= costUsdt;
+        state.user.deals_count += 1;
+        state.user.total_volume_usd += costUsdt;
+        syncWithBotDb({ a: "stars", rcp, st: pack.stars, usd: costUsdt.toFixed(2) });
+      }
+
+      saveLocal();
+      renderAll();
+      alert(`✅ Оплачено ${pack.stars} Stars (${costUsdt.toFixed(2)} USDT по курсу Bybit) для ${rcp}!`);
+    }
+
+    async function createWithdrawalRequest() {
+      const amountVal = parseFloat(document.getElementById("withdraw-amount").value);
+      const reqs = document.getElementById("withdraw-requisites").value.trim();
+      const curr = state.withdrawCurrency;
+
+      if (!amountVal || amountVal <= 0 || !reqs) {
+        return alert("Укажите корректную сумму и реквизиты для вывода");
+      }
+
+      const amountUsd = toUsd(amountVal, curr);
+      if (state.user.balance_usd < amountUsd) {
+        return alert("Недостаточно средств на балансе!");
+      }
+
+      const data = await apiCall("/api/withdraw/create", "POST", {
+        user_id: state.user.user_id,
+        amount_curr: amountVal,
+        currency: curr,
+        amount_usd: amountUsd,
+        requisites: reqs
+      });
+
+      if (data) {
+        if (!data.ok) return alert(data.error);
+        state.user = data.user;
+        state.withdrawals = data.withdrawals;
+      } else {
+        const wid = state.withdrawals.length ? Math.max(...state.withdrawals.map(w => w.withdraw_id)) + 1 : 1;
+        state.user.balance_usd -= amountUsd;
+        state.withdrawals.unshift({
+          withdraw_id: wid,
+          amount_curr: amountVal,
+          currency: curr,
+          requisites: reqs,
+          status: "pending"
+        });
+        syncWithBotDb({ a: "wd", ac: amountVal, c: curr, usd: amountUsd.toFixed(2), rq: reqs });
+      }
+
+      document.getElementById("withdraw-amount").value = "";
+      document.getElementById("withdraw-requisites").value = "";
+      saveLocal();
+      renderAll();
+    }
+
+    function renderWithdrawals() {
+      const box = document.getElementById("withdrawals-list");
+      if (!box) return;
+      if (!state.withdrawals.length) {
+        box.innerHTML = `<div style="font-size:12px; color:var(--text-sub); text-align:center; padding:12px;">Заявок на вывод пока нет.</div>`;
+        return;
+      }
+      const stMap = { pending: "В обработке", approved: "Выплачено", rejected: "Отклонено" };
+      box.innerHTML = state.withdrawals.map(w => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border); margin-bottom:8px;">
+          <div>
+            <div style="font-weight:700; font-size:13px; font-family:'JetBrains Mono',monospace;">#${w.withdraw_id} · ${Number(w.amount_curr).toFixed(2)} ${w.currency}</div>
+            <div style="font-size:11px; color:var(--text-sub);">${w.requisites}</div>
+          </div>
+          <span class="status-pill ${w.status}">${stMap[w.status] || w.status}</span>
+        </div>
+      `).join("");
     }
 
     function renderDeals() {
       const container = document.getElementById("deals-list");
       if (!state.deals.length) {
-        container.innerHTML = `<div class="liquid-card" style="text-align:center; color:var(--text-sub); padding:32px 18px;">${t("noDeals")}</div>`;
+        container.innerHTML = `<div class="liquid-card" style="text-align:center; color:var(--text-sub); padding:32px 18px;">Активных сделок пока нет. Создайте сделку или обмен NFT в меню слева.</div>`;
         return;
       }
 
+      const stMap = {
+        pending: "Ожидает оплаты",
+        funded: "Проверка у @ssupppoortt",
+        completed: "Завершена",
+        cancelled: "Отменена"
+      };
+
       container.innerHTML = state.deals.map(d => {
         const isBuyer = Number(d.buyer_id) === Number(state.user.user_id);
-        const stLabel = t(`st_${d.status}`);
-        let actions = `<button class="btn-liquid btn-secondary" style="margin-top:8px;" onclick="openChat(${d.deal_id})">${t("btnChat")}</button>`;
+        const isSwap = d.deal_type === "swap";
+        const dealCurr = d.deal_currency || "TON";
+        const dealPrimaryAmount = d.deal_amount && d.deal_amount > 0
+          ? `${Number(d.deal_amount).toFixed(2)} ${dealCurr}`
+          : formatCurr(d.price_usd, dealCurr);
+
+        let actions = `<button class="btn-liquid btn-secondary" style="margin-top:8px;" onclick="openChat(${d.deal_id})">Открыть чат сделки</button>`;
 
         if (d.status === "pending") {
-          if (isBuyer) {
-            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'pay')">${t("btnPay")} (${formatCurr(d.price_usd)})</button>` + actions;
+          if (isBuyer && d.price_usd > 0) {
+            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'pay')">Оплатить (${dealPrimaryAmount})</button>` + actions;
           }
-          actions += `<button class="btn-liquid btn-danger-glass" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">${t("btnCancel")}</button>`;
+          actions += `<button class="btn-liquid btn-danger-glass" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">Отменить</button>`;
         } else if (d.status === "funded") {
           if (isBuyer) {
-            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'complete')">${t("btnDone")}</button>` + actions;
+            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'complete')">Подтвердить получение от @ssupppoortt</button>` + actions;
           }
         }
 
         const sellerDisplay = d.seller_username ? `@${d.seller_username}` : d.seller_id;
         const buyerDisplay = d.buyer_username ? `@${d.buyer_username}` : d.buyer_id;
 
+        const swapBlock = isSwap ? `
+          <div style="padding:8px 10px; border-radius:10px; background:var(--glass-input); border:1px solid var(--glass-border); margin-bottom:8px; font-size:12px;">
+            <div>🔄 <b>Обмен на:</b> ${d.swap_nft_name || "NFT"}</div>
+            <div style="color:var(--text-sub); font-size:11px;">${d.swap_nft_link || "—"}</div>
+          </div>
+        ` : "";
+
         return `
           <div class="liquid-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-              <span style="font-weight:800; font-size:15px;">#${d.deal_id} · ${d.nft_name}</span>
-              <span class="status-pill ${d.status}">${stLabel}</span>
+              <span style="font-weight:800; font-size:15px;">${isSwap ? '🔄 Обмен' : '💎 Сделка'} #${d.deal_id} · ${d.nft_name}</span>
+              <span class="status-pill ${d.status}">${stMap[d.status] || d.status}</span>
             </div>
             <div style="font-size:12px; color:var(--text-sub); margin-bottom:6px; word-break:break-all;">${d.nft_link || "—"}</div>
-            <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:12px; font-family:'JetBrains Mono', monospace;">
-              Seller: ${sellerDisplay} · Buyer: ${buyerDisplay}
+            ${swapBlock}
+            <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:10px; font-family:'JetBrains Mono', monospace;">
+              Участник 1: ${sellerDisplay} · Участник 2: ${buyerDisplay}
             </div>
-            <div style="font-size:18px; font-weight:800; font-family:'JetBrains Mono', monospace; margin-bottom:12px;">${formatCurr(d.price_usd)}</div>
+            <div style="font-size:17px; font-weight:800; font-family:'JetBrains Mono', monospace; margin-bottom:12px;">
+              ${d.price_usd > 0 ? `${dealPrimaryAmount} (≈ $${d.price_usd.toFixed(2)} USDT)` : "Без доплаты (Бартер NFT)"}
+            </div>
             ${actions}
           </div>
         `;
@@ -1080,23 +1233,6 @@
       await apiCall("/api/currency", "POST", { user_id: state.user.user_id, currency: curr });
     }
 
-    async function depositBalance() {
-      const val = parseFloat(document.getElementById("deposit-input").value);
-      if (!val || val <= 0) return alert("Введите корректную сумму");
-      const addUsd = toUsd(val);
-
-      const data = await apiCall("/api/deposit", "POST", { user_id: state.user.user_id, amount_usd: addUsd });
-      if (data && data.ok) {
-        state.user = data.user;
-      } else {
-        state.user.balance_usd += addUsd;
-        syncWithBotDb({ a: "dep", amt: addUsd.toFixed(2) });
-      }
-      document.getElementById("deposit-input").value = "";
-      saveLocal();
-      renderAll();
-    }
-
     function setRole(role) {
       state.role = role;
       document.getElementById("role-seller").classList.toggle("active", role === "seller");
@@ -1108,19 +1244,23 @@
       const nft_name = document.getElementById("deal-nft-name").value.trim();
       const nft_link = document.getElementById("deal-nft-link").value.trim();
       const priceVal = parseFloat(document.getElementById("deal-price").value);
+      const deal_currency = state.dealCurrency;
 
       if (!partner || !nft_name || !priceVal || priceVal <= 0) {
         return alert("Заполните участника (@username или ID), название NFT и сумму сделки");
       }
 
-      const price_usd = toUsd(priceVal);
+      const price_usd = toUsd(priceVal, deal_currency);
       const data = await apiCall("/api/deals/create", "POST", {
         creator_id: state.user.user_id,
         role: state.role,
+        deal_type: "sale",
         partner,
         nft_name,
         nft_link,
-        price_usd
+        price_usd,
+        deal_currency,
+        deal_amount: priceVal
       });
 
       if (data) {
@@ -1130,6 +1270,7 @@
         const newId = state.deals.length ? Math.max(...state.deals.map(d => d.deal_id)) + 1 : 101;
         state.deals.unshift({
           deal_id: newId,
+          deal_type: "sale",
           seller_id: state.role === "seller" ? state.user.user_id : partner,
           seller_username: state.role === "seller" ? state.user.username : partner.replace(/^@/, ""),
           buyer_id: state.role === "buyer" ? state.user.user_id : partner,
@@ -1137,9 +1278,75 @@
           nft_name,
           nft_link,
           price_usd,
+          deal_currency,
+          deal_amount: priceVal,
           status: "pending"
         });
-        syncWithBotDb({ a: "new", r: state.role, p: partner, n: nft_name, l: nft_link, pr: price_usd.toFixed(2) });
+        syncWithBotDb({
+          a: "new", r: state.role, p: partner, n: nft_name, l: nft_link,
+          pr: price_usd.toFixed(2), dc: deal_currency, da: priceVal
+        });
+      }
+
+      saveLocal();
+      renderAll();
+      switchTab("deals");
+    }
+
+    async function createSwapDeal() {
+      const partner = document.getElementById("swap-partner").value.trim();
+      const nft_name = document.getElementById("swap-my-nft").value.trim();
+      const nft_link = document.getElementById("swap-my-link").value.trim();
+      const swap_nft_name = document.getElementById("swap-their-nft").value.trim();
+      const swap_nft_link = document.getElementById("swap-their-link").value.trim();
+      const surchargeVal = parseFloat(document.getElementById("swap-surcharge").value) || 0;
+      const deal_currency = state.swapCurrency;
+
+      if (!partner || !nft_name || !swap_nft_name) {
+        return alert("Укажите участника обмена, ваш NFT и NFT партнера");
+      }
+
+      const price_usd = surchargeVal > 0 ? toUsd(surchargeVal, deal_currency) : 0;
+      const data = await apiCall("/api/deals/create", "POST", {
+        creator_id: state.user.user_id,
+        role: "seller",
+        deal_type: "swap",
+        partner,
+        nft_name,
+        nft_link,
+        swap_nft_name,
+        swap_nft_link,
+        price_usd,
+        deal_currency,
+        deal_amount: surchargeVal
+      });
+
+      if (data) {
+        if (!data.ok) return alert(data.error);
+        state.deals = data.deals;
+      } else {
+        const newId = state.deals.length ? Math.max(...state.deals.map(d => d.deal_id)) + 1 : 101;
+        state.deals.unshift({
+          deal_id: newId,
+          deal_type: "swap",
+          seller_id: state.user.user_id,
+          seller_username: state.user.username,
+          buyer_id: partner,
+          buyer_username: partner.replace(/^@/, ""),
+          nft_name,
+          nft_link,
+          swap_nft_name,
+          swap_nft_link,
+          price_usd,
+          deal_currency,
+          deal_amount: surchargeVal,
+          status: price_usd > 0 ? "pending" : "funded"
+        });
+        syncWithBotDb({
+          a: "swap", r: "seller", p: partner, n: nft_name, l: nft_link,
+          sn: swap_nft_name, sl: swap_nft_link, pr: price_usd.toFixed(2),
+          dc: deal_currency, da: surchargeVal
+        });
       }
 
       saveLocal();
@@ -1227,12 +1434,13 @@
     }
 
     function switchTab(tab) {
-      ["profile", "deals", "create", "chat"].forEach(t => {
-        document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
-        document.getElementById(`nav-${t}`).classList.toggle("active", t === tab);
+      ["profile", "deals", "create", "swap", "stars", "withdraw", "chat"].forEach(t => {
+        document.getElementById(`tab-${t}`)?.classList.toggle("active", t === tab);
+        document.getElementById(`nav-${t}`)?.classList.toggle("active", t === tab);
       });
     }
 
+    setInterval(fetchBybitRates, 60000);
     loadProfile();
   </script>
 </body>
