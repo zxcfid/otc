@@ -16,7 +16,7 @@
       --orb-3: rgba(90, 90, 95, 0.075);
       --glass-bg: linear-gradient(135deg, rgba(38, 38, 41, 0.66) 0%, rgba(14, 14, 16, 0.54) 100%);
       --glass-dock: linear-gradient(180deg, rgba(44, 44, 47, 0.76) 0%, rgba(16, 16, 18, 0.64) 100%);
-      --glass-modal: linear-gradient(145deg, rgba(28, 28, 31, 0.95) 0%, rgba(12, 12, 14, 0.97) 100%);
+      --glass-modal: linear-gradient(145deg, rgba(28, 28, 31, 0.96) 0%, rgba(12, 12, 14, 0.98) 100%);
       --glass-input: rgba(10, 10, 12, 0.84);
       --glass-border: rgba(255, 255, 255, 0.14);
       --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.25), inset 1px 0 1px 0 rgba(255, 255, 255, 0.11);
@@ -76,7 +76,7 @@
       --orb-3: rgba(244, 63, 94, 0.16);
       --glass-bg: linear-gradient(135deg, rgba(255, 192, 225, 0.12) 0%, rgba(255, 192, 225, 0.03) 100%);
       --glass-dock: linear-gradient(180deg, rgba(255, 192, 225, 0.15) 0%, rgba(255, 192, 225, 0.04) 100%);
-      --glass-modal: linear-gradient(145deg, rgba(32, 10, 24, 0.95) 0%, rgba(16, 4, 12, 0.97) 100%);
+      --glass-modal: linear-gradient(145deg, rgba(32, 10, 24, 0.96) 0%, rgba(16, 4, 12, 0.98) 100%);
       --glass-input: rgba(20, 6, 16, 0.7);
       --glass-border: rgba(244, 114, 182, 0.24);
       --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 210, 235, 0.32), inset 1px 0 1px 0 rgba(255, 210, 235, 0.15);
@@ -297,17 +297,11 @@
       display: inline-flex; align-items: center; gap: 6px;
     }
 
-    /* Галочка верификации */
     .verified-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 50%;
       background: linear-gradient(135deg, #38bdf8, #2563eb);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.55);
+      color: #fff; box-shadow: 0 0 12px rgba(56, 189, 248, 0.55);
       flex-shrink: 0;
       animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -323,13 +317,93 @@
       background: var(--glass-input); border: 1px solid var(--glass-border);
     }
 
-    .balance-block {
-      padding: 15px; border-radius: 20px;
-      background: var(--glass-input); border: 1px solid var(--glass-border);
+    /* =========================================================
+       4 РАЗДЕЛЬНЫХ СЧЕТА ЭСКРОУ-БАЛАНСА (СЕТКА 2x2)
+       ========================================================= */
+    .balances-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .balance-caption {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 800;
+      color: var(--text-sub);
+    }
+
+    .escrow-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
       margin-bottom: 14px;
     }
-    .balance-caption { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; color: var(--text-sub); }
-    .balance-amount { font-family: 'JetBrains Mono', monospace; font-size: 27px; font-weight: 800; margin: 6px 0 12px; }
+
+    .wallet-part-card {
+      padding: 13px 12px;
+      border-radius: 18px;
+      background: var(--glass-input);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-highlight);
+      cursor: pointer;
+      transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .wallet-part-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .wallet-part-card.active {
+      background: var(--glass-bg);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 10px 24px var(--accent-glow), var(--glass-highlight);
+    }
+
+    .wallet-part-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .wallet-curr-tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      padding: 2px 7px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+    }
+    .wallet-active-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent);
+      opacity: 0;
+      transition: 0.25s;
+    }
+    .wallet-part-card.active .wallet-active-dot {
+      opacity: 1;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .wallet-main-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 17.5px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+
+    .wallet-equiv-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      line-height: 1.38;
+      color: var(--text-sub);
+    }
 
     .curr-segmented {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
@@ -348,30 +422,17 @@
       transform: scale(1.03);
     }
 
-    /* Мини-переключатель валюты специально для оборота */
     .vol-curr-pills {
-      display: inline-flex;
-      gap: 3px;
-      background: var(--glass-input);
-      padding: 2px;
-      border-radius: 8px;
-      border: 1px solid var(--glass-border);
+      display: inline-flex; gap: 3px;
+      background: var(--glass-input); padding: 2px;
+      border-radius: 8px; border: 1px solid var(--glass-border);
     }
     .vol-pill {
-      padding: 2px 6px;
-      border-radius: 6px;
-      font-size: 9px;
-      font-weight: 700;
-      border: none;
-      background: transparent;
-      color: var(--text-sub);
-      cursor: pointer;
-      transition: 0.2s;
+      padding: 2px 6px; border-radius: 6px;
+      font-size: 9px; font-weight: 700; border: none;
+      background: transparent; color: var(--text-sub); cursor: pointer;
     }
-    .vol-pill.active {
-      background: var(--accent-grad);
-      color: var(--btn-text);
-    }
+    .vol-pill.active { background: var(--accent-grad); color: var(--btn-text); }
 
     .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
     .metric-tile {
@@ -399,7 +460,9 @@
       width: 100%; padding: 12px 14px; border-radius: 14px;
       background: var(--glass-input); border: 1px solid var(--glass-border);
       color: var(--text-main); font-size: 13.5px; font-weight: 500; outline: none;
+      transition: border-color 0.25s ease, transform 0.2s ease;
     }
+    .glass-input:focus { border-color: var(--accent); transform: translateY(-1px); }
 
     .btn-liquid {
       width: 100%; padding: 13px 16px; border-radius: 15px;
@@ -434,6 +497,7 @@
       padding: 13px 12px; border-radius: 16px;
       background: var(--glass-input); border: 1px solid var(--glass-border);
       cursor: pointer; display: flex; flex-direction: column; gap: 4px;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .star-pack.active {
       border-color: var(--accent);
@@ -468,24 +532,29 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Модальные окна */
+    /* =========================================================
+       КАСТОМНЫЕ LIQUID GLASS МОДАЛЬНЫЕ ОКНА (БЕЗ БРАУЗЕРНЫХ ALERT)
+       ========================================================= */
     .modal-backdrop {
       position: fixed; inset: 0;
       background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       display: none; align-items: center; justify-content: center;
-      padding: 16px; z-index: 200;
+      padding: 16px; z-index: 250;
+      animation: fadeBackdrop 0.22s ease;
     }
     .modal-backdrop.open { display: flex; }
+    @keyframes fadeBackdrop { from { opacity: 0; } to { opacity: 1; } }
 
     .liquid-modal {
       width: 100%; max-width: 400px;
       background: var(--glass-modal);
       backdrop-filter: blur(36px) saturate(200%);
+      -webkit-backdrop-filter: blur(36px) saturate(200%);
       border: 1px solid var(--glass-border);
-      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.78), var(--glass-highlight);
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.8), var(--glass-highlight);
       border-radius: 28px; padding: 22px 20px;
-      animation: modalSpring 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: modalSpring 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     @keyframes modalSpring {
       from { opacity: 0; transform: translateY(26px) scale(0.9); }
@@ -497,6 +566,15 @@
       margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;
       background: rgba(239, 68, 68, 0.14); border: 1px solid rgba(239, 68, 68, 0.35);
       color: #f87171;
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.2);
+    }
+    .modal-icon-ring.warning {
+      background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.38);
+      color: #fbbf24; box-shadow: 0 0 24px rgba(245, 158, 11, 0.2);
+    }
+    .modal-icon-ring.success {
+      background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.38);
+      color: #34d399; box-shadow: 0 0 24px rgba(16, 185, 129, 0.22);
     }
 
     .deficit-table {
@@ -507,7 +585,6 @@
     .deficit-row { display: flex; justify-content: space-between; align-items: center; }
     .deficit-row span:last-child { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
 
-    /* Превью загрузки фото верификации */
     .kyc-preview-box {
       width: 100%; height: 155px; border-radius: 18px;
       background: var(--glass-input); border: 1.5px dashed var(--glass-border);
@@ -612,16 +689,13 @@
             </div>
           </div>
 
-          <div class="balance-block">
-            <div class="balance-caption">Мультивалютный эскроу-баланс</div>
-            <div class="balance-amount" id="prof-balance">0.00 GRAM</div>
+          <!-- МУЛЬТИВАЛЮТНЫЙ ЭСКРОУ-БАЛАНС: 4 ОТДЕЛЬНЫЕ ЧАСТИ С ЭКВИВАЛЕНТАМИ -->
+          <div class="balances-section-header">
+            <span class="balance-caption">Мультивалютный эскроу-баланс (4 счета)</span>
+          </div>
 
-            <div class="curr-segmented">
-              <button class="curr-btn" onclick="changeCurrency('GRAM')" id="curr-GRAM">GRAM</button>
-              <button class="curr-btn" onclick="changeCurrency('USDT')" id="curr-USDT">USDT</button>
-              <button class="curr-btn" onclick="changeCurrency('RUB')" id="curr-RUB">RUB</button>
-              <button class="curr-btn" onclick="changeCurrency('UAH')" id="curr-UAH">UAH</button>
-            </div>
+          <div class="escrow-grid-4" id="escrow-4-grid">
+            <!-- Рендерится динамически: GRAM, USDT, RUB, UAH -->
           </div>
 
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
@@ -632,7 +706,7 @@
           <div id="deposit-instructions" style="display:none; margin-top:12px; padding:12px; border-radius:14px; background:var(--glass-input); border:1px solid var(--glass-border); font-size:12px; line-height:1.5;">
             <div style="font-weight:700; margin-bottom:6px;">Пополнение счета:</div>
             <div style="color:var(--text-sub); margin-bottom:10px;">
-              Для пополнения баланса в GRAM, USDT, RUB или UAH обратитесь в техническую поддержку <b>@ssupppoortt</b> и укажите ваш Telegram ID: <code id="dep-uid-code" style="color:var(--text-main);">0</code>.
+              Для пополнения любого из ваших 4 счетов (GRAM, USDT, RUB или UAH) обратитесь в техническую поддержку <b>@ssupppoortt</b> и укажите ваш Telegram ID: <code id="dep-uid-code" style="color:var(--text-main);">0</code>.
             </div>
             <button class="btn-liquid" onclick="openSupport()">Написать в @ssupppoortt</button>
           </div>
@@ -664,7 +738,7 @@
             <div style="font-size:14px; font-weight:800;">🪪 Верификация аккаунта</div>
             <span class="status-pill" id="kyc-status-badge">Не верифицирован</span>
           </div>
-          <div style="font-size:12px; color:var(--text-sub); margin-bottom:12px; line-height:1.45;" id="kyc-status-desc">
+          <div style="font-size:12px; color:var(--text-sub); margin-bottom:12px; line-height:1.45;">
             Пройдите верификацию (фото паспорта с лицом прямо, затем поворот лица влево и вправо), чтобы получить галочку верификации и повысить доверие в сделках.
           </div>
           <button class="btn-liquid" id="btn-start-kyc" onclick="openKycModal()">Пройти верификацию</button>
@@ -818,7 +892,17 @@
             <span class="id-chip">Instant Delivery</span>
           </div>
           <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
-            Выберите пакет звезд для мгновенного зачисления на любой аккаунт Telegram.
+            Выберите счет списания и пакет звезд для мгновенного зачисления.
+          </div>
+
+          <div class="field">
+            <label>Счет оплаты звезд</label>
+            <div class="curr-segmented" style="margin-bottom:10px;">
+              <button type="button" class="curr-btn active" onclick="setStarsCurrency('GRAM')" id="stcurr-GRAM">GRAM</button>
+              <button type="button" class="curr-btn" onclick="setStarsCurrency('USDT')" id="stcurr-USDT">USDT</button>
+              <button type="button" class="curr-btn" onclick="setStarsCurrency('RUB')" id="stcurr-RUB">RUB</button>
+              <button type="button" class="curr-btn" onclick="setStarsCurrency('UAH')" id="stcurr-UAH">UAH</button>
+            </div>
           </div>
 
           <div class="field">
@@ -840,11 +924,11 @@
         <div class="liquid-card">
           <div style="font-size:16px; font-weight:800; margin-bottom:6px;">📤 Вывод средств</div>
           <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
-            Создайте заявку на вывод. Средства будут отправлены на указанные реквизиты после проверки.
+            Создайте заявку на вывод с выбранного валютного счета.
           </div>
 
           <div class="field">
-            <label>Валюта вывода</label>
+            <label>Счет вывода</label>
             <div class="curr-segmented" style="margin-bottom:10px;">
               <button type="button" class="curr-btn active" onclick="setWithdrawCurrency('GRAM')" id="wcurr-GRAM">GRAM</button>
               <button type="button" class="curr-btn" onclick="setWithdrawCurrency('USDT')" id="wcurr-USDT">USDT</button>
@@ -886,7 +970,7 @@
     </main>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО 1: НЕХВАТКА СРЕДСТВ -->
+  <!-- МОДАЛЬНОЕ ОКНО 1: КАСТОМНОЕ МЕНЮ НЕХВАТКИ БАЛАНСА НА КОНКРЕТНОМ СЧЕТЕ -->
   <div class="modal-backdrop" id="insufficient-modal" onclick="if(event.target===this) closeInsufficientModal()">
     <div class="liquid-modal">
       <div class="modal-icon-ring">
@@ -897,17 +981,21 @@
         </svg>
       </div>
       <div style="text-align:center; font-size:17px; font-weight:800; margin-bottom:4px;">Недостаточно средств</div>
-      <div style="text-align:center; font-size:12px; color:var(--text-sub);">
-        На вашем балансе недостаточно средств для проведения операции.
+      <div style="text-align:center; font-size:12px; color:var(--text-sub);" id="ins-subtitle">
+        На выбранном валютном счете недостаточно средств для выполнения операции.
       </div>
 
       <div class="deficit-table">
+        <div class="deficit-row">
+          <span style="color:var(--text-sub);">Валютный счет:</span>
+          <span id="ins-account">GRAM</span>
+        </div>
         <div class="deficit-row">
           <span style="color:var(--text-sub);">Сумма к оплате:</span>
           <span id="ins-required">0.00 GRAM</span>
         </div>
         <div class="deficit-row">
-          <span style="color:var(--text-sub);">Доступный баланс:</span>
+          <span style="color:var(--text-sub);">Доступно на счете:</span>
           <span id="ins-available">0.00 GRAM</span>
         </div>
         <div class="deficit-row" style="border-top:1px solid var(--glass-border); padding-top:8px; color:#f87171;">
@@ -917,13 +1005,23 @@
       </div>
 
       <div style="display:flex; flex-direction:column; gap:8px;">
-        <button class="btn-liquid" onclick="goToDepositFromModal()">💳 Пополнить баланс</button>
+        <button class="btn-liquid" onclick="goToDepositFromModal()">💳 Пополнить счет</button>
         <button class="btn-liquid btn-secondary" onclick="closeInsufficientModal()">Закрыть</button>
       </div>
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО 2: ПРОСМОТР ПРОФИЛЯ УЧАСТНИКА СДЕЛКИ -->
+  <!-- МОДАЛЬНОЕ ОКНО 2: КАСТОМНЫЕ ОШИБКИ И УВЕДОМЛЕНИЯ (ВМЕСТО ALERT) -->
+  <div class="modal-backdrop" id="notice-modal" onclick="if(event.target===this) closeNoticeModal()">
+    <div class="liquid-modal">
+      <div class="modal-icon-ring warning" id="notice-icon-box"></div>
+      <div style="text-align:center; font-size:17px; font-weight:800; margin-bottom:6px;" id="notice-title">Внимание</div>
+      <div style="text-align:center; font-size:12.5px; color:var(--text-sub); line-height:1.48; margin-bottom:18px;" id="notice-message"></div>
+      <button class="btn-liquid" onclick="closeNoticeModal()">Понятно</button>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО 3: ПРОСМОТР ПРОФИЛЯ УЧАСТНИКА СДЕЛКИ -->
   <div class="modal-backdrop" id="partner-profile-modal" onclick="if(event.target===this) closePartnerModal()">
     <div class="liquid-modal">
       <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
@@ -958,7 +1056,7 @@
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО 3: 3-ЭТАПНАЯ ВЕРИФИКАЦИЯ ПАСПОРТА И ЛИЦА -->
+  <!-- МОДАЛЬНОЕ ОКНО 4: 3-ЭТАПНАЯ ВЕРИФИКАЦИЯ ПАСПОРТА И ЛИЦА -->
   <div class="modal-backdrop" id="kyc-modal" onclick="if(event.target===this) closeKycModal()">
     <div class="liquid-modal">
       <div class="kyc-steps-dots">
@@ -1071,7 +1169,10 @@
       user: {
         user_id: tgUser.id,
         username: tgUser.username || urlParams.get("uname") || (savedLocal?.user?.username || ""),
-        balance_usd: urlParams.has("bal") ? parseFloat(urlParams.get("bal")) : (savedLocal?.user?.balance_usd || 0.0),
+        bal_gram: urlParams.has("bg") ? parseFloat(urlParams.get("bg")) : (savedLocal?.user?.bal_gram || 0.0),
+        bal_usdt: urlParams.has("bu") ? parseFloat(urlParams.get("bu")) : (savedLocal?.user?.bal_usdt || 0.0),
+        bal_rub: urlParams.has("br") ? parseFloat(urlParams.get("br")) : (savedLocal?.user?.bal_rub || 0.0),
+        bal_uah: urlParams.has("bua") ? parseFloat(urlParams.get("bua")) : (savedLocal?.user?.bal_uah || 0.0),
         deals_count: urlParams.has("deals") ? parseInt(urlParams.get("deals")) : (savedLocal?.user?.deals_count || 0),
         total_volume_usd: urlParams.has("vol") ? parseFloat(urlParams.get("vol")) : (savedLocal?.user?.total_volume_usd || 0.0),
         currency: normalizedCurr,
@@ -1088,6 +1189,7 @@
       role: "seller",
       dealCurrency: "GRAM",
       swapCurrency: "GRAM",
+      starsCurrency: "GRAM",
       withdrawCurrency: "GRAM",
       selectedStarPack: 100,
       activeChatDealId: null,
@@ -1096,6 +1198,87 @@
     };
 
     const VERIFIED_SVG = `<span class="verified-badge" title="Верифицирован"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+
+    // =========================================================
+    // КАСТОМНОЕ ОКНО ОШИБОК И УВЕДОМЛЕНИЙ (ЗАМЕНА БРАУЗЕРНОГО ALERT)
+    // =========================================================
+    function showNoticeModal(title, message, type = "warning") {
+      haptic(type === "success" ? "light" : "heavy");
+      const iconBox = document.getElementById("notice-icon-box");
+      iconBox.className = `modal-icon-ring ${type === "error" ? "" : type}`;
+
+      if (type === "success") {
+        iconBox.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>`;
+      } else if (type === "error") {
+        iconBox.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+      } else {
+        iconBox.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+      }
+
+      document.getElementById("notice-title").innerText = title;
+      document.getElementById("notice-message").innerText = message;
+      document.getElementById("notice-modal").classList.add("open");
+    }
+
+    function closeNoticeModal() {
+      document.getElementById("notice-modal").classList.remove("open");
+    }
+
+    // Работа с 4 отдельными валютными балансами
+    function getWalletBalance(curr) {
+      const c = curr === "TON" ? "GRAM" : curr;
+      const map = {
+        GRAM: state.user.bal_gram || 0,
+        USDT: state.user.bal_usdt || 0,
+        RUB: state.user.bal_rub || 0,
+        UAH: state.user.bal_uah || 0
+      };
+      return map[c] || 0;
+    }
+
+    function addWalletBalance(curr, delta) {
+      const c = curr === "TON" ? "GRAM" : curr;
+      if (c === "GRAM") state.user.bal_gram = Math.max(0, (state.user.bal_gram || 0) + delta);
+      if (c === "USDT") state.user.bal_usdt = Math.max(0, (state.user.bal_usdt || 0) + delta);
+      if (c === "RUB") state.user.bal_rub = Math.max(0, (state.user.bal_rub || 0) + delta);
+      if (c === "UAH") state.user.bal_uah = Math.max(0, (state.user.bal_uah || 0) + delta);
+    }
+
+    // Конвертация суммы из одной валюты в другую по текущему курсу
+    function convertAmount(amount, fromCurr, toCurr) {
+      const rFrom = state.rates[fromCurr] || 1;
+      const rTo = state.rates[toCurr] || 1;
+      const inUsdt = amount / rFrom;
+      return inUsdt * rTo;
+    }
+
+    function renderFourWalletsGrid() {
+      const grid = document.getElementById("escrow-4-grid");
+      if (!grid) return;
+
+      const currencies = ["GRAM", "USDT", "RUB", "UAH"];
+      grid.innerHTML = currencies.map(curr => {
+        const bal = getWalletBalance(curr);
+        const isSelected = state.user.currency === curr;
+
+        // Эквиваленты именно этого баланса в остальных 3 валютах
+        const otherEquivs = currencies
+          .filter(other => other !== curr)
+          .map(other => `${convertAmount(bal, curr, other).toFixed(2)} ${other}`)
+          .join(" · ");
+
+        return `
+          <div class="wallet-part-card ${isSelected ? 'active' : ''}" onclick="changeCurrency('${curr}')">
+            <div class="wallet-part-top">
+              <span class="wallet-curr-tag">${curr}</span>
+              <span class="wallet-active-dot"></span>
+            </div>
+            <div class="wallet-main-num">${bal.toFixed(2)} ${curr}</div>
+            <div class="wallet-equiv-sub">≈ ${otherEquivs}</div>
+          </div>
+        `;
+      }).join("");
+    }
 
     async function fetchLiveRates() {
       try {
@@ -1151,7 +1334,6 @@
       });
     }
 
-    // Форматирование эквивалентов сделки во всех остальных валютах
     function formatOtherEquivalents(usd, primaryCurr) {
       const allCurrs = ["GRAM", "USDT", "RUB", "UAH"];
       return allCurrs
@@ -1160,9 +1342,7 @@
         .join(" · ");
     }
 
-    // =========================================================
-    // 3-ЭТАПНАЯ ВЕРИФИКАЦИЯ (ПАСПОРТ ПРЯМО -> ЛИЦО ВЛЕВО -> ЛИЦО ВПРАВО)
-    // =========================================================
+    // 3-этапная верификация
     const KYC_STEP_INFO = {
       1: {
         title: "Шаг 1 из 3: Паспорт и лицо прямо",
@@ -1245,7 +1425,7 @@
     async function nextKycStep() {
       haptic("light");
       if (!state.kycPhotos[state.kycStep]) {
-        return alert("Сначала сделайте или выберите фотографию для текущего шага!");
+        return showNoticeModal("Фото не выбрано", "Сделайте снимок или прикрепите фотографию для текущего шага верификации.", "warning");
       }
       if (state.kycStep < 3) {
         state.kycStep += 1;
@@ -1253,7 +1433,6 @@
         return;
       }
 
-      // Отправка всех 3 фотографий главному админу
       const res = await apiCall("/api/kyc/submit", "POST", {
         user_id: state.user.user_id,
         username: state.user.username,
@@ -1267,6 +1446,7 @@
         state.user = res.user;
         saveLocal();
         renderAll();
+        showNoticeModal("Заявка отправлена", "Ваши фотографии переданы главному администратору. После проверки вам будет выдана галочка верификации.", "success");
       } else {
         state.user.kyc_status = "pending";
         saveLocal();
@@ -1277,17 +1457,17 @@
       }
     }
 
-    function showInsufficientFundsModal(requiredUsd) {
+    // Модальное окно нехватки средств на конкретном валютном счете
+    function showInsufficientFundsModal(requiredAmount, currency) {
       haptic("heavy");
-      const availUsd = state.user.balance_usd || 0;
-      const missingUsd = Math.max(0, requiredUsd - availUsd);
+      const curr = (currency === "TON" ? "GRAM" : currency) || "GRAM";
+      const avail = getWalletBalance(curr);
+      const missing = Math.max(0, requiredAmount - avail);
 
-      document.getElementById("ins-required").innerText =
-        `${formatCurr(requiredUsd)} ($${requiredUsd.toFixed(2)})`;
-      document.getElementById("ins-available").innerText =
-        `${formatCurr(availUsd)} ($${availUsd.toFixed(2)})`;
-      document.getElementById("ins-missing").innerText =
-        `${formatCurr(missingUsd)} ($${missingUsd.toFixed(2)})`;
+      document.getElementById("ins-account").innerText = `Счет ${curr}`;
+      document.getElementById("ins-required").innerText = `${requiredAmount.toFixed(2)} ${curr}`;
+      document.getElementById("ins-available").innerText = `${avail.toFixed(2)} ${curr}`;
+      document.getElementById("ins-missing").innerText = `${missing.toFixed(2)} ${curr}`;
 
       document.getElementById("insufficient-modal").classList.add("open");
     }
@@ -1322,7 +1502,9 @@
 
     async function queryAndOpenPartnerModal(queryStr) {
       const q = (queryStr || "").trim();
-      if (!q) return;
+      if (!q) {
+        return showNoticeModal("Введите данные", "Укажите @username или Telegram ID пользователя для просмотра профиля.", "warning");
+      }
 
       const res = await apiCall("/api/profile_lookup", "POST", { query: q });
       if (res && res.ok && res.profile) {
@@ -1345,13 +1527,11 @@
 
     function lookupCounterparty() {
       const val = document.getElementById("lookup-user-input").value.trim();
-      if (!val) return;
       queryAndOpenPartnerModal(val);
     }
 
     function previewPartnerFromInput(inputId) {
       const val = document.getElementById(inputId).value.trim();
-      if (!val) return;
       queryAndOpenPartnerModal(val);
     }
 
@@ -1436,12 +1616,11 @@
       document.getElementById("prof-verified-icon").style.display = Number(u.is_verified) ? "inline-flex" : "none";
       document.getElementById("prof-id").innerText = u.user_id;
       document.getElementById("dep-uid-code").innerText = u.user_id;
-      document.getElementById("prof-balance").innerText = formatCurr(u.balance_usd, u.currency);
       document.getElementById("prof-deals-count").innerText = u.deals_count;
-      // Оборот отображается в своей независимой валюте
       document.getElementById("prof-volume").innerText = formatCurr(u.total_volume_usd, volCurr);
 
-      // Статус верификации в профиле
+      renderFourWalletsGrid();
+
       const kycBadge = document.getElementById("kyc-status-badge");
       const kycBtn = document.getElementById("btn-start-kyc");
       if (Number(u.is_verified)) {
@@ -1466,10 +1645,10 @@
       }
 
       ["GRAM", "USDT", "RUB", "UAH"].forEach(c => {
-        document.getElementById(`curr-${c}`)?.classList.toggle("active", u.currency === c);
         document.getElementById(`vcurr-${c}`)?.classList.toggle("active", volCurr === c);
         document.getElementById(`dcurr-${c}`)?.classList.toggle("active", state.dealCurrency === c);
         document.getElementById(`scurr-${c}`)?.classList.toggle("active", state.swapCurrency === c);
+        document.getElementById(`stcurr-${c}`)?.classList.toggle("active", state.starsCurrency === c);
         document.getElementById(`wcurr-${c}`)?.classList.toggle("active", state.withdrawCurrency === c);
       });
 
@@ -1503,6 +1682,12 @@
       renderAll();
     }
 
+    function setStarsCurrency(curr) {
+      haptic("light");
+      state.starsCurrency = curr;
+      renderAll();
+    }
+
     function setWithdrawCurrency(curr) {
       haptic("light");
       state.withdrawCurrency = curr;
@@ -1519,9 +1704,10 @@
     function renderStarsGrid() {
       const box = document.getElementById("stars-grid-container");
       if (!box) return;
+      const payCurr = state.starsCurrency || "GRAM";
       box.innerHTML = STAR_PACKS.map((p, idx) => {
         const gramCost = p.usdt / state.gramPriceUsdt;
-        const userCurrStr = formatCurr(p.usdt);
+        const payCurrStr = formatCurr(p.usdt, payCurr);
         const isSelected = state.selectedStarPack === p.stars;
 
         return `
@@ -1530,8 +1716,8 @@
               <svg class="star-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               <span>${p.stars.toLocaleString()} Stars</span>
             </div>
-            <div class="star-ton-price">${gramCost.toFixed(2)} GRAM · ${p.usdt.toFixed(2)} USDT</div>
-            <div class="star-fiat-price">К оплате: ${userCurrStr}</div>
+            <div class="star-ton-price">${payCurrStr}</div>
+            <div class="star-fiat-price">≈ ${gramCost.toFixed(2)} GRAM · ${p.usdt.toFixed(2)} USDT</div>
           </div>
         `;
       }).join("");
@@ -1545,16 +1731,20 @@
 
     async function buyStars() {
       const rcp = document.getElementById("stars-recipient").value.trim();
-      if (!rcp) return alert("Укажите @username получателя звезд");
+      if (!rcp) {
+        return showNoticeModal("Укажите получателя", "Введите @username аккаунта, на который необходимо отправить Telegram Stars.", "warning");
+      }
 
       const pack = STAR_PACKS.find(x => x.stars === state.selectedStarPack);
       if (!pack) return;
 
+      const payCurr = state.starsCurrency || "GRAM";
       const costUsdt = pack.usdt;
+      const neededInCurr = +(costUsdt * (state.rates[payCurr] || 1)).toFixed(4);
       const gramAmount = +(costUsdt / state.gramPriceUsdt).toFixed(4);
 
-      if (state.user.balance_usd < costUsdt) {
-        return showInsufficientFundsModal(costUsdt);
+      if (getWalletBalance(payCurr) < neededInCurr) {
+        return showInsufficientFundsModal(neededInCurr, payCurr);
       }
 
       const data = await apiCall("/api/stars/buy", "POST", {
@@ -1562,24 +1752,26 @@
         recipient: rcp,
         stars: pack.stars,
         gram_amount: gramAmount,
-        cost_usd: costUsdt
+        cost_usd: costUsdt,
+        paid_currency: payCurr
       });
 
       if (data) {
         if (!data.ok) {
-          if (data.error === "insufficient_funds") return showInsufficientFundsModal(costUsdt);
-          return alert(data.error);
+          if (data.error === "insufficient_funds") return showInsufficientFundsModal(neededInCurr, payCurr);
+          return showNoticeModal("Ошибка оплаты", data.error, "error");
         }
         state.user = data.user;
       } else {
-        state.user.balance_usd -= costUsdt;
+        addWalletBalance(payCurr, -neededInCurr);
         state.user.deals_count += 1;
         state.user.total_volume_usd += costUsdt;
-        syncWithBotDb({ a: "stars", rcp, st: pack.stars, usd: costUsdt.toFixed(2) });
+        syncWithBotDb({ a: "stars", rcp, st: pack.stars, usd: costUsdt.toFixed(2), pc: payCurr });
       }
 
       saveLocal();
       renderAll();
+      showNoticeModal("Покупка успешна", `Пакет ${pack.stars} Telegram Stars для ${rcp} успешно оплачен со счета ${payCurr}!`, "success");
     }
 
     async function createWithdrawalRequest() {
@@ -1588,14 +1780,14 @@
       const curr = state.withdrawCurrency;
 
       if (!amountVal || amountVal <= 0 || !reqs) {
-        return alert("Укажите корректную сумму и реквизиты для вывода");
+        return showNoticeModal("Проверьте поля", "Укажите корректную сумму вывода и реквизиты получателя.", "warning");
+      }
+
+      if (getWalletBalance(curr) < amountVal) {
+        return showInsufficientFundsModal(amountVal, curr);
       }
 
       const amountUsd = toUsd(amountVal, curr);
-      if (state.user.balance_usd < amountUsd) {
-        return showInsufficientFundsModal(amountUsd);
-      }
-
       const data = await apiCall("/api/withdraw/create", "POST", {
         user_id: state.user.user_id,
         amount_curr: amountVal,
@@ -1606,14 +1798,14 @@
 
       if (data) {
         if (!data.ok) {
-          if (data.error === "insufficient_funds") return showInsufficientFundsModal(amountUsd);
-          return alert(data.error);
+          if (data.error === "insufficient_funds") return showInsufficientFundsModal(amountVal, curr);
+          return showNoticeModal("Ошибка вывода", data.error, "error");
         }
         state.user = data.user;
         state.withdrawals = data.withdrawals;
       } else {
         const wid = state.withdrawals.length ? Math.max(...state.withdrawals.map(w => w.withdraw_id)) + 1 : 1;
-        state.user.balance_usd -= amountUsd;
+        addWalletBalance(curr, -amountVal);
         state.withdrawals.unshift({
           withdraw_id: wid,
           amount_curr: amountVal,
@@ -1628,6 +1820,7 @@
       document.getElementById("withdraw-requisites").value = "";
       saveLocal();
       renderAll();
+      showNoticeModal("Заявка создана", `Заявка на вывод ${amountVal.toFixed(2)} ${curr} отправлена администратору.`, "success");
     }
 
     function renderWithdrawals() {
@@ -1666,13 +1859,11 @@
       container.innerHTML = state.deals.map((d, idx) => {
         const isBuyer = Number(d.buyer_id) === Number(state.user.user_id);
         const isSwap = d.deal_type === "swap";
-        // Крупно показываем именно ту валюту, на которую провели сделку
         const dealCurr = (d.deal_currency === "TON" ? "GRAM" : d.deal_currency) || "GRAM";
-        const dealPrimaryAmount = d.deal_amount && d.deal_amount > 0
-          ? `${Number(d.deal_amount).toFixed(2)} ${dealCurr}`
-          : formatCurr(d.price_usd, dealCurr);
-
-        // Ниже меньшим шрифтом эквивалент во всех остальных валютах
+        const dealAmtNum = d.deal_amount && d.deal_amount > 0
+          ? Number(d.deal_amount)
+          : +(d.price_usd * (state.rates[dealCurr] || 1)).toFixed(2);
+        const dealPrimaryAmount = `${dealAmtNum.toFixed(2)} ${dealCurr}`;
         const otherEquivs = formatOtherEquivalents(d.price_usd, dealCurr);
 
         const partnerId = isBuyer ? d.seller_id : d.buyer_id;
@@ -1691,7 +1882,7 @@
 
         if (d.status === "pending") {
           if (isBuyer && d.price_usd > 0) {
-            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'pay')">💳 Оплатить (${dealPrimaryAmount})</button>` + actions;
+            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'pay')">💳 Оплатить со счета ${dealCurr} (${dealPrimaryAmount})</button>` + actions;
           }
           actions += `<button class="btn-liquid btn-danger-glass" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">Отменить</button>`;
         } else if (d.status === "funded") {
@@ -1763,7 +1954,7 @@
       const deal_currency = state.dealCurrency;
 
       if (!partner || !nft_name || !priceVal || priceVal <= 0) {
-        return alert("Заполните участника (@username или ID), название NFT и сумму сделки");
+        return showNoticeModal("Заполните данные", "Укажите @username или ID второго участника, название NFT и корректную сумму сделки.", "warning");
       }
 
       const price_usd = toUsd(priceVal, deal_currency);
@@ -1780,7 +1971,7 @@
       });
 
       if (data) {
-        if (!data.ok) return alert(data.error);
+        if (!data.ok) return showNoticeModal("Ошибка создания", data.error, "error");
         state.deals = data.deals;
       } else {
         const newId = state.deals.length ? Math.max(...state.deals.map(d => d.deal_id)) + 1 : 101;
@@ -1825,7 +2016,7 @@
       const deal_currency = state.swapCurrency;
 
       if (!partner || !nft_name || !swap_nft_name) {
-        return alert("Укажите участника обмена, ваш NFT и NFT партнера");
+        return showNoticeModal("Заполните поля обмена", "Укажите участника обмена, название вашего NFT и NFT партнера.", "warning");
       }
 
       const price_usd = surchargeVal > 0 ? toUsd(surchargeVal, deal_currency) : 0;
@@ -1844,7 +2035,7 @@
       });
 
       if (data) {
-        if (!data.ok) return alert(data.error);
+        if (!data.ok) return showNoticeModal("Ошибка создания обмена", data.error, "error");
         state.deals = data.deals;
       } else {
         const newId = state.deals.length ? Math.max(...state.deals.map(d => d.deal_id)) + 1 : 101;
@@ -1884,22 +2075,28 @@
 
     async function dealAction(deal_id, action) {
       const deal = state.deals.find(d => d.deal_id === deal_id);
-      if (action === "pay" && deal && state.user.balance_usd < deal.price_usd) {
-        return showInsufficientFundsModal(deal.price_usd);
+      if (!deal) return;
+
+      const dealCurr = (deal.deal_currency === "TON" ? "GRAM" : deal.deal_currency) || "GRAM";
+      const reqAmt = deal.deal_amount && deal.deal_amount > 0
+        ? Number(deal.deal_amount)
+        : +(deal.price_usd * (state.rates[dealCurr] || 1)).toFixed(4);
+
+      if (action === "pay" && getWalletBalance(dealCurr) < reqAmt) {
+        return showInsufficientFundsModal(reqAmt, dealCurr);
       }
 
       const data = await apiCall("/api/deals/action", "POST", { user_id: state.user.user_id, deal_id, action });
       if (data) {
         if (!data.ok) {
-          if (data.error === "insufficient_funds" && deal) return showInsufficientFundsModal(deal.price_usd);
-          return alert(data.error);
+          if (data.error === "insufficient_funds") return showInsufficientFundsModal(reqAmt, dealCurr);
+          return showNoticeModal("Ошибка операции", data.error, "error");
         }
         state.user = data.user;
         state.deals = data.deals;
       } else {
-        if (!deal) return;
         if (action === "pay") {
-          state.user.balance_usd -= deal.price_usd;
+          addWalletBalance(dealCurr, -reqAmt);
           deal.status = "funded";
           syncWithBotDb({ a: "pay", id: deal_id });
         } else if (action === "complete") {
@@ -1945,7 +2142,9 @@
     }
 
     async function sendChatMessage() {
-      if (!state.activeChatDealId) return alert("Сначала выберите сделку во вкладке «Сделки»");
+      if (!state.activeChatDealId) {
+        return showNoticeModal("Выберите сделку", "Сначала откройте нужную сделку во вкладке «Сделки» и нажмите «Чат сделки».", "warning");
+      }
       const input = document.getElementById("chat-input");
       const text = input.value.trim();
       if (!text) return;
