@@ -1,232 +1,811 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>OTC Auto-Guarantor</title>
+  <title>OTC Liquid Glass Escrow</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #0b0f19;
-      --card: rgba(22, 29, 47, 0.88);
-      --border: rgba(255, 255, 255, 0.08);
-      --accent: #3b82f6;
-      --accent-glow: rgba(59, 130, 246, 0.35);
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --text: #f8fafc;
-      --muted: #94a3b8;
+    /* =========================================================
+       4 ТЕМЫ: ТЕМНАЯ, СВЕТЛАЯ, СВЕТЛО-РОЗОВАЯ, ТЕМНО-РОЗОВАЯ
+       ========================================================= */
+    :root, [data-theme="dark"] {
+      --bg-base: #07090e;
+      --orb-1: rgba(56, 189, 248, 0.22);
+      --orb-2: rgba(99, 102, 241, 0.22);
+      --orb-3: rgba(16, 185, 129, 0.14);
+      --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%);
+      --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.04) 100%);
+      --glass-input: rgba(10, 14, 23, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.28), inset 1px 0 1px 0 rgba(255, 255, 255, 0.12);
+      --glass-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.65);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --accent: #38bdf8;
+      --accent-grad: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+      --accent-glow: rgba(56, 189, 248, 0.35);
+      --btn-text: #ffffff;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: radial-gradient(circle at top, #172554 0%, var(--bg) 55%); color: var(--text); min-height: 100vh; padding: 16px 16px 96px; }
+    [data-theme="light"] {
+      --bg-base: #eef2f9;
+      --orb-1: rgba(59, 130, 246, 0.25);
+      --orb-2: rgba(147, 197, 253, 0.45);
+      --orb-3: rgba(167, 243, 208, 0.35);
+      --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.38) 100%);
+      --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.5) 100%);
+      --glass-input: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.85);
+      --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95), inset 1px 0 1px 0 rgba(255, 255, 255, 0.7);
+      --glass-shadow: 0 16px 36px -10px rgba(30, 64, 175, 0.1);
+      --text-main: #0f172a;
+      --text-sub: #475569;
+      --accent: #2563eb;
+      --accent-grad: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+      --accent-glow: rgba(37, 99, 235, 0.25);
+      --btn-text: #ffffff;
+    }
 
-    .glass-card {
-      background: var(--card);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
+    [data-theme="light-pink"] {
+      --bg-base: #fff0f6;
+      --orb-1: rgba(244, 114, 182, 0.32);
+      --orb-2: rgba(251, 113, 133, 0.25);
+      --orb-3: rgba(232, 121, 249, 0.25);
+      --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 240, 246, 0.42) 100%);
+      --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 228, 238, 0.55) 100%);
+      --glass-input: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.9);
+      --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 1), inset 1px 0 1px 0 rgba(255, 255, 255, 0.8);
+      --glass-shadow: 0 18px 40px -12px rgba(219, 39, 119, 0.14);
+      --text-main: #3b0722;
+      --text-sub: #831843;
+      --accent: #ec4899;
+      --accent-grad: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+      --accent-glow: rgba(236, 72, 153, 0.3);
+      --btn-text: #ffffff;
+    }
+
+    [data-theme="dark-pink"] {
+      --bg-base: #120610;
+      --orb-1: rgba(236, 72, 153, 0.28);
+      --orb-2: rgba(192, 38, 211, 0.24);
+      --orb-3: rgba(244, 63, 94, 0.18);
+      --glass-bg: linear-gradient(135deg, rgba(255, 192, 225, 0.11) 0%, rgba(255, 192, 225, 0.03) 100%);
+      --glass-dock: linear-gradient(180deg, rgba(255, 192, 225, 0.14) 0%, rgba(255, 192, 225, 0.04) 100%);
+      --glass-input: rgba(24, 7, 20, 0.6);
+      --glass-border: rgba(244, 114, 182, 0.24);
+      --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 210, 235, 0.32), inset 1px 0 1px 0 rgba(255, 210, 235, 0.15);
+      --glass-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.75);
+      --text-main: #fdf2f8;
+      --text-sub: #f472b6;
+      --accent: #f472b6;
+      --accent-grad: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+      --accent-glow: rgba(244, 114, 182, 0.38);
+      --btn-text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    /* Анимированные глубинные сферы под жидким стеклом */
+    .ambient-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(65px);
+      animation: floatOrb 14s infinite alternate ease-in-out;
+    }
+    .orb-1 { width: 320px; height: 320px; top: -8%; left: 10%; background: var(--orb-1); }
+    .orb-2 { width: 280px; height: 280px; bottom: 5%; right: -10%; background: var(--orb-2); animation-delay: -5s; }
+    .orb-3 { width: 240px; height: 240px; top: 42%; left: 30%; background: var(--orb-3); animation-delay: -9s; }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(24px, -28px) scale(1.12); }
+    }
+
+    /* =========================================================
+       LAYOUT: ЛЕВАЯ СТРОКА ВЫБОРА (SIDEBAR DOCK) + КОНТЕНТ
+       ========================================================= */
+    .app-shell {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      gap: 14px;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 14px 14px 28px 12px;
+      min-height: 100vh;
+      align-items: start;
+    }
+
+    /* Левая стеклянная панель навигации */
+    .left-rail {
+      position: sticky;
+      top: 14px;
+      height: calc(100vh - 28px);
+      max-height: 680px;
+      background: var(--glass-dock);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-highlight);
+      border-radius: 26px;
+      padding: 14px 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .rail-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--accent-grad);
+      box-shadow: 0 6px 18px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .rail-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .rail-btn {
+      width: 50px;
+      height: 54px;
       border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-sub);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
     }
 
-    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .brand { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-    .support-chip {
-      background: rgba(59, 130, 246, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      color: #60a5fa;
-      padding: 6px 12px;
+    .rail-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+      transition: transform 0.25s ease;
+    }
+
+    .rail-btn span {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+
+    .rail-btn.active {
+      background: var(--glass-bg);
+      border-color: var(--glass-border);
+      box-shadow: 0 8px 20px var(--accent-glow), var(--glass-highlight);
+      color: var(--text-main);
+    }
+
+    .rail-btn.active::before {
+      content: "";
+      position: absolute;
+      left: -8px;
+      width: 4px;
+      height: 22px;
+      border-radius: 0 4px 4px 0;
+      background: var(--accent-grad);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .rail-btn.active svg {
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Переключатель 4 тем внизу левого дока */
+    .rail-themes {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 8px 6px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.12);
+      border: 1px solid var(--glass-border);
+    }
+
+    .theme-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .theme-dot.active {
+      transform: scale(1.2);
+      border-color: var(--text-main);
+      box-shadow: 0 0 10px var(--accent);
+    }
+    .dot-dark { background: linear-gradient(135deg, #0f172a, #38bdf8); }
+    .dot-light { background: linear-gradient(135deg, #ffffff, #93c5fd); }
+    .dot-lpink { background: linear-gradient(135deg, #ffd1e6, #f472b6); }
+    .dot-dpink { background: linear-gradient(135deg, #2e0722, #ec4899); }
+
+    /* =========================================================
+       LIQUID GLASS КАРТОЧКИ И ЭЛЕМЕНТЫ
+       ========================================================= */
+    .main-stage {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 4px 2px;
+    }
+
+    .stage-title {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+    }
+
+    .support-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
       border-radius: 999px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-highlight);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .liquid-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-highlight);
+      border-radius: 24px;
+      padding: 18px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Профиль */
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .avatar-glass {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: var(--accent-grad);
+      box-shadow: 0 8px 24px var(--accent-glow), inset 0 1.5px 2px rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-meta h2 {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .id-chip {
+      display: inline-block;
+      margin-top: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-sub);
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: var(--glass-input);
+      border: 1px solid var(--glass-border);
+    }
+
+    .balance-block {
+      padding: 16px;
+      border-radius: 20px;
+      background: var(--glass-input);
+      border: 1px solid var(--glass-border);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+      margin-bottom: 14px;
+    }
+
+    .balance-caption {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .balance-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 28px;
+      font-weight: 800;
+      margin: 6px 0 12px;
+      letter-spacing: -0.8px;
+    }
+
+    .curr-segmented {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.12);
+      padding: 4px;
+      border-radius: 13px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .curr-btn {
+      padding: 7px 0;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .curr-btn.active {
+      background: var(--accent-grad);
+      color: var(--btn-text);
+      box-shadow: 0 3px 10px var(--accent-glow);
+    }
+
+    /* Статистика профиля */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .metric-tile {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-highlight);
+      border-radius: 20px;
+      padding: 15px;
+    }
+
+    .metric-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    /* Селектор тем в профиле с подписями */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .theme-card-btn {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-input);
+      color: var(--text-main);
       font-size: 12px;
       font-weight: 600;
-      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       cursor: pointer;
+      transition: 0.2s;
     }
 
-    .profile-hero { text-align: center; padding: 20px 16px; }
-    .avatar-circle {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; font-weight: 700; margin: 0 auto 10px;
-      box-shadow: 0 0 24px var(--accent-glow);
+    .theme-card-btn.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 6px 16px var(--accent-glow);
     }
-    .balance-val { font-size: 28px; font-weight: 800; margin: 10px 0 4px; letter-spacing: -0.5px; }
-    .currency-pills { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
-    .curr-pill {
-      padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: 700;
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); cursor: pointer;
+
+    /* Инпуты и кнопки */
+    .field { margin-bottom: 12px; }
+    .field label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-bottom: 6px;
     }
-    .curr-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-    .stat-box { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
-    .stat-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .stat-num { font-size: 18px; font-weight: 800; color: #fff; }
-
-    .btn {
-      width: 100%; padding: 13px; border-radius: 12px; border: none;
-      font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s;
-      display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+    .glass-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--glass-input);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      font-size: 13.5px;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 16px var(--accent-glow); }
-    .btn-success { background: var(--success); color: #fff; }
-    .btn-danger { background: rgba(239, 68, 68, 0.18); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); }
-    .btn-outline { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
-
-    .input-group { margin-bottom: 12px; }
-    .input-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .input-control {
-      width: 100%; padding: 12px 14px; border-radius: 12px;
-      background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border);
-      color: #fff; font-size: 14px; outline: none;
+    .glass-input::placeholder { color: var(--text-sub); opacity: 0.65; }
+    .glass-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
     }
-    .input-control:focus { border-color: var(--accent); }
 
-    .role-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-    .role-btn {
-      padding: 11px; border-radius: 12px; border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03); color: var(--muted); font-weight: 700; cursor: pointer;
+    .btn-liquid {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: var(--accent-grad);
+      color: var(--btn-text);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 22px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.4);
+      transition: transform 0.15s ease, opacity 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
-    .role-btn.active { background: rgba(59, 130, 246, 0.2); border-color: var(--accent); color: #fff; }
+    .btn-liquid:active { transform: scale(0.98); }
 
-    .badge { padding: 4px 9px; border-radius: 8px; font-size: 11px; font-weight: 700; }
-    .badge.pending { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
-    .badge.funded { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-    .badge.completed { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-    .badge.cancelled { background: rgba(239, 68, 68, 0.18); color: #f87171; }
-
-    .chat-box { height: 48vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 10px; background: rgba(11, 15, 25, 0.6); border-radius: 14px; margin-bottom: 10px; }
-    .msg { max-width: 80%; padding: 10px 12px; border-radius: 14px; font-size: 13px; line-height: 1.4; }
-    .msg.me { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
-    .msg.other { align-self: flex-start; background: rgba(255,255,255,0.08); color: var(--text); border-bottom-left-radius: 4px; }
-    .msg-author { font-size: 10px; opacity: 0.75; margin-bottom: 3px; font-weight: 700; }
-
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px);
-      border-top: 1px solid var(--border);
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      padding: 8px 10px 18px; z-index: 100;
+    .btn-secondary {
+      background: var(--glass-input);
+      color: var(--text-main);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-highlight);
     }
-    .nav-item {
-      background: none; border: none; color: var(--muted);
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      font-size: 11px; font-weight: 600; cursor: pointer;
+
+    .btn-danger-glass {
+      background: rgba(239, 68, 68, 0.14);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      box-shadow: none;
     }
-    .nav-item.active { color: var(--accent); }
-    .tab-pane { display: none; }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .role-pill {
+      padding: 11px;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-input);
+      color: var(--text-sub);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .role-pill.active {
+      background: var(--accent-grad);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 6px 18px var(--accent-glow);
+    }
+
+    /* Бейджи сделок */
+    .status-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .status-pill.pending { background: rgba(245, 158, 11, 0.16); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .status-pill.funded { background: rgba(56, 189, 248, 0.18); color: var(--accent); border: 1px solid var(--glass-border); }
+    .status-pill.completed { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .status-pill.cancelled { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* Чат */
+    .chat-stream {
+      height: 54vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 18px;
+      background: var(--glass-input);
+      border: 1px solid var(--glass-border);
+      margin-bottom: 12px;
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 10px 13px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+    .bubble.me {
+      align-self: flex-end;
+      background: var(--accent-grad);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+    .bubble.other {
+      align-self: flex-start;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      border-bottom-left-radius: 4px;
+    }
+    .bubble-meta {
+      font-size: 10px;
+      font-weight: 700;
+      opacity: 0.78;
+      margin-bottom: 3px;
+    }
+
+    .tab-pane { display: none; animation: fadeIn 0.22s ease; }
     .tab-pane.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
-  <div class="header-bar">
-    <div class="brand" id="ui-brand">🛡 OTC Автогарант</div>
-    <a onclick="openSupport()" class="support-chip">@ssupppoortt</a>
+  <!-- Фоновое световое поле для преломления жидкого стекла -->
+  <div class="ambient-canvas">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
   </div>
 
-  <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
-  <div id="tab-profile" class="tab-pane active">
-    <div class="glass-card profile-hero">
-      <div class="avatar-circle" id="prof-avatar">U</div>
-      <div style="font-size:17px; font-weight:700;" id="prof-username">@username</div>
-      <div style="font-size:12px; color:var(--muted); margin-top:2px;">Telegram ID: <span id="prof-id">0</span></div>
-
-      <div class="balance-val" id="prof-balance">0.00 TON</div>
-      <div style="font-size:12px; color:var(--muted);" id="ui-bal-sub">Мультивалютный баланс</div>
-
-      <div class="currency-pills">
-        <button class="curr-pill" onclick="changeCurrency('TON')" id="curr-TON">TON</button>
-        <button class="curr-pill" onclick="changeCurrency('USDT')" id="curr-USDT">USDT</button>
-        <button class="curr-pill" onclick="changeCurrency('RUB')" id="curr-RUB">RUB</button>
-        <button class="curr-pill" onclick="changeCurrency('UAH')" id="curr-UAH">UAH</button>
-      </div>
-    </div>
-
-    <div class="stats-grid">
-      <div class="stat-box">
-        <div class="stat-label" id="ui-deals-cnt-label">Количество сделок</div>
-        <div class="stat-num" id="prof-deals-count">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label" id="ui-vol-label">Общий объем</div>
-        <div class="stat-num" id="prof-volume">0.00 TON</div>
-      </div>
-    </div>
-
-    <div class="glass-card">
-      <div style="font-size:14px; font-weight:700; margin-bottom:10px;" id="ui-dep-title">Пополнение баланса</div>
-      <div style="display:flex; gap:8px;">
-        <input type="number" id="deposit-input" class="input-control" placeholder="100" />
-        <button class="btn btn-primary" style="width:auto; padding:0 20px;" onclick="depositBalance()" id="ui-dep-btn">Пополнить</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ВКЛАДКА 2: МОИ СДЕЛКИ -->
-  <div id="tab-deals" class="tab-pane">
-    <div id="deals-list"></div>
-  </div>
-
-  <!-- ВКЛАДКА 3: СОЗДАТЬ СДЕЛКУ -->
-  <div id="tab-create" class="tab-pane">
-    <div class="glass-card">
-      <div style="font-size:16px; font-weight:700; margin-bottom:12px;" id="ui-create-title">💎 Создать NFT-сделку</div>
-      <div class="role-switch">
-        <button class="role-btn active" id="role-seller" onclick="setRole('seller')">📤 Я Продавец</button>
-        <button class="role-btn" id="role-buyer" onclick="setRole('buyer')">📥 Я Покупатель</button>
+  <div class="app-shell">
+    <!-- ЛЕВАЯ СТРОКА ВЫБОРА (LIQUID GLASS SIDEBAR) -->
+    <aside class="left-rail">
+      <div class="rail-logo" title="OTC Escrow">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
       </div>
 
-      <div class="input-group">
-        <label id="ui-partner-label">Пригласить участника (@username или Telegram ID)</label>
-        <input type="text" id="deal-partner" class="input-control" placeholder="@username / ID" />
+      <nav class="rail-nav">
+        <button class="rail-btn active" onclick="switchTab('profile')" id="nav-profile">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span id="nav-lbl-profile">Профиль</span>
+        </button>
+
+        <button class="rail-btn" onclick="switchTab('deals')" id="nav-deals">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          <span id="nav-lbl-deals">Сделки</span>
+        </button>
+
+        <button class="rail-btn" onclick="switchTab('create')" id="nav-create">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          <span id="nav-lbl-create">Создать</span>
+        </button>
+
+        <button class="rail-btn" onclick="switchTab('chat')" id="nav-chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span id="nav-lbl-chat">Чат</span>
+        </button>
+      </nav>
+
+      <!-- Быстрый переключатель 4 тем прямо на левой панели -->
+      <div class="rail-themes" title="Тема оформления">
+        <div class="theme-dot dot-dark" onclick="setTheme('dark')" id="dot-dark"></div>
+        <div class="theme-dot dot-light" onclick="setTheme('light')" id="dot-light"></div>
+        <div class="theme-dot dot-lpink" onclick="setTheme('light-pink')" id="dot-light-pink"></div>
+        <div class="theme-dot dot-dpink" onclick="setTheme('dark-pink')" id="dot-dark-pink"></div>
+      </div>
+    </aside>
+
+    <!-- ОСНОВНАЯ ОБЛАСТЬ КОНТЕНТА -->
+    <main class="main-stage">
+      <div class="top-bar">
+        <div class="stage-title" id="ui-brand">OTC Автогарант</div>
+        <a onclick="openSupport()" class="support-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          @ssupppoortt
+        </a>
       </div>
 
-      <div class="input-group">
-        <label id="ui-nft-label">Название NFT / Подарка / Аккаунта</label>
-        <input type="text" id="deal-nft-name" class="input-control" placeholder="Plush Pepe #412" />
-      </div>
+      <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
+      <section id="tab-profile" class="tab-pane active">
+        <div class="liquid-card">
+          <div class="profile-top">
+            <div class="avatar-glass" id="prof-avatar">U</div>
+            <div class="user-meta">
+              <h2 id="prof-username">@username</h2>
+              <span class="id-chip">ID: <span id="prof-id">0</span></span>
+            </div>
+          </div>
 
-      <div class="input-group">
-        <label id="ui-link-label">Ссылка на NFT или описание</label>
-        <input type="text" id="deal-nft-link" class="input-control" placeholder="https://t.me/nft/..." />
-      </div>
+          <div class="balance-block">
+            <div class="balance-caption" id="ui-bal-sub">Мультивалютный баланс</div>
+            <div class="balance-amount" id="prof-balance">0.00 TON</div>
 
-      <div class="input-group">
-        <label><span id="ui-price-label">Сумма сделки</span> (<span id="create-curr-label">TON</span>)</label>
-        <input type="number" id="deal-price" class="input-control" placeholder="100" />
-      </div>
+            <div class="curr-segmented">
+              <button class="curr-btn" onclick="changeCurrency('TON')" id="curr-TON">TON</button>
+              <button class="curr-btn" onclick="changeCurrency('USDT')" id="curr-USDT">USDT</button>
+              <button class="curr-btn" onclick="changeCurrency('RUB')" id="curr-RUB">RUB</button>
+              <button class="curr-btn" onclick="changeCurrency('UAH')" id="curr-UAH">UAH</button>
+            </div>
+          </div>
 
-      <div style="font-size:12px; color:var(--muted); margin-bottom:12px; line-height:1.4;" id="ui-escrow-warn">
-        ⚠️ Передача товара осуществляется строго через аккаунт технической поддержки <b>@ssupppoortt</b> после заморозки оплаты.
-      </div>
+          <div style="display:flex; gap:8px;">
+            <input type="number" id="deposit-input" class="glass-input" placeholder="Сумма пополнения..." />
+            <button class="btn-liquid" style="width:auto; padding:0 20px; white-space:nowrap;" onclick="depositBalance()" id="ui-dep-btn">Пополнить</button>
+          </div>
+        </div>
 
-      <button class="btn btn-primary" onclick="createDeal()" id="ui-create-btn">Создать сделку и пригласить</button>
-    </div>
-  </div>
+        <div class="metrics-row">
+          <div class="metric-tile">
+            <div class="metric-label" id="ui-deals-cnt-label">Количество сделок</div>
+            <div class="metric-value" id="prof-deals-count">0</div>
+          </div>
+          <div class="metric-tile">
+            <div class="metric-label" id="ui-vol-label">Общий объем</div>
+            <div class="metric-value" id="prof-volume">0.00 TON</div>
+          </div>
+        </div>
 
-  <!-- ВКЛАДКА 4: ЧАТ СДЕЛКИ -->
-  <div id="tab-chat" class="tab-pane">
-    <div class="glass-card">
-      <div style="font-size:14px; font-weight:700; margin-bottom:10px;" id="chat-title">Выберите сделку во вкладке «Сделки»</div>
-      <div class="chat-box" id="chat-messages"></div>
-      <div style="display:flex; gap:8px;">
-        <input type="text" id="chat-input" class="input-control" placeholder="Сообщение..." />
-        <button class="btn btn-primary" style="width:auto; padding:0 18px;" onclick="sendChatMessage()">➤</button>
-      </div>
-    </div>
-  </div>
+        <div class="liquid-card">
+          <div style="font-size:13px; font-weight:700; color:var(--text-sub);" id="ui-theme-title">Оформление Liquid Glass</div>
+          <div class="theme-grid">
+            <button class="theme-card-btn" onclick="setTheme('dark')" id="tbtn-dark">
+              <span class="theme-dot dot-dark" style="width:14px;height:14px;"></span> Темная
+            </button>
+            <button class="theme-card-btn" onclick="setTheme('light')" id="tbtn-light">
+              <span class="theme-dot dot-light" style="width:14px;height:14px;"></span> Светлая
+            </button>
+            <button class="theme-card-btn" onclick="setTheme('light-pink')" id="tbtn-light-pink">
+              <span class="theme-dot dot-lpink" style="width:14px;height:14px;"></span> Светло-розовая
+            </button>
+            <button class="theme-card-btn" onclick="setTheme('dark-pink')" id="tbtn-dark-pink">
+              <span class="theme-dot dot-dpink" style="width:14px;height:14px;"></span> Темно-розовая
+            </button>
+          </div>
+        </div>
+      </section>
 
-  <!-- НИЖНЯЯ НАВИГАЦИЯ -->
-  <div class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('profile')" id="nav-profile">👤<span id="nav-lbl-profile">Профиль</span></button>
-    <button class="nav-item" onclick="switchTab('deals')" id="nav-deals">📂<span id="nav-lbl-deals">Сделки</span></button>
-    <button class="nav-item" onclick="switchTab('create')" id="nav-create">➕<span id="nav-lbl-create">Создать</span></button>
-    <button class="nav-item" onclick="switchTab('chat')" id="nav-chat">💬<span id="nav-lbl-chat">Чат</span></button>
+      <!-- ВКЛАДКА 2: СДЕЛКИ -->
+      <section id="tab-deals" class="tab-pane">
+        <div id="deals-list"></div>
+      </section>
+
+      <!-- ВКЛАДКА 3: СОЗДАТЬ СДЕЛКУ -->
+      <section id="tab-create" class="tab-pane">
+        <div class="liquid-card">
+          <div style="font-size:16px; font-weight:800; margin-bottom:14px;" id="ui-create-title">Новая NFT-сделка</div>
+
+          <div class="role-selector">
+            <button class="role-pill active" id="role-seller" onclick="setRole('seller')">Я Продавец</button>
+            <button class="role-pill" id="role-buyer" onclick="setRole('buyer')">Я Покупатель</button>
+          </div>
+
+          <div class="field">
+            <label id="ui-partner-label">Участник сделки (@username или Telegram ID)</label>
+            <input type="text" id="deal-partner" class="glass-input" placeholder="@username или числовой ID" />
+          </div>
+
+          <div class="field">
+            <label id="ui-nft-label">Название NFT / Цифрового актива</label>
+            <input type="text" id="deal-nft-name" class="glass-input" placeholder="Plush Pepe #412" />
+          </div>
+
+          <div class="field">
+            <label id="ui-link-label">Ссылка на NFT или условия</label>
+            <input type="text" id="deal-nft-link" class="glass-input" placeholder="https://t.me/nft/..." />
+          </div>
+
+          <div class="field">
+            <label><span id="ui-price-label">Сумма сделки</span> (<span id="create-curr-label">TON</span>)</label>
+            <input type="number" id="deal-price" class="glass-input" placeholder="100.00" />
+          </div>
+
+          <div style="font-size:11.5px; color:var(--text-sub); margin: 14px 0; line-height:1.45; padding:10px 12px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border);" id="ui-escrow-warn">
+            Проверка и передача актива выполняется строго через аккаунт поддержки <b>@ssupppoortt</b> после депонирования оплаты.
+          </div>
+
+          <button class="btn-liquid" onclick="createDeal()" id="ui-create-btn">Создать сделку и пригласить</button>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 4: ЧАТ СДЕЛКИ -->
+      <section id="tab-chat" class="tab-pane">
+        <div class="liquid-card">
+          <div style="font-size:14px; font-weight:800; margin-bottom:10px;" id="chat-title">Выберите сделку во вкладке «Сделки»</div>
+          <div class="chat-stream" id="chat-messages"></div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="chat-input" class="glass-input" placeholder="Написать сообщение..." />
+            <button class="btn-liquid" style="width:auto; padding:0 18px;" onclick="sendChatMessage()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 
   <script>
@@ -239,52 +818,52 @@
 
     const I18N = {
       ru: {
-        brand: "🛡 OTC Автогарант", balSub: "Баланс безопасных сделок", dealsCnt: "Количество сделок",
-        vol: "Общий объем", depTitle: "Пополнение баланса", depBtn: "Пополнить",
-        createTitle: "💎 Создать NFT-сделку", roleSeller: "📤 Я Продавец", roleBuyer: "📥 Я Покупатель",
-        partnerLbl: "Пригласить участника (@username или Telegram ID)", nftLbl: "Название NFT / Товара",
-        linkLbl: "Ссылка на NFT или описание", priceLbl: "Сумма сделки",
-        warn: "⚠️ Передача товара осуществляется строго через аккаунт поддержки <b>@ssupppoortt</b> после заморозки средств.",
+        brand: "OTC Автогарант", balSub: "Мультивалютный баланс", dealsCnt: "Количество сделок",
+        vol: "Общий объем", depBtn: "Пополнить", createTitle: "Новая NFT-сделка",
+        roleSeller: "Я Продавец", roleBuyer: "Я Покупатель",
+        partnerLbl: "Участник сделки (@username или Telegram ID)", nftLbl: "Название NFT / Цифрового актива",
+        linkLbl: "Ссылка на NFT или условия", priceLbl: "Сумма сделки",
+        warn: "Проверка и передача актива выполняется строго через аккаунт поддержки <b>@ssupppoortt</b> после заморозки средств.",
         createBtn: "Создать сделку и пригласить", navProfile: "Профиль", navDeals: "Сделки", navCreate: "Создать", navChat: "Чат",
-        noDeals: "У вас пока нет сделок. Создайте сделку во вкладке «Создать».",
-        st_pending: "Ожидает оплаты", st_funded: "Оплачена (Проверка @ssupppoortt)", st_completed: "Завершена", st_cancelled: "Отменена",
-        btnPay: "💳 Оплатить", btnDone: "✅ Товар получен от @ssupppoortt", btnCancel: "Отменить сделку", btnChat: "💬 Чат сделки"
+        noDeals: "Активных сделок пока нет. Создайте новую сделку в меню слева.",
+        st_pending: "Ожидает оплаты", st_funded: "В холде (@ssupppoortt)", st_completed: "Завершена", st_cancelled: "Отменена",
+        btnPay: "Оплатить сделку", btnDone: "Подтвердить получение NFT", btnCancel: "Отменить", btnChat: "Открыть чат"
       },
       en: {
-        brand: "🛡 OTC Auto-Guarantor", balSub: "Secure Escrow Balance", dealsCnt: "Total Deals",
-        vol: "Total Volume", depTitle: "Deposit Balance", depBtn: "Deposit",
-        createTitle: "💎 Create NFT Deal", roleSeller: "📤 I'm Seller", roleBuyer: "📥 I'm Buyer",
-        partnerLbl: "Invite Partner (@username or Telegram ID)", nftLbl: "NFT / Item Name",
-        linkLbl: "NFT Link or Description", priceLbl: "Deal Price",
-        warn: "⚠️ Item transfer is strictly handled via support <b>@ssupppoortt</b> after payment is frozen.",
-        createBtn: "Create Deal & Invite", navProfile: "Profile", navDeals: "Deals", navCreate: "Create", navChat: "Chat",
-        noDeals: "No active deals yet. Create one in the 'Create' tab.",
-        st_pending: "Awaiting Payment", st_funded: "Funded (@ssupppoortt check)", st_completed: "Completed", st_cancelled: "Cancelled",
-        btnPay: "💳 Pay & Freeze", btnDone: "✅ Received from @ssupppoortt", btnCancel: "Cancel Deal", btnChat: "💬 Deal Chat"
+        brand: "OTC Auto-Guarantor", balSub: "Multi-Currency Escrow", dealsCnt: "Total Deals",
+        vol: "Total Volume", depBtn: "Deposit", createTitle: "New NFT Deal",
+        roleSeller: "I'm Seller", roleBuyer: "I'm Buyer",
+        partnerLbl: "Counterparty (@username or Telegram ID)", nftLbl: "NFT / Digital Asset Name",
+        linkLbl: "Asset Link or Terms", priceLbl: "Deal Amount",
+        warn: "Asset verification and transfer is strictly handled via support <b>@ssupppoortt</b> after payment is frozen.",
+        createBtn: "Create & Invite", navProfile: "Profile", navDeals: "Deals", navCreate: "Create", navChat: "Chat",
+        noDeals: "No active deals yet. Create one using the left dock.",
+        st_pending: "Awaiting Payment", st_funded: "Funded (@ssupppoortt)", st_completed: "Completed", st_cancelled: "Cancelled",
+        btnPay: "Fund Escrow", btnDone: "Confirm Receipt", btnCancel: "Cancel", btnChat: "Open Chat"
       },
       zh: {
-        brand: "🛡 OTC 自动担保", balSub: "安全托管余额", dealsCnt: "交易数量",
-        vol: "总交易量", depTitle: "充值余额", depBtn: "充值",
-        createTitle: "💎 创建 NFT 担保交易", roleSeller: "📤 我是卖家", roleBuyer: "📥 我是买家",
-        partnerLbl: "邀请交易方 (@username 或 Telegram ID)", nftLbl: "NFT / 商品名称",
-        linkLbl: "NFT 链接或描述", priceLbl: "交易金额",
-        warn: "⚠️ 资金冻结后，请务必将商品转交给客服 <b>@ssupppoortt</b> 进行核验。",
-        createBtn: "创建交易并邀请", navProfile: "个人中心", navDeals: "交易", navCreate: "创建", navChat: "聊天",
-        noDeals: "暂无交易，请在“创建”页面发起新交易。",
-        st_pending: "等待付款", st_funded: "已冻结 (@ssupppoortt 核验中)", st_completed: "已完成", st_cancelled: "已取消",
-        btnPay: "💳 支付并冻结", btnDone: "✅ 已从 @ssupppoortt 收到商品", btnCancel: "取消交易", btnChat: "💬 交易聊天"
+        brand: "OTC 自动担保", balSub: "多币种安全托管余额", dealsCnt: "交易数量",
+        vol: "总交易量", depBtn: "充值", createTitle: "创建 NFT 担保交易",
+        roleSeller: "我是卖家", roleBuyer: "我是买家",
+        partnerLbl: "交易对方 (@username 或 Telegram ID)", nftLbl: "NFT / 数字商品名称",
+        linkLbl: "NFT 链接或条款", priceLbl: "交易金额",
+        warn: "资金冻结后，请务必将商品转交给客服账号 <b>@ssupppoortt</b> 进行核验交割。",
+        createBtn: "创建并邀请", navProfile: "个人", navDeals: "交易", navCreate: "创建", navChat: "聊天",
+        noDeals: "暂无交易，请在左侧导航栏创建新交易。",
+        st_pending: "等待付款", st_funded: "已冻结 (@ssupppoortt)", st_completed: "已完成", st_cancelled: "已取消",
+        btnPay: "支付并冻结", btnDone: "确认收货", btnCancel: "取消交易", btnChat: "进入聊天"
       },
       uk: {
-        brand: "🛡 OTC Автогарант", balSub: "Баланс безпечних угод", dealsCnt: "Кількість угод",
-        vol: "Загальний обсяг", depTitle: "Поповнення балансу", depBtn: "Поповнити",
-        createTitle: "💎 Створити NFT-угоду", roleSeller: "📤 Я Продавець", roleBuyer: "📥 Я Покупець",
-        partnerLbl: "Запросити учасника (@username або Telegram ID)", nftLbl: "Назва NFT / Товару",
-        linkLbl: "Посилання на NFT або опис", priceLbl: "Сума угоди",
-        warn: "⚠️ Передача товару здійснюється суворо через підтримку <b>@ssupppoortt</b> після заморожування коштів.",
-        createBtn: "Створити угоду та запросити", navProfile: "Профіль", navDeals: "Угоди", navCreate: "Створити", navChat: "Чат",
-        noDeals: "У вас поки немає угод. Створіть угоду у вкладці «Створити».",
-        st_pending: "Очікує оплати", st_funded: "Оплачена (Перевірка @ssupppoortt)", st_completed: "Завершена", st_cancelled: "Скасована",
-        btnPay: "💳 Оплатити", btnDone: "✅ Товар отримано від @ssupppoortt", btnCancel: "Скасувати угоду", btnChat: "💬 Чат угоди"
+        brand: "OTC Автогарант", balSub: "Мультивалютний баланс", dealsCnt: "Кількість угод",
+        vol: "Загальний обсяг", depBtn: "Поповнити", createTitle: "Нова NFT-угода",
+        roleSeller: "Я Продавець", roleBuyer: "Я Покупець",
+        partnerLbl: "Учасник угоди (@username або Telegram ID)", nftLbl: "Назва NFT / Цифрового активу",
+        linkLbl: "Посилання на NFT або умови", priceLbl: "Сума угоди",
+        warn: "Перевірка та передача товару виконується суворо через підтримку <b>@ssupppoortt</b> після заморожування коштів.",
+        createBtn: "Створити та запросити", navProfile: "Профіль", navDeals: "Угоди", navCreate: "Створити", navChat: "Чат",
+        noDeals: "Активних угод поки немає. Створіть нову в меню зліва.",
+        st_pending: "Очікує оплати", st_funded: "У холді (@ssupppoortt)", st_completed: "Завершена", st_cancelled: "Скасована",
+        btnPay: "Оплатити угоду", btnDone: "Підтвердити отримання", btnCancel: "Скасувати", btnChat: "Відкрити чат"
       }
     };
 
@@ -293,7 +872,6 @@
       username: urlParams.get("uname") || "telegram_user"
     };
 
-    // Декодируем сделки, переданные ботом из БД через параметр ?d=
     function parseUrlDeals() {
       const dParam = urlParams.get("d");
       if (!dParam) return null;
@@ -329,12 +907,24 @@
         currency: urlParams.get("curr") || (savedLocal?.user?.currency || "TON"),
         language: urlParams.get("lang") || (savedLocal?.user?.language || "ru")
       },
+      theme: localStorage.getItem("otc_glass_theme") || "dark",
       deals: urlDeals || (savedLocal?.deals || []),
       chats: savedLocal?.chats || {},
       rates: { USDT: 1.0, TON: 0.2, RUB: 95.0, UAH: 41.5 },
       role: "seller",
       activeChatDealId: null
     };
+
+    function setTheme(themeName) {
+      state.theme = themeName;
+      document.documentElement.setAttribute("data-theme", themeName);
+      localStorage.setItem("otc_glass_theme", themeName);
+
+      ["dark", "light", "light-pink", "dark-pink"].forEach(th => {
+        document.getElementById(`dot-${th}`)?.classList.toggle("active", th === themeName);
+        document.getElementById(`tbtn-${th}`)?.classList.toggle("active", th === themeName);
+      });
+    }
 
     function t(key) {
       const lang = state.user.language || "ru";
@@ -384,8 +974,10 @@
     }
 
     async function loadProfile() {
+      setTheme(state.theme);
       applyTranslations();
       renderAll();
+
       const data = await apiCall("/api/user", "POST", {
         user_id: tgUser.id,
         username: tgUser.username || state.user.username || ""
@@ -405,7 +997,6 @@
       document.getElementById("ui-bal-sub").innerText = t("balSub");
       document.getElementById("ui-deals-cnt-label").innerText = t("dealsCnt");
       document.getElementById("ui-vol-label").innerText = t("vol");
-      document.getElementById("ui-dep-title").innerText = t("depTitle");
       document.getElementById("ui-dep-btn").innerText = t("depBtn");
       document.getElementById("ui-create-title").innerText = t("createTitle");
       document.getElementById("role-seller").innerText = t("roleSeller");
@@ -425,7 +1016,7 @@
     function renderAll() {
       const u = state.user;
       document.getElementById("prof-avatar").innerText = (u.username || "U")[0].toUpperCase();
-      document.getElementById("prof-username").innerText = u.username ? `@${u.username.replace(/^@/, '')}` : `ID ${u.user_id}`;
+      document.getElementById("prof-username").innerText = u.username ? `@${u.username.replace(/^@/, '')}` : `User #${u.user_id}`;
       document.getElementById("prof-id").innerText = u.user_id;
       document.getElementById("prof-balance").innerText = formatCurr(u.balance_usd);
       document.getElementById("prof-deals-count").innerText = u.deals_count;
@@ -442,23 +1033,23 @@
     function renderDeals() {
       const container = document.getElementById("deals-list");
       if (!state.deals.length) {
-        container.innerHTML = `<div class="glass-card" style="text-align:center; color:var(--muted);">${t("noDeals")}</div>`;
+        container.innerHTML = `<div class="liquid-card" style="text-align:center; color:var(--text-sub); padding:32px 18px;">${t("noDeals")}</div>`;
         return;
       }
 
       container.innerHTML = state.deals.map(d => {
         const isBuyer = Number(d.buyer_id) === Number(state.user.user_id);
         const stLabel = t(`st_${d.status}`);
-        let actions = `<button class="btn btn-outline" style="margin-top:8px;" onclick="openChat(${d.deal_id})">${t("btnChat")}</button>`;
+        let actions = `<button class="btn-liquid btn-secondary" style="margin-top:8px;" onclick="openChat(${d.deal_id})">${t("btnChat")}</button>`;
 
         if (d.status === "pending") {
           if (isBuyer) {
-            actions = `<button class="btn btn-primary" onclick="dealAction(${d.deal_id}, 'pay')">${t("btnPay")} (${formatCurr(d.price_usd)})</button>` + actions;
+            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'pay')">${t("btnPay")} (${formatCurr(d.price_usd)})</button>` + actions;
           }
-          actions += `<button class="btn btn-danger" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">${t("btnCancel")}</button>`;
+          actions += `<button class="btn-liquid btn-danger-glass" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">${t("btnCancel")}</button>`;
         } else if (d.status === "funded") {
           if (isBuyer) {
-            actions = `<button class="btn btn-success" onclick="dealAction(${d.deal_id}, 'complete')">${t("btnDone")}</button>` + actions;
+            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'complete')">${t("btnDone")}</button>` + actions;
           }
         }
 
@@ -466,16 +1057,16 @@
         const buyerDisplay = d.buyer_username ? `@${d.buyer_username}` : d.buyer_id;
 
         return `
-          <div class="glass-card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <b>#${d.deal_id} — ${d.nft_name}</b>
-              <span class="badge ${d.status}">${stLabel}</span>
+          <div class="liquid-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span style="font-weight:800; font-size:15px;">#${d.deal_id} · ${d.nft_name}</span>
+              <span class="status-pill ${d.status}">${stLabel}</span>
             </div>
-            <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">🔗 ${d.nft_link || "—"}</div>
-            <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">
-              📤 <code>${sellerDisplay}</code> | 📥 <code>${buyerDisplay}</code>
+            <div style="font-size:12px; color:var(--text-sub); margin-bottom:6px; word-break:break-all;">${d.nft_link || "—"}</div>
+            <div style="font-size:11.5px; color:var(--text-sub); margin-bottom:12px; font-family:'JetBrains Mono', monospace;">
+              Seller: ${sellerDisplay} · Buyer: ${buyerDisplay}
             </div>
-            <div style="font-size:16px; font-weight:800; margin-bottom:10px;">${formatCurr(d.price_usd)}</div>
+            <div style="font-size:18px; font-weight:800; font-family:'JetBrains Mono', monospace; margin-bottom:12px;">${formatCurr(d.price_usd)}</div>
             ${actions}
           </div>
         `;
@@ -593,7 +1184,7 @@
       if (!state.activeChatDealId) return;
       const deal = state.deals.find(d => d.deal_id === state.activeChatDealId);
       if (deal) {
-        document.getElementById("chat-title").innerText = `#${deal.deal_id} — ${deal.nft_name}`;
+        document.getElementById("chat-title").innerText = `#${deal.deal_id} · ${deal.nft_name}`;
       }
 
       const data = await apiCall(`/api/chat/${state.activeChatDealId}`, "GET");
@@ -603,8 +1194,8 @@
       box.innerHTML = msgs.map(m => {
         const isMe = Number(m.sender_id) === Number(state.user.user_id);
         return `
-          <div class="msg ${isMe ? 'me' : 'other'}">
-            <div class="msg-author">${m.sender_name}</div>
+          <div class="bubble ${isMe ? 'me' : 'other'}">
+            <div class="bubble-meta">${m.sender_name}</div>
             <div>${m.message_text}</div>
           </div>
         `;
