@@ -1,719 +1,962 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>OTC Liquid Glass Escrow</title>
+  <title>FunPay — Биржа игровых ценностей и NFT</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root, [data-theme="dark"] {
-      --bg-base: #050505;
-      --orb-1: rgba(255, 255, 255, 0.065);
-      --orb-2: rgba(155, 155, 160, 0.055);
-      --orb-3: rgba(90, 90, 95, 0.075);
-      --glass-bg: linear-gradient(135deg, rgba(38, 38, 41, 0.66) 0%, rgba(14, 14, 16, 0.54) 100%);
-      --glass-dock: linear-gradient(180deg, rgba(44, 44, 47, 0.76) 0%, rgba(16, 16, 18, 0.64) 100%);
-      --glass-modal: linear-gradient(145deg, rgba(28, 28, 31, 0.96) 0%, rgba(12, 12, 14, 0.98) 100%);
-      --glass-input: rgba(10, 10, 12, 0.84);
-      --glass-border: rgba(255, 255, 255, 0.14);
-      --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.25), inset 1px 0 1px 0 rgba(255, 255, 255, 0.11);
-      --glass-shadow: 0 22px 48px -14px rgba(0, 0, 0, 0.92);
-      --text-main: #f4f4f6;
-      --text-sub: #8e8e93;
-      --accent: #e4e4e7;
-      --accent-grad: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
-      --accent-glow: rgba(255, 255, 255, 0.16);
-      --btn-text: #09090b;
-    }
-
-    [data-theme="light"] {
-      --bg-base: #f2f3f7;
-      --orb-1: rgba(180, 185, 200, 0.35);
-      --orb-2: rgba(210, 215, 228, 0.5);
-      --orb-3: rgba(160, 170, 190, 0.28);
-      --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(245, 246, 250, 0.5) 100%);
-      --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 242, 247, 0.6) 100%);
-      --glass-modal: linear-gradient(145deg, rgba(255, 255, 255, 0.96) 0%, rgba(242, 244, 248, 0.98) 100%);
-      --glass-input: rgba(255, 255, 255, 0.76);
-      --glass-border: rgba(255, 255, 255, 0.94);
-      --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 1), inset 1px 0 1px 0 rgba(255, 255, 255, 0.8);
-      --glass-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.08);
-      --text-main: #111827;
-      --text-sub: #6b7280;
-      --accent: #18181b;
-      --accent-grad: linear-gradient(135deg, #27272a 0%, #09090b 100%);
-      --accent-glow: rgba(24, 24, 27, 0.18);
-      --btn-text: #ffffff;
-    }
-
-    [data-theme="light-pink"] {
-      --bg-base: #fff0f6;
-      --orb-1: rgba(244, 114, 182, 0.32);
-      --orb-2: rgba(251, 113, 133, 0.25);
-      --orb-3: rgba(232, 121, 249, 0.25);
-      --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.76) 0%, rgba(255, 240, 246, 0.44) 100%);
-      --glass-dock: linear-gradient(180deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 228, 238, 0.56) 100%);
-      --glass-modal: linear-gradient(145deg, rgba(255, 250, 252, 0.96) 0%, rgba(255, 232, 242, 0.98) 100%);
-      --glass-input: rgba(255, 255, 255, 0.72);
-      --glass-border: rgba(255, 255, 255, 0.92);
-      --glass-highlight: inset 0 1.5px 2px 0 rgba(255, 255, 255, 1), inset 1px 0 1px 0 rgba(255, 255, 255, 0.8);
-      --glass-shadow: 0 18px 40px -12px rgba(219, 39, 119, 0.14);
-      --text-main: #3b0722;
-      --text-sub: #9d174d;
-      --accent: #ec4899;
-      --accent-grad: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
-      --accent-glow: rgba(236, 72, 153, 0.3);
-      --btn-text: #ffffff;
-    }
-
-    [data-theme="dark-pink"] {
-      --bg-base: #0d050a;
-      --orb-1: rgba(236, 72, 153, 0.25);
-      --orb-2: rgba(192, 38, 211, 0.2);
-      --orb-3: rgba(244, 63, 94, 0.16);
-      --glass-bg: linear-gradient(135deg, rgba(255, 192, 225, 0.12) 0%, rgba(255, 192, 225, 0.03) 100%);
-      --glass-dock: linear-gradient(180deg, rgba(255, 192, 225, 0.15) 0%, rgba(255, 192, 225, 0.04) 100%);
-      --glass-modal: linear-gradient(145deg, rgba(32, 10, 24, 0.96) 0%, rgba(16, 4, 12, 0.98) 100%);
-      --glass-input: rgba(20, 6, 16, 0.7);
-      --glass-border: rgba(244, 114, 182, 0.24);
-      --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 210, 235, 0.32), inset 1px 0 1px 0 rgba(255, 210, 235, 0.15);
-      --glass-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.82);
-      --text-main: #fdf2f8;
-      --text-sub: #f472b6;
-      --accent: #f472b6;
-      --accent-grad: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-      --accent-glow: rgba(244, 114, 182, 0.35);
-      --btn-text: #ffffff;
+    /* =========================================================
+       ФИРМЕННЫЙ ДИЗАЙН FUNPAY.COM (СВЕТЛЫЙ, ЧИСТЫЙ, БЕЗ НЕОНА)
+       ========================================================= */
+    :root {
+      --fp-bg: #f5f6f8;
+      --fp-card: #ffffff;
+      --fp-subtle: #f8f9fb;
+      --fp-border: #e4e7eb;
+      --fp-border-hover: #cbd2d9;
+      --fp-text: #22252a;
+      --fp-muted: #78828c;
+      --fp-blue: #2b6cc4;
+      --fp-blue-hover: #22569c;
+      --fp-blue-light: #eef4fc;
+      --fp-green: #28a745;
+      --fp-green-bg: #eaf6ed;
+      --fp-orange: #e67e22;
+      --fp-orange-bg: #fef5ec;
+      --fp-red: #dc3545;
+      --fp-red-bg: #fcebed;
+      --fp-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+      --fp-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg-base);
-      color: var(--text-main);
+      background-color: var(--fp-bg);
+      color: var(--fp-text);
       min-height: 100vh;
       overflow-x: hidden;
-      transition: background-color 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+      font-size: 13.5px;
     }
 
-    .ambient-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-      pointer-events: none;
-    }
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(72px);
-      animation: floatOrb 13s infinite alternate ease-in-out;
-    }
-    .orb-1 { width: 320px; height: 320px; top: -6%; left: 12%; background: var(--orb-1); }
-    .orb-2 { width: 280px; height: 280px; bottom: 6%; right: -8%; background: var(--orb-2); animation-delay: -4s; }
-    .orb-3 { width: 240px; height: 240px; top: 44%; left: 28%; background: var(--orb-3); animation-delay: -8s; }
-
-    @keyframes floatOrb {
-      0% { transform: translate3d(0, 0, 0) scale(1); }
-      50% { transform: translate3d(22px, -26px, 0) scale(1.1); }
-      100% { transform: translate3d(-16px, 18px, 0) scale(0.94); }
+    /* Верхняя белая шапка в стиле FunPay */
+    .fp-header {
+      background: var(--fp-card);
+      border-bottom: 1px solid var(--fp-border);
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
     }
 
+    .fp-header-inner {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .fp-logo {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--fp-text);
+      letter-spacing: -0.6px;
+      user-select: none;
+    }
+    .fp-logo-dot {
+      color: var(--fp-blue);
+      font-size: 24px;
+      line-height: 0;
+    }
+    .fp-logo-tag {
+      margin-left: 8px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--fp-muted);
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fp-help-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--fp-border);
+      background: var(--fp-subtle);
+      color: var(--fp-muted);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .fp-help-btn:hover {
+      border-color: var(--fp-blue);
+      color: var(--fp-blue);
+      background: var(--fp-blue-light);
+    }
+
+    .fp-support-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 11px;
+      border-radius: 6px;
+      background: var(--fp-blue-light);
+      color: var(--fp-blue);
+      border: 1px solid rgba(43, 108, 196, 0.2);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .fp-support-link:hover {
+      background: #dfeaf9;
+    }
+
+    /* Основная сетка: Левое меню + Контент */
     .app-shell {
       display: grid;
-      grid-template-columns: 66px 1fr;
+      grid-template-columns: 68px 1fr;
       gap: 12px;
-      max-width: 720px;
+      max-width: 740px;
       margin: 0 auto;
       padding: 12px 12px 28px 10px;
-      min-height: 100vh;
       align-items: start;
     }
 
+    /* Левая навигационная колонка в стиле FunPay */
     .left-rail {
       position: sticky;
-      top: 12px;
-      background: var(--glass-dock);
-      backdrop-filter: blur(34px) saturate(200%);
-      -webkit-backdrop-filter: blur(34px) saturate(200%);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow), var(--glass-highlight);
-      border-radius: 24px;
-      padding: 14px 6px;
+      top: 62px;
+      background: var(--fp-card);
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow);
+      border-radius: 10px;
+      padding: 8px 5px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 4px;
       align-items: center;
-      z-index: 50;
-      animation: dockSlideIn 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 40;
     }
-
-    @keyframes dockSlideIn {
-      from { opacity: 0; transform: translateX(-22px) scale(0.95); }
-      to { opacity: 1; transform: translateX(0) scale(1); }
-    }
-
-    .rail-logo {
-      width: 40px; height: 40px; border-radius: 13px;
-      background: var(--accent-grad);
-      box-shadow: 0 6px 18px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.45);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--btn-text); flex-shrink: 0;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .rail-logo:hover { transform: rotate(-8deg) scale(1.08); }
-
-    .rail-nav { display: flex; flex-direction: column; gap: 6px; width: 100%; align-items: center; }
 
     .rail-btn {
-      width: 52px; height: 48px; border-radius: 15px;
-      border: 1px solid transparent; background: transparent;
-      color: var(--text-sub);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 3px; cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: 56px;
+      height: 50px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--fp-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
       position: relative;
     }
-    .rail-btn:hover { transform: translateY(-2px); color: var(--text-main); }
-    .rail-btn:active { transform: scale(0.9); }
-    .rail-btn svg { width: 18px; height: 18px; stroke-width: 2; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .rail-btn span { font-size: 8.5px; font-weight: 600; letter-spacing: -0.2px; }
+    .rail-btn:hover {
+      background: var(--fp-subtle);
+      color: var(--fp-text);
+    }
+    .rail-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+    }
+    .rail-btn span {
+      font-size: 9.5px;
+      font-weight: 600;
+    }
 
     .rail-btn.active {
-      background: var(--glass-bg);
-      border-color: var(--glass-border);
-      box-shadow: 0 8px 20px var(--accent-glow), var(--glass-highlight);
-      color: var(--text-main);
+      background: var(--fp-blue-light);
+      color: var(--fp-blue);
     }
-    .rail-btn.active svg { color: var(--accent); transform: scale(1.14) translateY(-1px); }
     .rail-btn.active::before {
-      content: ""; position: absolute; left: -6px;
-      width: 3.5px; height: 20px; border-radius: 0 4px 4px 0;
-      background: var(--accent-grad); box-shadow: 0 0 10px var(--accent);
-      animation: indicatorPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes indicatorPop {
-      from { transform: scaleY(0.2); opacity: 0; }
-      to { transform: scaleY(1); opacity: 1; }
+      content: "";
+      position: absolute;
+      left: -5px;
+      width: 3px;
+      height: 24px;
+      border-radius: 0 3px 3px 0;
+      background: var(--fp-blue);
     }
 
-    .theme-dot {
-      width: 15px; height: 15px; border-radius: 50%;
-      border: 1.5px solid rgba(255, 255, 255, 0.35); flex-shrink: 0;
+    /* Контентная область и карточки FunPay */
+    .main-stage {
+      width: 100%;
+      min-width: 0;
     }
-    .dot-dark { background: linear-gradient(135deg, #09090b, #71717a); }
-    .dot-light { background: linear-gradient(135deg, #ffffff, #d4d4d8); }
-    .dot-lpink { background: linear-gradient(135deg, #ffd1e6, #f472b6); }
-    .dot-dpink { background: linear-gradient(135deg, #2e0722, #ec4899); }
-
-    .main-stage { width: 100%; min-width: 0; }
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
-    .stage-title { font-size: 18px; font-weight: 800; letter-spacing: -0.4px; }
 
     .ticker-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 8px; padding: 8px 13px; margin-bottom: 14px; border-radius: 14px;
-      background: var(--glass-bg); backdrop-filter: blur(24px);
-      border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight);
-      font-size: 11px; color: var(--text-sub); transition: all 0.35s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      background: var(--fp-card);
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow);
+      font-size: 11.5px;
+      color: var(--fp-muted);
+      transition: border-color 0.25s ease;
     }
     .ticker-bar.flash {
-      border-color: #10b981;
-      box-shadow: 0 0 18px rgba(16, 185, 129, 0.25), var(--glass-highlight);
+      border-color: var(--fp-blue);
     }
 
     .live-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #10b981; display: inline-block; margin-right: 5px;
-      animation: livePulse 2s infinite ease-in-out;
-    }
-    @keyframes livePulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-    }
-
-    .support-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 12px; border-radius: 999px;
-      background: var(--glass-bg); backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight);
-      color: var(--text-main); font-size: 11.5px; font-weight: 700;
-      cursor: pointer; text-decoration: none;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .support-pill:active { transform: scale(0.95); }
-
-    .liquid-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(30px) saturate(195%);
-      -webkit-backdrop-filter: blur(30px) saturate(195%);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow), var(--glass-highlight);
-      border-radius: 24px; padding: 18px; margin-bottom: 14px;
-      position: relative; overflow: hidden;
-      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease;
-    }
-    .liquid-card::after {
-      content: ""; position: absolute; top: 0; left: -130%;
-      width: 65%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.065), transparent);
-      transform: skewX(-24deg); pointer-events: none;
-      animation: glassSheen 8.5s infinite ease-in-out;
-    }
-    @keyframes glassSheen {
-      0%, 68% { left: -130%; }
-      100% { left: 160%; }
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--fp-green);
+      display: inline-block;
+      margin-right: 5px;
     }
 
-    .stagger-item {
-      opacity: 0;
-      animation: staggerUp 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    @keyframes staggerUp {
-      from { opacity: 0; transform: translateY(14px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    .fp-card {
+      background: var(--fp-card);
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
     }
 
-    .profile-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-    .avatar-glass {
-      width: 54px; height: 54px; border-radius: 17px;
-      background: var(--accent-grad);
-      box-shadow: 0 8px 24px var(--accent-glow), inset 0 1.5px 2px rgba(255,255,255,0.5);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 21px; font-weight: 800; color: var(--btn-text);
+    .fp-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--fp-text);
+      margin-bottom: 12px;
+    }
+
+    /* Шапка профиля */
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--fp-border);
+    }
+
+    .avatar-fp {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--fp-blue);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      flex-shrink: 0;
     }
 
     .user-meta h2 {
-      font-size: 16.5px; font-weight: 800;
-      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--fp-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
+    /* Фирменная галочка верификации */
     .verified-badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 18px; height: 18px; border-radius: 50%;
-      background: linear-gradient(135deg, #38bdf8, #2563eb);
-      color: #fff; box-shadow: 0 0 12px rgba(56, 189, 248, 0.55);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: var(--fp-blue);
+      color: #fff;
       flex-shrink: 0;
-      animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes badgePop {
-      from { transform: scale(0); }
-      to { transform: scale(1); }
     }
 
     .id-chip {
-      display: inline-block; margin-top: 4px;
-      font-family: 'JetBrains Mono', monospace; font-size: 11px;
-      color: var(--text-sub); padding: 3px 8px; border-radius: 8px;
-      background: var(--glass-input); border: 1px solid var(--glass-border);
+      display: inline-block;
+      margin-top: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--fp-muted);
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      padding: 2px 7px;
+      border-radius: 4px;
     }
 
-    /* =========================================================
-       4 РАЗДЕЛЬНЫХ СЧЕТА ЭСКРОУ-БАЛАНСА (СЕТКА 2x2)
-       ========================================================= */
+    /* 4 Счета баланса */
     .balances-section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .balance-caption {
-      font-size: 10.5px;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      font-weight: 800;
-      color: var(--text-sub);
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: var(--fp-muted);
     }
 
     .escrow-grid-4 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 14px;
     }
 
     .wallet-part-card {
-      padding: 13px 12px;
-      border-radius: 18px;
-      background: var(--glass-input);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-highlight);
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
       cursor: pointer;
-      transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-      position: relative;
-      overflow: hidden;
+      transition: all 0.15s ease;
     }
     .wallet-part-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--accent);
+      border-color: var(--fp-border-hover);
+      background: #ffffff;
     }
     .wallet-part-card.active {
-      background: var(--glass-bg);
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent), 0 10px 24px var(--accent-glow), var(--glass-highlight);
+      background: var(--fp-blue-light);
+      border-color: var(--fp-blue);
     }
 
     .wallet-part-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .wallet-curr-tag {
       font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      padding: 2px 7px;
-      border-radius: 7px;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-main);
+      font-weight: 700;
+      color: var(--fp-muted);
+    }
+    .wallet-part-card.active .wallet-curr-tag {
+      color: var(--fp-blue);
     }
     .wallet-active-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--accent);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--fp-blue);
       opacity: 0;
-      transition: 0.25s;
     }
     .wallet-part-card.active .wallet-active-dot {
       opacity: 1;
-      box-shadow: 0 0 8px var(--accent);
     }
 
     .wallet-main-num {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 17.5px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text-main);
-      margin-bottom: 4px;
-      word-break: break-all;
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--fp-text);
+      margin-bottom: 3px;
     }
 
     .wallet-equiv-sub {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 9.5px;
-      line-height: 1.38;
-      color: var(--text-sub);
+      font-size: 10px;
+      line-height: 1.35;
+      color: var(--fp-muted);
     }
 
-    .curr-segmented {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
-      background: rgba(0, 0, 0, 0.16); padding: 4px;
-      border-radius: 13px; border: 1px solid var(--glass-border);
+    /* Статистика: Сделки и Оборот */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
     }
-    .curr-btn {
-      padding: 7px 0; border-radius: 9px; border: none;
-      background: transparent; color: var(--text-sub);
-      font-size: 11.5px; font-weight: 700; cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    .metric-tile {
+      background: var(--fp-card);
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow);
+      border-radius: 10px;
+      padding: 14px;
     }
-    .curr-btn.active {
-      background: var(--accent-grad); color: var(--btn-text);
-      box-shadow: 0 3px 10px var(--accent-glow);
-      transform: scale(1.03);
+    .metric-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--fp-muted);
+      margin-bottom: 6px;
+    }
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--fp-text);
     }
 
     .vol-curr-pills {
-      display: inline-flex; gap: 3px;
-      background: var(--glass-input); padding: 2px;
-      border-radius: 8px; border: 1px solid var(--glass-border);
+      display: inline-flex;
+      gap: 2px;
+      background: var(--fp-subtle);
+      padding: 2px;
+      border-radius: 5px;
+      border: 1px solid var(--fp-border);
     }
     .vol-pill {
-      padding: 2px 6px; border-radius: 6px;
-      font-size: 9px; font-weight: 700; border: none;
-      background: transparent; color: var(--text-sub); cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--fp-muted);
+      cursor: pointer;
     }
-    .vol-pill.active { background: var(--accent-grad); color: var(--btn-text); }
-
-    .metrics-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-    .metric-tile {
-      background: var(--glass-bg); backdrop-filter: blur(24px);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow), var(--glass-highlight);
-      border-radius: 20px; padding: 15px;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    .vol-pill.active {
+      background: var(--fp-blue);
+      color: #ffffff;
     }
-    .metric-label { font-size: 11.5px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
-    .metric-value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 800; }
 
-    .theme-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
-    .theme-card-btn {
-      padding: 11px 12px; border-radius: 14px;
-      border: 1px solid var(--glass-border); background: var(--glass-input);
-      color: var(--text-main); font-size: 12px; font-weight: 600;
-      display: flex; align-items: center; gap: 8px; cursor: pointer;
-    }
-    .theme-card-btn.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-
+    /* Поля ввода и кнопки в стиле FunPay */
     .field { margin-bottom: 12px; }
-    .field label { display: block; font-size: 11.5px; font-weight: 600; color: var(--text-sub); margin-bottom: 6px; }
-    .glass-input {
-      width: 100%; padding: 12px 14px; border-radius: 14px;
-      background: var(--glass-input); border: 1px solid var(--glass-border);
-      color: var(--text-main); font-size: 13.5px; font-weight: 500; outline: none;
-      transition: border-color 0.25s ease, transform 0.2s ease;
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fp-text);
+      margin-bottom: 5px;
     }
-    .glass-input:focus { border-color: var(--accent); transform: translateY(-1px); }
-
-    .btn-liquid {
-      width: 100%; padding: 13px 16px; border-radius: 15px;
-      border: 1px solid rgba(255,255,255,0.22);
-      background: var(--accent-grad); color: var(--btn-text);
-      font-size: 13.5px; font-weight: 700; cursor: pointer;
-      box-shadow: 0 8px 22px var(--accent-glow), inset 0 1px 1px rgba(255,255,255,0.4);
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    .fp-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid #ced4da;
+      color: var(--fp-text);
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-    .btn-liquid:active { transform: scale(0.96); }
-    .btn-secondary { background: var(--glass-input); color: var(--text-main); border: 1px solid var(--glass-border); box-shadow: var(--glass-highlight); }
-    .btn-danger-glass { background: rgba(239, 68, 68, 0.14); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: none; }
+    .fp-input:focus {
+      border-color: var(--fp-blue);
+      box-shadow: 0 0 0 3px rgba(43, 108, 196, 0.12);
+    }
 
-    .role-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .btn-fp {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: var(--fp-blue);
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-fp:hover { background: var(--fp-blue-hover); }
+    .btn-fp:active { transform: translateY(1px); }
+
+    .btn-fp-secondary {
+      background: var(--fp-subtle);
+      color: var(--fp-text);
+      border: 1px solid var(--fp-border);
+    }
+    .btn-fp-secondary:hover {
+      background: #ebedf0;
+    }
+
+    .btn-fp-danger {
+      background: var(--fp-red-bg);
+      color: var(--fp-red);
+      border: 1px solid rgba(220, 53, 69, 0.25);
+    }
+    .btn-fp-danger:hover {
+      background: #f8d7da;
+    }
+
+    .curr-segmented {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      background: var(--fp-subtle);
+      padding: 4px;
+      border-radius: 7px;
+      border: 1px solid var(--fp-border);
+    }
+    .curr-btn {
+      padding: 7px 0;
+      border-radius: 5px;
+      border: none;
+      background: transparent;
+      color: var(--fp-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .curr-btn.active {
+      background: var(--fp-blue);
+      color: #ffffff;
+    }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
     .role-pill {
-      padding: 11px; border-radius: 14px; border: 1px solid var(--glass-border);
-      background: var(--glass-input); color: var(--text-sub);
-      font-size: 12.5px; font-weight: 700; cursor: pointer;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--fp-border);
+      background: var(--fp-subtle);
+      color: var(--fp-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .role-pill.active { background: var(--accent-grad); color: var(--btn-text); border-color: transparent; }
+    .role-pill.active {
+      background: var(--fp-blue-light);
+      color: var(--fp-blue);
+      border-color: var(--fp-blue);
+    }
 
     .partner-chip {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 5px 10px; border-radius: 10px;
-      background: var(--glass-input); border: 1px solid var(--glass-border);
-      color: var(--text-main); font-size: 11.5px; font-weight: 600; cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: 5px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      color: var(--fp-blue);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .partner-chip:hover {
+      background: var(--fp-blue-light);
     }
 
-    .stars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+    /* Пакеты звезд */
+    .stars-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
     .star-pack {
-      padding: 13px 12px; border-radius: 16px;
-      background: var(--glass-input); border: 1px solid var(--glass-border);
-      cursor: pointer; display: flex; flex-direction: column; gap: 4px;
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: all 0.15s ease;
+    }
+    .star-pack:hover {
+      border-color: var(--fp-border-hover);
+      background: #ffffff;
     }
     .star-pack.active {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent), 0 8px 20px var(--accent-glow);
-      background: var(--glass-bg);
+      border-color: var(--fp-blue);
+      background: var(--fp-blue-light);
     }
-    .star-pack-top { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 14.5px; }
+    .star-pack-top {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--fp-text);
+    }
     .star-icon { color: #f59e0b; }
-    .star-ton-price { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--text-main); }
-    .star-fiat-price { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-sub); }
-
-    .status-pill { padding: 4px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; }
-    .status-pill.pending { background: rgba(245, 158, 11, 0.16); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
-    .status-pill.funded { background: rgba(255, 255, 255, 0.12); color: var(--text-main); border: 1px solid var(--glass-border); }
-    .status-pill.completed, .status-pill.approved, .status-pill.verified { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
-    .status-pill.cancelled, .status-pill.rejected { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-
-    .chat-stream {
-      height: 52vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
-      padding: 12px; border-radius: 18px; background: var(--glass-input);
-      border: 1px solid var(--glass-border); margin-bottom: 12px;
+    .star-ton-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--fp-blue);
     }
-    .bubble { max-width: 82%; padding: 10px 13px; border-radius: 16px; font-size: 13px; line-height: 1.42; }
-    .bubble.me { align-self: flex-end; background: var(--accent-grad); color: var(--btn-text); border-bottom-right-radius: 4px; }
-    .bubble.other { align-self: flex-start; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-main); border-bottom-left-radius: 4px; }
-    .bubble-meta { font-size: 10px; font-weight: 700; opacity: 0.75; margin-bottom: 3px; }
+    .star-fiat-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--fp-muted);
+    }
+
+    /* Статусы FunPay */
+    .status-pill {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-pill.pending { background: var(--fp-orange-bg); color: var(--fp-orange); }
+    .status-pill.funded { background: var(--fp-blue-light); color: var(--fp-blue); }
+    .status-pill.completed, .status-pill.approved, .status-pill.verified { background: var(--fp-green-bg); color: var(--fp-green); }
+    .status-pill.cancelled, .status-pill.rejected { background: var(--fp-red-bg); color: var(--fp-red); }
+
+    /* Чат сделки */
+    .chat-stream {
+      height: 52vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      margin-bottom: 10px;
+    }
+    .bubble {
+      max-width: 82%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .bubble.me {
+      align-self: flex-end;
+      background: var(--fp-blue);
+      color: #ffffff;
+    }
+    .bubble.other {
+      align-self: flex-start;
+      background: #ffffff;
+      border: 1px solid var(--fp-border);
+      color: var(--fp-text);
+    }
+    .bubble-meta {
+      font-size: 10px;
+      font-weight: 600;
+      opacity: 0.75;
+      margin-bottom: 2px;
+    }
 
     .tab-pane { display: none; }
-    .tab-pane.active { display: block; animation: stageSpring 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-    @keyframes stageSpring {
-      from { opacity: 0; transform: translateY(12px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+    .tab-pane.active {
+      display: block;
+      animation: fpFade 0.2s ease;
+    }
+    @keyframes fpFade {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* =========================================================
-       КАСТОМНЫЕ LIQUID GLASS МОДАЛЬНЫЕ ОКНА (БЕЗ БРАУЗЕРНЫХ ALERT)
-       ========================================================= */
+    /* Модальные окна в стиле FunPay */
     .modal-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      display: none; align-items: center; justify-content: center;
-      padding: 16px; z-index: 250;
-      animation: fadeBackdrop 0.22s ease;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 250;
     }
     .modal-backdrop.open { display: flex; }
-    @keyframes fadeBackdrop { from { opacity: 0; } to { opacity: 1; } }
 
-    .liquid-modal {
-      width: 100%; max-width: 400px;
-      background: var(--glass-modal);
-      backdrop-filter: blur(36px) saturate(200%);
-      -webkit-backdrop-filter: blur(36px) saturate(200%);
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.8), var(--glass-highlight);
-      border-radius: 28px; padding: 22px 20px;
-      animation: modalSpring 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
+    .fp-modal {
+      width: 100%;
+      max-width: 390px;
+      background: #ffffff;
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow-lg);
+      border-radius: 12px;
+      padding: 20px;
+      animation: modalPop 0.2s ease;
     }
-    @keyframes modalSpring {
-      from { opacity: 0; transform: translateY(26px) scale(0.9); }
+    @keyframes modalPop {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .modal-icon-ring {
-      width: 56px; height: 56px; border-radius: 18px;
-      margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;
-      background: rgba(239, 68, 68, 0.14); border: 1px solid rgba(239, 68, 68, 0.35);
-      color: #f87171;
-      box-shadow: 0 0 24px rgba(239, 68, 68, 0.2);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--fp-red-bg);
+      color: var(--fp-red);
     }
-    .modal-icon-ring.warning {
-      background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.38);
-      color: #fbbf24; box-shadow: 0 0 24px rgba(245, 158, 11, 0.2);
-    }
-    .modal-icon-ring.success {
-      background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.38);
-      color: #34d399; box-shadow: 0 0 24px rgba(16, 185, 129, 0.22);
-    }
+    .modal-icon-ring.warning { background: var(--fp-orange-bg); color: var(--fp-orange); }
+    .modal-icon-ring.success { background: var(--fp-green-bg); color: var(--fp-green); }
 
     .deficit-table {
-      background: var(--glass-input); border: 1px solid var(--glass-border);
-      border-radius: 16px; padding: 12px 14px; margin: 14px 0 16px;
-      display: flex; flex-direction: column; gap: 8px; font-size: 12.5px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 12.5px;
     }
     .deficit-row { display: flex; justify-content: space-between; align-items: center; }
     .deficit-row span:last-child { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
 
     .kyc-preview-box {
-      width: 100%; height: 155px; border-radius: 18px;
-      background: var(--glass-input); border: 1.5px dashed var(--glass-border);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 8px; margin: 14px 0; cursor: pointer; overflow: hidden; position: relative;
+      width: 100%;
+      height: 150px;
+      border-radius: 8px;
+      background: var(--fp-subtle);
+      border: 1.5px dashed #cbd2d9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 12px 0;
+      cursor: pointer;
+      overflow: hidden;
     }
     .kyc-preview-box img { width: 100%; height: 100%; object-fit: cover; }
-    .kyc-steps-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+    .kyc-steps-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
     .kyc-step-dot {
-      width: 28px; height: 6px; border-radius: 999px;
-      background: var(--glass-input); border: 1px solid var(--glass-border);
-      transition: 0.3s;
+      width: 26px;
+      height: 5px;
+      border-radius: 4px;
+      background: var(--fp-border);
     }
-    .kyc-step-dot.active { background: var(--accent-grad); width: 42px; }
+    .kyc-step-dot.active { background: var(--fp-blue); width: 38px; }
+
+    /* =========================================================
+       ИНТЕРАКТИВНОЕ ОБУЧЕНИЕ FUNPAY (ПОДСВЕТКА КНОПОК)
+       ========================================================= */
+    .tour-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      display: none;
+    }
+    .tour-layer.active { display: block; }
+
+    .tour-spotlight {
+      position: fixed;
+      border-radius: 10px;
+      box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.58);
+      border: 2px solid var(--fp-blue);
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 901;
+    }
+
+    .tour-tooltip {
+      position: fixed;
+      width: calc(100vw - 32px);
+      max-width: 340px;
+      background: #ffffff;
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow-lg);
+      border-radius: 10px;
+      padding: 16px;
+      z-index: 902;
+      transition: top 0.3s ease, left 0.3s ease;
+    }
+
+    .tour-step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .tour-step-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--fp-blue-light);
+      color: var(--fp-blue);
+    }
+    .tour-skip-link {
+      background: none;
+      border: none;
+      color: var(--fp-muted);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tour-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--fp-text);
+      margin-bottom: 5px;
+    }
+    .tour-desc {
+      font-size: 12.5px;
+      color: var(--fp-muted);
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+    .tour-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tour-dots { display: flex; gap: 4px; }
+    .tour-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--fp-border);
+    }
+    .tour-dot.active {
+      width: 16px;
+      border-radius: 4px;
+      background: var(--fp-blue);
+    }
   </style>
 </head>
 <body>
 
-  <div class="ambient-canvas">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
+  <!-- ВЕРХНЯЯ ШАПКА FUNPAY -->
+  <header class="fp-header">
+    <div class="fp-header-inner">
+      <div class="fp-logo">
+        FunPay<span class="fp-logo-dot">.</span>
+        <span class="fp-logo-tag">Escrow</span>
+      </div>
+      <div class="header-right">
+        <button class="fp-help-btn" onclick="startOnboardingTour(true)" title="Инструкция">?</button>
+        <a onclick="openSupport()" class="fp-support-link" id="tour-support-btn">Помощь · @ssupppoortt</a>
+      </div>
+    </div>
+  </header>
 
   <div class="app-shell">
     <!-- ЛЕВАЯ ПАНЕЛЬ НАВИГАЦИИ -->
-    <aside class="left-rail">
-      <div class="rail-logo" title="OTC Escrow">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="m9 12 2 2 4-4"/>
-        </svg>
-      </div>
+    <aside class="left-rail" id="tour-left-rail">
+      <button class="rail-btn active" onclick="switchTab('profile')" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Профиль</span>
+      </button>
 
-      <nav class="rail-nav">
-        <button class="rail-btn active" onclick="switchTab('profile')" id="nav-profile">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span>Профиль</span>
-        </button>
+      <button class="rail-btn" onclick="switchTab('deals')" id="nav-deals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span>Сделки</span>
+      </button>
 
-        <button class="rail-btn" onclick="switchTab('deals')" id="nav-deals">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-          <span>Сделки</span>
-        </button>
+      <button class="rail-btn" onclick="switchTab('create')" id="nav-create">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <span>Создать</span>
+      </button>
 
-        <button class="rail-btn" onclick="switchTab('create')" id="nav-create">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-          <span>Создать</span>
-        </button>
+      <button class="rail-btn" onclick="switchTab('swap')" id="nav-swap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        <span>Обмен</span>
+      </button>
 
-        <button class="rail-btn" onclick="switchTab('swap')" id="nav-swap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-          <span>Обмен</span>
-        </button>
+      <button class="rail-btn" onclick="switchTab('stars')" id="nav-stars">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Звезды</span>
+      </button>
 
-        <button class="rail-btn" onclick="switchTab('stars')" id="nav-stars">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <span>Звезды</span>
-        </button>
+      <button class="rail-btn" onclick="switchTab('withdraw')" id="nav-withdraw">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/></svg>
+        <span>Вывод</span>
+      </button>
 
-        <button class="rail-btn" onclick="switchTab('withdraw')" id="nav-withdraw">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/></svg>
-          <span>Вывод</span>
-        </button>
-
-        <button class="rail-btn" onclick="switchTab('chat')" id="nav-chat">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <span>Чат</span>
-        </button>
-      </nav>
+      <button class="rail-btn" onclick="switchTab('chat')" id="nav-chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Чат</span>
+      </button>
     </aside>
 
     <!-- ОСНОВНАЯ ОБЛАСТЬ КОНТЕНТА -->
     <main class="main-stage">
-      <div class="top-bar">
-        <div class="stage-title">OTC Автогарант</div>
-        <a onclick="openSupport()" class="support-pill">@ssupppoortt</a>
-      </div>
-
       <div class="ticker-bar" id="ticker-bar-box">
         <div>
           <span class="live-dot"></span>
-          <b style="color:var(--text-main);">Курс:</b>
+          <b style="color:var(--fp-text);">Курс FunPay:</b>
           <span id="live-ticker-text" style="font-family:'JetBrains Mono',monospace;">1 GRAM = 1.062 USDT · 1 USDT = 82.78₽</span>
         </div>
-        <div id="live-updated-time" style="font-family:'JetBrains Mono',monospace; font-size:10px;">Live</div>
+        <div id="live-updated-time" style="font-family:'JetBrains Mono',monospace; font-size:10.5px;">Live</div>
       </div>
 
       <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
       <section id="tab-profile" class="tab-pane active">
-        <div class="liquid-card">
+        <div class="fp-card">
           <div class="profile-top">
-            <div class="avatar-glass" id="prof-avatar">U</div>
+            <div class="avatar-fp" id="prof-avatar">U</div>
             <div class="user-meta">
               <h2>
                 <span id="prof-username">@username</span>
-                <span id="prof-verified-icon" style="display:none;" class="verified-badge" title="Верифицированный аккаунт">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="prof-verified-icon" style="display:none;" class="verified-badge" title="Верифицированный продавец FunPay">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
                 </span>
               </h2>
               <div><span class="id-chip">ID: <span id="prof-id">0</span></span></div>
             </div>
           </div>
 
-          <!-- МУЛЬТИВАЛЮТНЫЙ ЭСКРОУ-БАЛАНС: 4 ОТДЕЛЬНЫЕ ЧАСТИ С ЭКВИВАЛЕНТАМИ -->
           <div class="balances-section-header">
-            <span class="balance-caption">Мультивалютный эскроу-баланс (4 счета)</span>
+            <span class="balance-caption">Финансы и балансы счетов (4 валюты)</span>
           </div>
 
           <div class="escrow-grid-4" id="escrow-4-grid">
-            <!-- Рендерится динамически: GRAM, USDT, RUB, UAH -->
+            <!-- 4 счета: GRAM, USDT, RUB, UAH -->
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <button class="btn-liquid" onclick="toggleDepositInfo()">Пополнить баланс</button>
-            <button class="btn-liquid btn-secondary" onclick="switchTab('withdraw')">Вывести средства</button>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;" id="tour-wallet-actions">
+            <button class="btn-fp" onclick="toggleDepositInfo()">Пополнить баланс</button>
+            <button class="btn-fp btn-fp-secondary" onclick="switchTab('withdraw')">Вывести средства</button>
           </div>
 
-          <div id="deposit-instructions" style="display:none; margin-top:12px; padding:12px; border-radius:14px; background:var(--glass-input); border:1px solid var(--glass-border); font-size:12px; line-height:1.5;">
-            <div style="font-weight:700; margin-bottom:6px;">Пополнение счета:</div>
-            <div style="color:var(--text-sub); margin-bottom:10px;">
-              Для пополнения любого из ваших 4 счетов (GRAM, USDT, RUB или UAH) обратитесь в техническую поддержку <b>@ssupppoortt</b> и укажите ваш Telegram ID: <code id="dep-uid-code" style="color:var(--text-main);">0</code>.
+          <div id="deposit-instructions" style="display:none; margin-top:12px; padding:12px; border-radius:8px; background:var(--fp-subtle); border:1px solid var(--fp-border); font-size:12px; line-height:1.5;">
+            <div style="font-weight:700; margin-bottom:4px;">Пополнение счета FunPay:</div>
+            <div style="color:var(--fp-muted); margin-bottom:10px;">
+              Для пополнения любого из ваших 4 счетов (GRAM, USDT, RUB или UAH) напишите саппорту <b>@ssupppoortt</b> и укажите ваш ID: <code id="dep-uid-code" style="color:var(--fp-text); font-weight:700;">0</code>.
             </div>
-            <button class="btn-liquid" onclick="openSupport()">Написать в @ssupppoortt</button>
+            <button class="btn-fp" onclick="openSupport()">Написать в @ssupppoortt</button>
           </div>
         </div>
 
-        <!-- МЕТРИКИ: СДЕЛКИ + ОБОРОТ С НЕЗАВИСИМЫМ ВЫБОРОМ ВАЛЮТЫ ОБОРОТА -->
-        <div class="metrics-row">
+        <!-- МЕТРИКИ: СДЕЛКИ + ОБОРОТ -->
+        <div class="metrics-row" id="tour-metrics-row">
           <div class="metric-tile">
             <div class="metric-label">Успешных сделок</div>
             <div class="metric-value" id="prof-deals-count">0</div>
@@ -733,41 +976,23 @@
         </div>
 
         <!-- РАЗДЕЛ ВЕРИФИКАЦИИ АККАУНТА -->
-        <div class="liquid-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <div style="font-size:14px; font-weight:800;">🪪 Верификация аккаунта</div>
+        <div class="fp-card" id="tour-kyc-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-size:14px; font-weight:700;">Верификация продавца FunPay</div>
             <span class="status-pill" id="kyc-status-badge">Не верифицирован</span>
           </div>
-          <div style="font-size:12px; color:var(--text-sub); margin-bottom:12px; line-height:1.45;">
-            Пройдите верификацию (фото паспорта с лицом прямо, затем поворот лица влево и вправо), чтобы получить галочку верификации и повысить доверие в сделках.
+          <div style="font-size:12px; color:var(--fp-muted); margin-bottom:12px; line-height:1.45;">
+            Подтвердите личность (фото паспорта с лицом прямо, затем поворот головы влево и вправо), чтобы получить синюю галочку верификации FunPay.
           </div>
-          <button class="btn-liquid" id="btn-start-kyc" onclick="openKycModal()">Пройти верификацию</button>
+          <button class="btn-fp" id="btn-start-kyc" onclick="openKycModal()">Верифицировать аккаунт</button>
         </div>
 
-        <!-- Просмотр профиля любого участника -->
-        <div class="liquid-card">
-          <div style="font-size:12.5px; font-weight:700; margin-bottom:8px;">Проверить профиль участника</div>
+        <!-- Поиск профиля участника -->
+        <div class="fp-card">
+          <div style="font-size:13px; font-weight:700; margin-bottom:8px;">Проверить профиль пользователя</div>
           <div style="display:flex; gap:8px;">
-            <input type="text" id="lookup-user-input" class="glass-input" placeholder="@username или ID пользователя" />
-            <button class="btn-liquid" style="width:auto; padding:0 18px; white-space:nowrap;" onclick="lookupCounterparty()">Найти</button>
-          </div>
-        </div>
-
-        <div class="liquid-card">
-          <div style="font-size:12.5px; font-weight:700; color:var(--text-sub);">Тема оформления</div>
-          <div class="theme-grid">
-            <button class="theme-card-btn" onclick="setTheme('dark')" id="tbtn-dark">
-              <span class="theme-dot dot-dark"></span> Темная
-            </button>
-            <button class="theme-card-btn" onclick="setTheme('light')" id="tbtn-light">
-              <span class="theme-dot dot-light"></span> Светлая
-            </button>
-            <button class="theme-card-btn" onclick="setTheme('light-pink')" id="tbtn-light-pink">
-              <span class="theme-dot dot-lpink"></span> Светло-розовая
-            </button>
-            <button class="theme-card-btn" onclick="setTheme('dark-pink')" id="tbtn-dark-pink">
-              <span class="theme-dot dot-dpink"></span> Темно-розовая
-            </button>
+            <input type="text" id="lookup-user-input" class="fp-input" placeholder="@username или ID пользователя" />
+            <button class="btn-fp" style="width:auto; padding:0 18px; white-space:nowrap;" onclick="lookupCounterparty()">Найти</button>
           </div>
         </div>
       </section>
@@ -777,10 +1002,10 @@
         <div id="deals-list"></div>
       </section>
 
-      <!-- ВКЛАДКА 3: СОЗДАТЬ СДЕЛКУ ПОКУПКИ/ПРОДАЖИ -->
+      <!-- ВКЛАДКА 3: СОЗДАТЬ СДЕЛКУ -->
       <section id="tab-create" class="tab-pane">
-        <div class="liquid-card">
-          <div style="font-size:16px; font-weight:800; margin-bottom:14px;">Создать NFT-сделку</div>
+        <div class="fp-card">
+          <div class="fp-section-title">Создание безопасной сделки FunPay</div>
 
           <div class="role-selector">
             <button class="role-pill active" id="role-seller" onclick="setRole('seller')">Я Продавец</button>
@@ -790,19 +1015,19 @@
           <div class="field">
             <label>Участник сделки (@username или Telegram ID)</label>
             <div style="display:flex; gap:8px;">
-              <input type="text" id="deal-partner" class="glass-input" placeholder="@username или числовой ID" />
-              <button type="button" class="btn-liquid btn-secondary" style="width:auto; padding:0 14px; white-space:nowrap;" onclick="previewPartnerFromInput('deal-partner')">👤 Профиль</button>
+              <input type="text" id="deal-partner" class="fp-input" placeholder="@username или числовой ID" />
+              <button type="button" class="btn-fp btn-fp-secondary" style="width:auto; padding:0 14px; white-space:nowrap;" onclick="previewPartnerFromInput('deal-partner')">Профиль</button>
             </div>
           </div>
 
           <div class="field">
             <label>Название NFT / Цифрового товара</label>
-            <input type="text" id="deal-nft-name" class="glass-input" placeholder="Plush Pepe #412" />
+            <input type="text" id="deal-nft-name" class="fp-input" placeholder="Plush Pepe #412" />
           </div>
 
           <div class="field">
-            <label>Ссылка на NFT или условия</label>
-            <input type="text" id="deal-nft-link" class="glass-input" placeholder="https://t.me/nft/..." />
+            <label>Ссылка на товар или описание условий</label>
+            <input type="text" id="deal-nft-link" class="fp-input" placeholder="https://t.me/nft/..." />
           </div>
 
           <div class="field">
@@ -817,52 +1042,52 @@
 
           <div class="field">
             <label>Сумма сделки в <b id="create-curr-label">GRAM</b></label>
-            <input type="number" id="deal-price" class="glass-input" placeholder="100.00" oninput="updateDealPreview()" />
-            <div id="deal-usd-preview" style="font-size:11px; color:var(--text-sub); margin-top:5px; font-family:'JetBrains Mono',monospace;">≈ 0.00 USDT · 0.00 RUB · 0.00 UAH</div>
+            <input type="number" id="deal-price" class="fp-input" placeholder="100.00" oninput="updateDealPreview()" />
+            <div id="deal-usd-preview" style="font-size:11px; color:var(--fp-muted); margin-top:5px; font-family:'JetBrains Mono',monospace;">≈ 0.00 USDT · 0.00 RUB · 0.00 UAH</div>
           </div>
 
-          <div style="font-size:11.5px; color:var(--text-sub); margin: 14px 0; line-height:1.45; padding:10px 12px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border);">
-            Передача товара выполняется строго через аккаунт поддержки <b>@ssupppoortt</b> после заморозки средств.
+          <div style="font-size:11.5px; color:var(--fp-muted); margin: 12px 0; line-height:1.45; padding:10px 12px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border);">
+            Передача товара выполняется строго через сотрудника технической поддержки <b>@ssupppoortt</b> после резервирования оплаты.
           </div>
 
-          <button class="btn-liquid" onclick="createDeal()">Создать сделку и пригласить</button>
+          <button class="btn-fp" onclick="createDeal()">Создать сделку и пригласить</button>
         </div>
       </section>
 
-      <!-- ВКЛАДКА 4: ОБМЕН NFT (NFT SWAP) -->
+      <!-- ВКЛАДКА 4: ОБМЕН NFT -->
       <section id="tab-swap" class="tab-pane">
-        <div class="liquid-card">
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">🔄 Безопасный Обмен NFT</div>
-          <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
-            Обмен NFT на NFT (с возможной доплатой) через проверку обоих подарков у <b>@ssupppoortt</b>.
+        <div class="fp-card">
+          <div class="fp-section-title" style="margin-bottom:4px;">Обмен NFT (Бартер FunPay)</div>
+          <div style="font-size:12px; color:var(--fp-muted); margin-bottom:14px;">
+            Безопасный обмен NFT на NFT (с доплатой или без) через проверку у <b>@ssupppoortt</b>.
           </div>
 
           <div class="field">
             <label>Второй участник обмена (@username или Telegram ID)</label>
             <div style="display:flex; gap:8px;">
-              <input type="text" id="swap-partner" class="glass-input" placeholder="@username или ID" />
-              <button type="button" class="btn-liquid btn-secondary" style="width:auto; padding:0 14px; white-space:nowrap;" onclick="previewPartnerFromInput('swap-partner')">👤 Профиль</button>
+              <input type="text" id="swap-partner" class="fp-input" placeholder="@username или ID" />
+              <button type="button" class="btn-fp btn-fp-secondary" style="width:auto; padding:0 14px; white-space:nowrap;" onclick="previewPartnerFromInput('swap-partner')">Профиль</button>
             </div>
           </div>
 
           <div class="field">
             <label>Ваш NFT (который вы отдаете)</label>
-            <input type="text" id="swap-my-nft" class="glass-input" placeholder="Например: Durov's Cap #12" />
+            <input type="text" id="swap-my-nft" class="fp-input" placeholder="Например: Durov's Cap #12" />
           </div>
 
           <div class="field">
             <label>Ссылка на ваш NFT</label>
-            <input type="text" id="swap-my-link" class="glass-input" placeholder="https://t.me/nft/..." />
+            <input type="text" id="swap-my-link" class="fp-input" placeholder="https://t.me/nft/..." />
           </div>
 
           <div class="field">
-            <label>NFT партнера (который вы получаете взамен)</label>
-            <input type="text" id="swap-their-nft" class="glass-input" placeholder="Например: Plush Pepe #88" />
+            <label>NFT партнера (который вы получаете)</label>
+            <input type="text" id="swap-their-nft" class="fp-input" placeholder="Например: Plush Pepe #88" />
           </div>
 
           <div class="field">
             <label>Ссылка на NFT партнера</label>
-            <input type="text" id="swap-their-link" class="glass-input" placeholder="https://t.me/nft/..." />
+            <input type="text" id="swap-their-link" class="fp-input" placeholder="https://t.me/nft/..." />
           </div>
 
           <div class="field">
@@ -876,27 +1101,27 @@
           </div>
 
           <div class="field">
-            <label>Сумма доплаты в <b id="swap-curr-label">GRAM</b> (0 — если обмен без доплаты)</label>
-            <input type="number" id="swap-surcharge" class="glass-input" value="0" placeholder="0" />
+            <label>Сумма доплаты в <b id="swap-curr-label">GRAM</b> (0 — без доплаты)</label>
+            <input type="number" id="swap-surcharge" class="fp-input" value="0" placeholder="0" />
           </div>
 
-          <button class="btn-liquid" onclick="createSwapDeal()">Создать сделку обмена NFT</button>
+          <button class="btn-fp" onclick="createSwapDeal()">Создать сделку обмена</button>
         </div>
       </section>
 
       <!-- ВКЛАДКА 5: ПОКУПКА ЗВЕЗД -->
       <section id="tab-stars" class="tab-pane">
-        <div class="liquid-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <div style="font-size:16px; font-weight:800;">Покупка Telegram Stars</div>
-            <span class="id-chip">Instant Delivery</span>
+        <div class="fp-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <div class="fp-section-title" style="margin-bottom:0;">Покупка Telegram Stars</div>
+            <span class="id-chip">Автовыдача</span>
           </div>
-          <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
-            Выберите счет списания и пакет звезд для мгновенного зачисления.
+          <div style="font-size:12px; color:var(--fp-muted); margin-bottom:14px;">
+            Выберите валютный счет списания и нужный пакет звезд.
           </div>
 
           <div class="field">
-            <label>Счет оплаты звезд</label>
+            <label>Счет оплаты</label>
             <div class="curr-segmented" style="margin-bottom:10px;">
               <button type="button" class="curr-btn active" onclick="setStarsCurrency('GRAM')" id="stcurr-GRAM">GRAM</button>
               <button type="button" class="curr-btn" onclick="setStarsCurrency('USDT')" id="stcurr-USDT">USDT</button>
@@ -907,28 +1132,28 @@
 
           <div class="field">
             <label>Получатель звезд (@username)</label>
-            <input type="text" id="stars-recipient" class="glass-input" placeholder="@username получателя" />
+            <input type="text" id="stars-recipient" class="fp-input" placeholder="@username получателя" />
           </div>
 
           <div class="field">
-            <label>Выберите пакет Telegram Stars</label>
+            <label>Пакет Telegram Stars</label>
             <div class="stars-grid" id="stars-grid-container"></div>
           </div>
 
-          <button class="btn-liquid" onclick="buyStars()">Купить выбранный пакет</button>
+          <button class="btn-fp" onclick="buyStars()">Оплатить и получить звезды</button>
         </div>
       </section>
 
       <!-- ВКЛАДКА 6: ВЫВОД СРЕДСТВ -->
       <section id="tab-withdraw" class="tab-pane">
-        <div class="liquid-card">
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">📤 Вывод средств</div>
-          <div style="font-size:12px; color:var(--text-sub); margin-bottom:14px;">
-            Создайте заявку на вывод с выбранного валютного счета.
+        <div class="fp-card">
+          <div class="fp-section-title" style="margin-bottom:4px;">Вывод средств</div>
+          <div style="font-size:12px; color:var(--fp-muted); margin-bottom:14px;">
+            Создайте заявку на вывод средств с выбранного валютного счета.
           </div>
 
           <div class="field">
-            <label>Счет вывода</label>
+            <label>Счет списания</label>
             <div class="curr-segmented" style="margin-bottom:10px;">
               <button type="button" class="curr-btn active" onclick="setWithdrawCurrency('GRAM')" id="wcurr-GRAM">GRAM</button>
               <button type="button" class="curr-btn" onclick="setWithdrawCurrency('USDT')" id="wcurr-USDT">USDT</button>
@@ -939,152 +1164,169 @@
 
           <div class="field">
             <label>Сумма вывода в <b id="withdraw-curr-label">GRAM</b></label>
-            <input type="number" id="withdraw-amount" class="glass-input" placeholder="50.00" />
+            <input type="number" id="withdraw-amount" class="fp-input" placeholder="50.00" />
           </div>
 
           <div class="field">
-            <label>Кошелек (GRAM / USDT TRC20) или номер карты</label>
-            <input type="text" id="withdraw-requisites" class="glass-input" placeholder="UQ... / T... / 2200..." />
+            <label>Реквизиты получателя (кошелек или карта)</label>
+            <input type="text" id="withdraw-requisites" class="fp-input" placeholder="UQ... / T... / 2200..." />
           </div>
 
-          <button class="btn-liquid" onclick="createWithdrawalRequest()">Создать заявку на вывод</button>
+          <button class="btn-fp" onclick="createWithdrawalRequest()">Создать заявку на вывод</button>
         </div>
 
-        <div class="liquid-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:10px;">История ваших заявок на вывод</div>
+        <div class="fp-card">
+          <div style="font-size:13.5px; font-weight:700; margin-bottom:10px;">История заявок на вывод</div>
           <div id="withdrawals-list"></div>
         </div>
       </section>
 
       <!-- ВКЛАДКА 7: ЧАТ СДЕЛКИ -->
       <section id="tab-chat" class="tab-pane">
-        <div class="liquid-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:10px;" id="chat-title">Выберите сделку во вкладке «Сделки»</div>
+        <div class="fp-card">
+          <div style="font-size:14px; font-weight:700; margin-bottom:10px;" id="chat-title">Выберите сделку во вкладке «Сделки»</div>
           <div class="chat-stream" id="chat-messages"></div>
           <div style="display:flex; gap:8px;">
-            <input type="text" id="chat-input" class="glass-input" placeholder="Написать сообщение..." />
-            <button class="btn-liquid" style="width:auto; padding:0 18px;" onclick="sendChatMessage()">➤</button>
+            <input type="text" id="chat-input" class="fp-input" placeholder="Написать сообщение продавцу/покупателю..." />
+            <button class="btn-fp" style="width:auto; padding:0 18px;" onclick="sendChatMessage()">Отправить</button>
           </div>
         </div>
       </section>
     </main>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО 1: КАСТОМНОЕ МЕНЮ НЕХВАТКИ БАЛАНСА НА КОНКРЕТНОМ СЧЕТЕ -->
+  <!-- ИНТЕРАКТИВНЫЙ ОНБОРДИНГ ПРИ ПЕРВОМ ЗАПУСКЕ -->
+  <div class="tour-layer" id="onboarding-tour-layer">
+    <div class="tour-spotlight" id="tour-spotlight-box"></div>
+    <div class="tour-tooltip" id="tour-tooltip-card">
+      <div class="tour-step-header">
+        <span class="tour-step-badge" id="tour-step-counter">Шаг 1 из 7</span>
+        <button class="tour-skip-link" onclick="finishOnboardingTour()">Пропустить</button>
+      </div>
+      <div class="tour-title" id="tour-step-title">Добро пожаловать в FunPay!</div>
+      <div class="tour-desc" id="tour-step-desc">Описание шага</div>
+      <div class="tour-footer">
+        <div class="tour-dots" id="tour-dots-box"></div>
+        <button class="btn-fp" style="width:auto; padding:8px 16px; font-size:12.5px;" id="tour-next-btn" onclick="nextOnboardingStep()">Далее →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО 1: НЕХВАТКА БАЛАНСА -->
   <div class="modal-backdrop" id="insufficient-modal" onclick="if(event.target===this) closeInsufficientModal()">
-    <div class="liquid-modal">
+    <div class="fp-modal">
       <div class="modal-icon-ring">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
           <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
           <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
         </svg>
       </div>
-      <div style="text-align:center; font-size:17px; font-weight:800; margin-bottom:4px;">Недостаточно средств</div>
-      <div style="text-align:center; font-size:12px; color:var(--text-sub);" id="ins-subtitle">
-        На выбранном валютном счете недостаточно средств для выполнения операции.
+      <div style="text-align:center; font-size:16px; font-weight:700; margin-bottom:4px;">Недостаточно средств</div>
+      <div style="text-align:center; font-size:12px; color:var(--fp-muted);">
+        На выбранном валютном счете не хватает средств для оплаты заказа.
       </div>
 
       <div class="deficit-table">
         <div class="deficit-row">
-          <span style="color:var(--text-sub);">Валютный счет:</span>
+          <span style="color:var(--fp-muted);">Валютный счет:</span>
           <span id="ins-account">GRAM</span>
         </div>
         <div class="deficit-row">
-          <span style="color:var(--text-sub);">Сумма к оплате:</span>
+          <span style="color:var(--fp-muted);">К оплате:</span>
           <span id="ins-required">0.00 GRAM</span>
         </div>
         <div class="deficit-row">
-          <span style="color:var(--text-sub);">Доступно на счете:</span>
+          <span style="color:var(--fp-muted);">Доступно на счете:</span>
           <span id="ins-available">0.00 GRAM</span>
         </div>
-        <div class="deficit-row" style="border-top:1px solid var(--glass-border); padding-top:8px; color:#f87171;">
+        <div class="deficit-row" style="border-top:1px solid var(--fp-border); padding-top:7px; color:var(--fp-red);">
           <span>Не хватает:</span>
           <span id="ins-missing">0.00 GRAM</span>
         </div>
       </div>
 
       <div style="display:flex; flex-direction:column; gap:8px;">
-        <button class="btn-liquid" onclick="goToDepositFromModal()">💳 Пополнить счет</button>
-        <button class="btn-liquid btn-secondary" onclick="closeInsufficientModal()">Закрыть</button>
+        <button class="btn-fp" onclick="goToDepositFromModal()">Пополнить счет</button>
+        <button class="btn-fp btn-fp-secondary" onclick="closeInsufficientModal()">Закрыть</button>
       </div>
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО 2: КАСТОМНЫЕ ОШИБКИ И УВЕДОМЛЕНИЯ (ВМЕСТО ALERT) -->
+  <!-- МОДАЛЬНОЕ ОКНО 2: УВЕДОМЛЕНИЯ И ОШИБКИ -->
   <div class="modal-backdrop" id="notice-modal" onclick="if(event.target===this) closeNoticeModal()">
-    <div class="liquid-modal">
+    <div class="fp-modal">
       <div class="modal-icon-ring warning" id="notice-icon-box"></div>
-      <div style="text-align:center; font-size:17px; font-weight:800; margin-bottom:6px;" id="notice-title">Внимание</div>
-      <div style="text-align:center; font-size:12.5px; color:var(--text-sub); line-height:1.48; margin-bottom:18px;" id="notice-message"></div>
-      <button class="btn-liquid" onclick="closeNoticeModal()">Понятно</button>
+      <div style="text-align:center; font-size:16px; font-weight:700; margin-bottom:6px;" id="notice-title">Внимание</div>
+      <div style="text-align:center; font-size:12.5px; color:var(--fp-muted); line-height:1.45; margin-bottom:16px;" id="notice-message"></div>
+      <button class="btn-fp" onclick="closeNoticeModal()">Понятно</button>
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО 3: ПРОСМОТР ПРОФИЛЯ УЧАСТНИКА СДЕЛКИ -->
+  <!-- МОДАЛЬНОЕ ОКНО 3: ПРОФИЛЬ УЧАСТНИКА СДЕЛКИ -->
   <div class="modal-backdrop" id="partner-profile-modal" onclick="if(event.target===this) closePartnerModal()">
-    <div class="liquid-modal">
-      <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
-        <div class="avatar-glass" id="modal-p-avatar">U</div>
+    <div class="fp-modal">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div class="avatar-fp" id="modal-p-avatar">U</div>
         <div>
-          <div style="font-size:17px; font-weight:800; display:flex; align-items:center; gap:6px;">
+          <div style="font-size:16px; font-weight:700; display:flex; align-items:center; gap:5px;">
             <span id="modal-p-username">@user</span>
             <span id="modal-p-verified" style="display:none;" class="verified-badge" title="Верифицирован">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
             </span>
           </div>
           <span class="id-chip">Telegram ID: <span id="modal-p-id">—</span></span>
         </div>
       </div>
 
-      <div class="metrics-row" style="margin-bottom:16px;">
-        <div class="metric-tile" style="padding:13px;">
+      <div class="metrics-row" style="margin-bottom:14px;">
+        <div class="metric-tile" style="padding:12px; background:var(--fp-subtle);">
           <div class="metric-label">Успешных сделок</div>
           <div class="metric-value" id="modal-p-deals">0</div>
         </div>
-        <div class="metric-tile" style="padding:13px;">
+        <div class="metric-tile" style="padding:12px; background:var(--fp-subtle);">
           <div class="metric-label">Общий оборот</div>
           <div class="metric-value" id="modal-p-vol">0.00 USDT</div>
         </div>
       </div>
 
-      <div style="font-size:11.5px; color:var(--text-sub); text-align:center; margin-bottom:14px; padding:9px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border);">
-        🛡 Профиль участника проверен системой безопасных сделок
+      <div style="font-size:11.5px; color:var(--fp-muted); text-align:center; margin-bottom:14px; padding:8px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border);">
+        Профиль проверен системой безопасности FunPay Escrow
       </div>
 
-      <button class="btn-liquid btn-secondary" onclick="closePartnerModal()">Закрыть профиль</button>
+      <button class="btn-fp btn-fp-secondary" onclick="closePartnerModal()">Закрыть окно</button>
     </div>
   </div>
 
-  <!-- МОДАЛЬНОЕ ОКНО 4: 3-ЭТАПНАЯ ВЕРИФИКАЦИЯ ПАСПОРТА И ЛИЦА -->
+  <!-- МОДАЛЬНОЕ ОКНО 4: 3-ЭТАПНАЯ ВЕРИФИКАЦИЯ -->
   <div class="modal-backdrop" id="kyc-modal" onclick="if(event.target===this) closeKycModal()">
-    <div class="liquid-modal">
+    <div class="fp-modal">
       <div class="kyc-steps-dots">
         <div class="kyc-step-dot active" id="kyc-dot-1"></div>
         <div class="kyc-step-dot" id="kyc-dot-2"></div>
         <div class="kyc-step-dot" id="kyc-dot-3"></div>
       </div>
 
-      <div style="text-align:center; font-size:16px; font-weight:800; margin-bottom:4px;" id="kyc-step-title">
+      <div style="text-align:center; font-size:15.5px; font-weight:700; margin-bottom:4px;" id="kyc-step-title">
         Шаг 1 из 3: Паспорт и лицо прямо
       </div>
-      <div style="text-align:center; font-size:12px; color:var(--text-sub); line-height:1.4;" id="kyc-step-subtitle">
-        Держите паспорт в разворот рядом с лицом, смотрящим прямо в камеру.
+      <div style="text-align:center; font-size:12px; color:var(--fp-muted); line-height:1.4;" id="kyc-step-subtitle">
+        Держите паспорт рядом с лицом, смотрящим прямо в камеру.
       </div>
 
       <input type="file" id="kyc-file-input" accept="image/*" capture="user" style="display:none;" onchange="handleKycPhotoSelected(event)" />
 
       <div class="kyc-preview-box" onclick="document.getElementById('kyc-file-input').click()" id="kyc-preview-area">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--text-sub);">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--fp-muted);">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
           <circle cx="12" cy="13" r="4"/>
         </svg>
-        <span style="font-size:12px; color:var(--text-sub); font-weight:600;">Нажмите, чтобы сделать фото или выбрать кадр</span>
+        <span style="font-size:12px; color:var(--fp-muted); font-weight:600;">Нажмите, чтобы сделать фото или выбрать файл</span>
       </div>
 
       <div style="display:flex; flex-direction:column; gap:8px;">
-        <button class="btn-liquid" id="kyc-next-btn" onclick="nextKycStep()">Далее</button>
-        <button class="btn-liquid btn-secondary" onclick="closeKycModal()">Отмена</button>
+        <button class="btn-fp" id="kyc-next-btn" onclick="nextKycStep()">Далее</button>
+        <button class="btn-fp btn-fp-secondary" onclick="closeKycModal()">Отмена</button>
       </div>
     </div>
   </div>
@@ -1114,7 +1356,7 @@
 
     const tgUser = tg.initDataUnsafe?.user || {
       id: parseInt(urlParams.get("uid")) || 100001,
-      username: urlParams.get("uname") || "telegram_user"
+      username: urlParams.get("uname") || "funpay_user"
     };
 
     function parseUrlList(paramName, mapper) {
@@ -1129,7 +1371,7 @@
       }
     }
 
-    const savedLocal = JSON.parse(localStorage.getItem(`otc_state_${tgUser.id}`) || "null");
+    const savedLocal = JSON.parse(localStorage.getItem(`fp_state_${tgUser.id}`) || "null");
     const urlDeals = parseUrlList("d", x => ({
       deal_id: x.id,
       deal_type: x.tp || "sale",
@@ -1180,7 +1422,6 @@
         is_verified: urlParams.has("ver") ? parseInt(urlParams.get("ver")) : (savedLocal?.user?.is_verified || 0),
         kyc_status: urlParams.get("kyc") || (savedLocal?.user?.kyc_status || "none")
       },
-      theme: localStorage.getItem("otc_glass_theme") || "dark",
       deals: urlDeals || (savedLocal?.deals || []),
       withdrawals: urlWithdrawals || (savedLocal?.withdrawals || []),
       chats: savedLocal?.chats || {},
@@ -1200,19 +1441,149 @@
     const VERIFIED_SVG = `<span class="verified-badge" title="Верифицирован"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg></span>`;
 
     // =========================================================
-    // КАСТОМНОЕ ОКНО ОШИБОК И УВЕДОМЛЕНИЙ (ЗАМЕНА БРАУЗЕРНОГО ALERT)
+    // ИНТЕРАКТИВНОЕ ОБУЧЕНИЕ FUNPAY С ПОДСВЕТКОЙ КНОПОК
     // =========================================================
+    const ONBOARDING_STEPS = [
+      {
+        targetId: "escrow-4-grid",
+        tab: "profile",
+        title: "4 Валютных Счета FunPay",
+        desc: "Здесь находятся ваши независимые счета в GRAM, USDT, RUB и UAH. В каждой карточке виден баланс конкретной валюты и её пересчет в остальные."
+      },
+      {
+        targetId: "tour-wallet-actions",
+        tab: "profile",
+        title: "Пополнение и Вывод средств",
+        desc: "Пополняйте любой счет через поддержку или создавайте заявку на быстрый вывод средств на карту или криптокошелек."
+      },
+      {
+        targetId: "tour-metrics-row",
+        tab: "profile",
+        title: "Сделки и Валюта Оборота",
+        desc: "Отслеживайте успешные сделки и общий оборот. Переключать валюту отображения оборота можно прямо внутри карточки."
+      },
+      {
+        targetId: "tour-kyc-card",
+        tab: "profile",
+        title: "Верификация Продавца",
+        desc: "Загрузите 3 фото (паспорт с лицом прямо, затем поворот головы влево и вправо), чтобы получить синюю галочку верификации FunPay."
+      },
+      {
+        targetId: "nav-create",
+        tab: "profile",
+        title: "Создание Безопасной Сделки",
+        desc: "В разделе «Создать» укажите @username или ID партнера, выберите валюту сделки и заморозьте оплату в гаранте."
+      },
+      {
+        targetId: "nav-swap",
+        tab: "profile",
+        title: "Обмен NFT и Звезды",
+        desc: "Во вкладке «Обмен» можно провести бартер NFT на NFT, а в разделе «Звезды» — моментально купить Telegram Stars."
+      },
+      {
+        targetId: "tour-support-btn",
+        tab: "profile",
+        title: "Техническая Поддержка FunPay",
+        desc: "Проверка и передача всех товаров осуществляется строго через официальный саппорт @ssupppoortt."
+      }
+    ];
+
+    let currentTourIdx = 0;
+
+    function startOnboardingTour(force = false) {
+      const alreadyDone = localStorage.getItem("fp_onboarding_done_v1");
+      if (alreadyDone && !force) return;
+
+      currentTourIdx = 0;
+      switchTab("profile");
+      document.getElementById("onboarding-tour-layer").classList.add("active");
+      renderOnboardingStep();
+    }
+
+    function renderOnboardingStep() {
+      const step = ONBOARDING_STEPS[currentTourIdx];
+      if (!step) return finishOnboardingTour();
+
+      if (step.tab) switchTab(step.tab);
+      const el = document.getElementById(step.targetId);
+      if (!el) return finishOnboardingTour();
+
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      setTimeout(() => {
+        const rect = el.getBoundingClientRect();
+        const pad = 5;
+        const spot = document.getElementById("tour-spotlight-box");
+        spot.style.top = `${Math.max(4, rect.top - pad)}px`;
+        spot.style.left = `${Math.max(4, rect.left - pad)}px`;
+        spot.style.width = `${rect.width + pad * 2}px`;
+        spot.style.height = `${rect.height + pad * 2}px`;
+
+        document.getElementById("tour-step-counter").innerText = `Шаг ${currentTourIdx + 1} из ${ONBOARDING_STEPS.length}`;
+        document.getElementById("tour-step-title").innerText = step.title;
+        document.getElementById("tour-step-desc").innerText = step.desc;
+        document.getElementById("tour-next-btn").innerText =
+          currentTourIdx === ONBOARDING_STEPS.length - 1 ? "Готово ✓" : "Далее →";
+
+        const dotsContainer = document.getElementById("tour-dots-box");
+        dotsContainer.innerHTML = ONBOARDING_STEPS.map((_, i) =>
+          `<div class="tour-dot ${i === currentTourIdx ? 'active' : ''}"></div>`
+        ).join("");
+
+        const tooltip = document.getElementById("tour-tooltip-card");
+        const tipHeight = tooltip.offsetHeight || 185;
+        const viewportH = window.innerHeight;
+        const viewportW = window.innerWidth;
+
+        let topPos = rect.bottom + 12;
+        if (topPos + tipHeight > viewportH - 14) {
+          topPos = Math.max(14, rect.top - tipHeight - 12);
+        }
+
+        let leftPos = Math.max(14, Math.min(rect.left, viewportW - tooltip.offsetWidth - 14));
+        if (rect.left < 80) {
+          leftPos = Math.max(14, (viewportW - tooltip.offsetWidth) / 2);
+        }
+
+        tooltip.style.top = `${topPos}px`;
+        tooltip.style.left = `${leftPos}px`;
+      }, 220);
+    }
+
+    function nextOnboardingStep() {
+      haptic("light");
+      if (currentTourIdx < ONBOARDING_STEPS.length - 1) {
+        currentTourIdx += 1;
+        renderOnboardingStep();
+      } else {
+        finishOnboardingTour();
+      }
+    }
+
+    function finishOnboardingTour() {
+      haptic("medium");
+      localStorage.setItem("fp_onboarding_done_v1", "1");
+      document.getElementById("onboarding-tour-layer").classList.remove("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.addEventListener("resize", () => {
+      if (document.getElementById("onboarding-tour-layer").classList.contains("active")) {
+        renderOnboardingStep();
+      }
+    });
+
     function showNoticeModal(title, message, type = "warning") {
       haptic(type === "success" ? "light" : "heavy");
       const iconBox = document.getElementById("notice-icon-box");
       iconBox.className = `modal-icon-ring ${type === "error" ? "" : type}`;
 
       if (type === "success") {
-        iconBox.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>`;
+        iconBox.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>`;
       } else if (type === "error") {
-        iconBox.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+        iconBox.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
       } else {
-        iconBox.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+        iconBox.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
       }
 
       document.getElementById("notice-title").innerText = title;
@@ -1224,7 +1595,6 @@
       document.getElementById("notice-modal").classList.remove("open");
     }
 
-    // Работа с 4 отдельными валютными балансами
     function getWalletBalance(curr) {
       const c = curr === "TON" ? "GRAM" : curr;
       const map = {
@@ -1244,7 +1614,6 @@
       if (c === "UAH") state.user.bal_uah = Math.max(0, (state.user.bal_uah || 0) + delta);
     }
 
-    // Конвертация суммы из одной валюты в другую по текущему курсу
     function convertAmount(amount, fromCurr, toCurr) {
       const rFrom = state.rates[fromCurr] || 1;
       const rTo = state.rates[toCurr] || 1;
@@ -1261,7 +1630,6 @@
         const bal = getWalletBalance(curr);
         const isSelected = state.user.currency === curr;
 
-        // Эквиваленты именно этого баланса в остальных 3 валютах
         const otherEquivs = currencies
           .filter(other => other !== curr)
           .map(other => `${convertAmount(bal, curr, other).toFixed(2)} ${other}`)
@@ -1270,7 +1638,7 @@
         return `
           <div class="wallet-part-card ${isSelected ? 'active' : ''}" onclick="changeCurrency('${curr}')">
             <div class="wallet-part-top">
-              <span class="wallet-curr-tag">${curr}</span>
+              <span class="wallet-curr-tag">Счет ${curr}</span>
               <span class="wallet-active-dot"></span>
             </div>
             <div class="wallet-main-num">${bal.toFixed(2)} ${curr}</div>
@@ -1324,16 +1692,6 @@
       updateDealPreview();
     }
 
-    function setTheme(themeName) {
-      haptic("light");
-      state.theme = themeName;
-      document.documentElement.setAttribute("data-theme", themeName);
-      localStorage.setItem("otc_glass_theme", themeName);
-      ["dark", "light", "light-pink", "dark-pink"].forEach(th => {
-        document.getElementById(`tbtn-${th}`)?.classList.toggle("active", th === themeName);
-      });
-    }
-
     function formatOtherEquivalents(usd, primaryCurr) {
       const allCurrs = ["GRAM", "USDT", "RUB", "UAH"];
       return allCurrs
@@ -1342,7 +1700,6 @@
         .join(" · ");
     }
 
-    // 3-этапная верификация
     const KYC_STEP_INFO = {
       1: {
         title: "Шаг 1 из 3: Паспорт и лицо прямо",
@@ -1385,11 +1742,11 @@
         area.innerHTML = `<img src="${state.kycPhotos[s]}" alt="KYC Step ${s}" />`;
       } else {
         area.innerHTML = `
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--text-sub);">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--fp-muted);">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
             <circle cx="12" cy="13" r="4"/>
           </svg>
-          <span style="font-size:12px; color:var(--text-sub); font-weight:600;">Нажмите, чтобы сделать или загрузить фото</span>
+          <span style="font-size:12px; color:var(--fp-muted); font-weight:600;">Нажмите, чтобы сделать или загрузить фото</span>
         `;
       }
     }
@@ -1446,7 +1803,7 @@
         state.user = res.user;
         saveLocal();
         renderAll();
-        showNoticeModal("Заявка отправлена", "Ваши фотографии переданы главному администратору. После проверки вам будет выдана галочка верификации.", "success");
+        showNoticeModal("Заявка отправлена", "Ваши фотографии переданы главному администратору FunPay. После проверки вам будет выдана галочка верификации.", "success");
       } else {
         state.user.kyc_status = "pending";
         saveLocal();
@@ -1457,7 +1814,6 @@
       }
     }
 
-    // Модальное окно нехватки средств на конкретном валютном счете
     function showInsufficientFundsModal(requiredAmount, currency) {
       haptic("heavy");
       const curr = (currency === "TON" ? "GRAM" : currency) || "GRAM";
@@ -1556,7 +1912,7 @@
     }
 
     function saveLocal() {
-      localStorage.setItem(`otc_state_${tgUser.id}`, JSON.stringify(state));
+      localStorage.setItem(`fp_state_${tgUser.id}`, JSON.stringify(state));
     }
 
     function formatCurr(usd, customCurr = null) {
@@ -1586,7 +1942,6 @@
     }
 
     async function loadProfile() {
-      setTheme(state.theme);
       if (state.user.username) {
         document.getElementById("stars-recipient").value = `@${state.user.username.replace(/^@/, "")}`;
       }
@@ -1605,6 +1960,8 @@
         saveLocal();
         renderAll();
       }
+
+      setTimeout(() => startOnboardingTour(false), 450);
     }
 
     function renderAll() {
@@ -1625,7 +1982,7 @@
       const kycBtn = document.getElementById("btn-start-kyc");
       if (Number(u.is_verified)) {
         kycBadge.className = "status-pill verified";
-        kycBadge.innerText = "Верифицирован ☑️";
+        kycBadge.innerText = "Верифицирован ✓";
         kycBtn.style.display = "none";
       } else if (u.kyc_status === "pending") {
         kycBadge.className = "status-pill pending";
@@ -1705,13 +2062,13 @@
       const box = document.getElementById("stars-grid-container");
       if (!box) return;
       const payCurr = state.starsCurrency || "GRAM";
-      box.innerHTML = STAR_PACKS.map((p, idx) => {
+      box.innerHTML = STAR_PACKS.map(p => {
         const gramCost = p.usdt / state.gramPriceUsdt;
         const payCurrStr = formatCurr(p.usdt, payCurr);
         const isSelected = state.selectedStarPack === p.stars;
 
         return `
-          <div class="star-pack stagger-item ${isSelected ? 'active' : ''}" style="animation-delay:${idx * 0.04}s" onclick="selectStarPack(${p.stars})">
+          <div class="star-pack ${isSelected ? 'active' : ''}" onclick="selectStarPack(${p.stars})">
             <div class="star-pack-top">
               <svg class="star-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               <span>${p.stars.toLocaleString()} Stars</span>
@@ -1771,7 +2128,7 @@
 
       saveLocal();
       renderAll();
-      showNoticeModal("Покупка успешна", `Пакет ${pack.stars} Telegram Stars для ${rcp} успешно оплачен со счета ${payCurr}!`, "success");
+      showNoticeModal("Заказ выполнен", `Пакет ${pack.stars} Telegram Stars для ${rcp} успешно оплачен со счета ${payCurr}!`, "success");
     }
 
     async function createWithdrawalRequest() {
@@ -1820,22 +2177,22 @@
       document.getElementById("withdraw-requisites").value = "";
       saveLocal();
       renderAll();
-      showNoticeModal("Заявка создана", `Заявка на вывод ${amountVal.toFixed(2)} ${curr} отправлена администратору.`, "success");
+      showNoticeModal("Заявка создана", `Заявка на вывод ${amountVal.toFixed(2)} ${curr} отправлена в финансовый отдел FunPay.`, "success");
     }
 
     function renderWithdrawals() {
       const box = document.getElementById("withdrawals-list");
       if (!box) return;
       if (!state.withdrawals.length) {
-        box.innerHTML = `<div style="font-size:12px; color:var(--text-sub); text-align:center; padding:12px;">Заявок на вывод пока нет.</div>`;
+        box.innerHTML = `<div style="font-size:12px; color:var(--fp-muted); text-align:center; padding:12px;">Заявок на вывод пока нет.</div>`;
         return;
       }
       const stMap = { pending: "В обработке", approved: "Выплачено", rejected: "Отклонено" };
       box.innerHTML = state.withdrawals.map(w => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:12px; background:var(--glass-input); border:1px solid var(--glass-border); margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border); margin-bottom:8px;">
           <div>
             <div style="font-weight:700; font-size:13px; font-family:'JetBrains Mono',monospace;">#${w.withdraw_id} · ${Number(w.amount_curr).toFixed(2)} ${w.currency}</div>
-            <div style="font-size:11px; color:var(--text-sub);">${w.requisites}</div>
+            <div style="font-size:11px; color:var(--fp-muted);">${w.requisites}</div>
           </div>
           <span class="status-pill ${w.status}">${stMap[w.status] || w.status}</span>
         </div>
@@ -1845,7 +2202,7 @@
     function renderDeals() {
       const container = document.getElementById("deals-list");
       if (!state.deals.length) {
-        container.innerHTML = `<div class="liquid-card" style="text-align:center; color:var(--text-sub); padding:32px 18px;">Активных сделок пока нет. Создайте сделку или обмен NFT в меню слева.</div>`;
+        container.innerHTML = `<div class="fp-card" style="text-align:center; color:var(--fp-muted); padding:30px 18px;">Активных сделок пока нет. Создайте сделку или обмен NFT в меню слева.</div>`;
         return;
       }
 
@@ -1856,7 +2213,7 @@
         cancelled: "Отменена"
       };
 
-      container.innerHTML = state.deals.map((d, idx) => {
+      container.innerHTML = state.deals.map(d => {
         const isBuyer = Number(d.buyer_id) === Number(state.user.user_id);
         const isSwap = d.deal_type === "swap";
         const dealCurr = (d.deal_currency === "TON" ? "GRAM" : d.deal_currency) || "GRAM";
@@ -1875,19 +2232,19 @@
 
         let actions = `
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
-            <button class="btn-liquid btn-secondary" onclick="openPartnerProfileModal('${partnerId}', '${safePartnerUname}', ${partnerDeals}, ${partnerVol}, ${partnerVer})">👤 Профиль участника</button>
-            <button class="btn-liquid btn-secondary" onclick="openChat(${d.deal_id})">💬 Чат сделки</button>
+            <button class="btn-fp btn-fp-secondary" onclick="openPartnerProfileModal('${partnerId}', '${safePartnerUname}', ${partnerDeals}, ${partnerVol}, ${partnerVer})">Профиль участника</button>
+            <button class="btn-fp btn-fp-secondary" onclick="openChat(${d.deal_id})">Чат заказа</button>
           </div>
         `;
 
         if (d.status === "pending") {
           if (isBuyer && d.price_usd > 0) {
-            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'pay')">💳 Оплатить со счета ${dealCurr} (${dealPrimaryAmount})</button>` + actions;
+            actions = `<button class="btn-fp" onclick="dealAction(${d.deal_id}, 'pay')">Оплатить со счета ${dealCurr} (${dealPrimaryAmount})</button>` + actions;
           }
-          actions += `<button class="btn-liquid btn-danger-glass" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">Отменить</button>`;
+          actions += `<button class="btn-fp btn-fp-danger" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">Отменить заказ</button>`;
         } else if (d.status === "funded") {
           if (isBuyer) {
-            actions = `<button class="btn-liquid" onclick="dealAction(${d.deal_id}, 'complete')">✅ Подтвердить получение от @ssupppoortt</button>` + actions;
+            actions = `<button class="btn-fp" onclick="dealAction(${d.deal_id}, 'complete')">Подтвердить выполнение заказа</button>` + actions;
           }
         }
 
@@ -1895,33 +2252,33 @@
         const buyerDisplay = d.buyer_username ? `@${d.buyer_username}` : `ID ${d.buyer_id}`;
 
         const swapBlock = isSwap ? `
-          <div style="padding:8px 10px; border-radius:10px; background:var(--glass-input); border:1px solid var(--glass-border); margin-bottom:8px; font-size:12px;">
-            <div>🔄 <b>Обмен на:</b> ${d.swap_nft_name || "NFT"}</div>
-            <div style="color:var(--text-sub); font-size:11px;">${d.swap_nft_link || "—"}</div>
+          <div style="padding:8px 10px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border); margin-bottom:8px; font-size:12px;">
+            <div><b>Обмен на:</b> ${d.swap_nft_name || "NFT"}</div>
+            <div style="color:var(--fp-muted); font-size:11px;">${d.swap_nft_link || "—"}</div>
           </div>
         ` : "";
 
         const priceSection = d.price_usd > 0 ? `
-          <div style="margin-bottom:12px;">
-            <div style="font-size:19px; font-weight:800; font-family:'JetBrains Mono', monospace;">${dealPrimaryAmount}</div>
-            <div style="font-size:11px; color:var(--text-sub); font-family:'JetBrains Mono', monospace; margin-top:3px;">≈ ${otherEquivs}</div>
+          <div style="margin-bottom:12px; padding:10px 12px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border);">
+            <div style="font-size:18px; font-weight:800; font-family:'JetBrains Mono', monospace; color:var(--fp-blue);">${dealPrimaryAmount}</div>
+            <div style="font-size:11px; color:var(--fp-muted); font-family:'JetBrains Mono', monospace; margin-top:2px;">≈ ${otherEquivs}</div>
           </div>
-        ` : `<div style="font-size:16px; font-weight:800; margin-bottom:12px;">Без доплаты (Бартер NFT)</div>`;
+        ` : `<div style="font-size:15px; font-weight:700; margin-bottom:12px;">Без доплаты (Бартер NFT)</div>`;
 
         return `
-          <div class="liquid-card stagger-item" style="animation-delay:${idx * 0.05}s">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-              <span style="font-weight:800; font-size:15px;">${isSwap ? '🔄 Обмен' : '💎 Сделка'} #${d.deal_id} · ${d.nft_name}</span>
+          <div class="fp-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-weight:700; font-size:14.5px;">Заказ #${d.deal_id} · ${d.nft_name}</span>
               <span class="status-pill ${d.status}">${stMap[d.status] || d.status}</span>
             </div>
-            <div style="font-size:12px; color:var(--text-sub); margin-bottom:8px; word-break:break-all;">${d.nft_link || "—"}</div>
+            <div style="font-size:12px; color:var(--fp-muted); margin-bottom:8px; word-break:break-all;">${d.nft_link || "—"}</div>
             ${swapBlock}
             <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
               <span class="partner-chip" onclick="openPartnerProfileModal('${d.seller_id}', '${(d.seller_username||'').replace(/'/g,'')}', ${d.seller_deals||0}, ${d.seller_vol||0}, ${d.seller_verified||0})">
-                📤 ${sellerDisplay} ${d.seller_verified ? VERIFIED_SVG : ''}
+                Продавец: ${sellerDisplay} ${d.seller_verified ? VERIFIED_SVG : ''}
               </span>
               <span class="partner-chip" onclick="openPartnerProfileModal('${d.buyer_id}', '${(d.buyer_username||'').replace(/'/g,'')}', ${d.buyer_deals||0}, ${d.buyer_vol||0}, ${d.buyer_verified||0})">
-                📥 ${buyerDisplay} ${d.buyer_verified ? VERIFIED_SVG : ''}
+                Покупатель: ${buyerDisplay} ${d.buyer_verified ? VERIFIED_SVG : ''}
               </span>
             </div>
             ${priceSection}
@@ -2122,7 +2479,7 @@
       if (!state.activeChatDealId) return;
       const deal = state.deals.find(d => d.deal_id === state.activeChatDealId);
       if (deal) {
-        document.getElementById("chat-title").innerText = `#${deal.deal_id} · ${deal.nft_name}`;
+        document.getElementById("chat-title").innerText = `Заказ #${deal.deal_id} · ${deal.nft_name}`;
       }
 
       const data = await apiCall(`/api/chat/${state.activeChatDealId}`, "GET");
@@ -2143,7 +2500,7 @@
 
     async function sendChatMessage() {
       if (!state.activeChatDealId) {
-        return showNoticeModal("Выберите сделку", "Сначала откройте нужную сделку во вкладке «Сделки» и нажмите «Чат сделки».", "warning");
+        return showNoticeModal("Выберите заказ", "Сначала откройте нужный заказ во вкладке «Сделки» и нажмите «Чат заказа».", "warning");
       }
       const input = document.getElementById("chat-input");
       const text = input.value.trim();
