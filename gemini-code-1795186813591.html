@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FunPay — Биржа игровых ценностей и NFT</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fp-bg: #f5f6f8;
+      --fp-card: #ffffff;
+      --fp-subtle: #f8f9fb;
+      --fp-border: #e4e7eb;
+      --fp-border-hover: #cbd2d9;
+      --fp-text: #22252a;
+      --fp-muted: #78828c;
+      --fp-blue: #2b6cc4;
+      --fp-blue-hover: #22569c;
+      --fp-blue-light: #eef4fc;
+      --fp-green: #28a745;
+      --fp-green-bg: #eaf6ed;
+      --fp-orange: #e67e22;
+      --fp-orange-bg: #fef5ec;
+      --fp-red: #dc3545;
+      --fp-red-bg: #fcebed;
+      --fp-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+      --fp-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--fp-bg);
+      color: var(--fp-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-size: 13.5px;
+    }
+
+    .fp-header {
+      background: var(--fp-card);
+      border-bottom: 1px solid var(--fp-border);
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    .fp-header-inner {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .fp-logo {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--fp-text);
+      letter-spacing: -0.6px;
+      user-select: none;
+    }
+    .fp-logo-dot {
+      color: var(--fp-blue);
+      font-size: 24px;
+      line-height: 0;
+    }
+    .fp-logo-tag {
+      margin-left: 8px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--fp-muted);
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fp-help-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--fp-border);
+      background: var(--fp-subtle);
+      color: var(--fp-muted);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .fp-help-btn:hover {
+      border-color: var(--fp-blue);
+      color: var(--fp-blue);
+      background: var(--fp-blue-light);
+    }
+
+    .fp-support-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 11px;
+      border-radius: 6px;
+      background: var(--fp-blue-light);
+      color: var(--fp-blue);
+      border: 1px solid rgba(43, 108, 196, 0.2);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .fp-support-link:hover {
+      background: #dfeaf9;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      gap: 12px;
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 12px 12px 28px 10px;
+      align-items: start;
+    }
+
+    .left-rail {
+      position: sticky;
+      top: 62px;
+      background: var(--fp-card);
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow);
+      border-radius: 10px;
+      padding: 8px 5px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+      z-index: 40;
+    }
+
+    .rail-btn {
+      width: 56px;
+      height: 50px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--fp-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .rail-btn:hover {
+      background: var(--fp-subtle);
+      color: var(--fp-text);
+    }
+    .rail-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+    }
+    .rail-btn span {
+      font-size: 9.5px;
+      font-weight: 600;
+    }
+
+    .rail-btn.active {
+      background: var(--fp-blue-light);
+      color: var(--fp-blue);
+    }
+    .rail-btn.active::before {
+      content: "";
+      position: absolute;
+      left: -5px;
+      width: 3px;
+      height: 24px;
+      border-radius: 0 3px 3px 0;
+      background: var(--fp-blue);
+    }
+
+    .main-stage {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .ticker-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      background: var(--fp-card);
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow);
+      font-size: 11.5px;
+      color: var(--fp-muted);
+      transition: border-color 0.25s ease;
+    }
+    .ticker-bar.flash {
+      border-color: var(--fp-blue);
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--fp-green);
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .fp-card {
+      background: var(--fp-card);
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .fp-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--fp-text);
+      margin-bottom: 12px;
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--fp-border);
+    }
+
+    .avatar-fp {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--fp-blue);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .user-meta h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--fp-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: var(--fp-blue);
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .id-chip {
+      display: inline-block;
+      margin-top: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--fp-muted);
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .balances-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .balance-caption {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: var(--fp-muted);
+    }
+
+    .escrow-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .wallet-part-card {
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .wallet-part-card:hover {
+      border-color: var(--fp-border-hover);
+      background: #ffffff;
+    }
+    .wallet-part-card.active {
+      background: var(--fp-blue-light);
+      border-color: var(--fp-blue);
+    }
+
+    .wallet-part-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .wallet-curr-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--fp-muted);
+    }
+    .wallet-part-card.active .wallet-curr-tag {
+      color: var(--fp-blue);
+    }
+    .wallet-active-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--fp-blue);
+      opacity: 0;
+    }
+    .wallet-part-card.active .wallet-active-dot {
+      opacity: 1;
+    }
+
+    .wallet-main-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--fp-text);
+      margin-bottom: 3px;
+    }
+
+    .wallet-equiv-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      line-height: 1.35;
+      color: var(--fp-muted);
+    }
+
+    .metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .metric-tile {
+      background: var(--fp-card);
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .metric-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--fp-muted);
+      margin-bottom: 6px;
+    }
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--fp-text);
+    }
+
+    .vol-curr-pills {
+      display: inline-flex;
+      gap: 2px;
+      background: var(--fp-subtle);
+      padding: 2px;
+      border-radius: 5px;
+      border: 1px solid var(--fp-border);
+    }
+    .vol-pill {
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--fp-muted);
+      cursor: pointer;
+    }
+    .vol-pill.active {
+      background: var(--fp-blue);
+      color: #ffffff;
+    }
+
+    .field { margin-bottom: 12px; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fp-text);
+      margin-bottom: 5px;
+    }
+    .fp-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid #ced4da;
+      color: var(--fp-text);
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .fp-input:focus {
+      border-color: var(--fp-blue);
+      box-shadow: 0 0 0 3px rgba(43, 108, 196, 0.12);
+    }
+
+    .btn-fp {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: var(--fp-blue);
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-fp:hover { background: var(--fp-blue-hover); }
+    .btn-fp:active { transform: translateY(1px); }
+
+    .btn-fp-secondary {
+      background: var(--fp-subtle);
+      color: var(--fp-text);
+      border: 1px solid var(--fp-border);
+    }
+    .btn-fp-secondary:hover {
+      background: #ebedf0;
+    }
+
+    .btn-fp-danger {
+      background: var(--fp-red-bg);
+      color: var(--fp-red);
+      border: 1px solid rgba(220, 53, 69, 0.25);
+    }
+    .btn-fp-danger:hover {
+      background: #f8d7da;
+    }
+
+    .curr-segmented {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      background: var(--fp-subtle);
+      padding: 4px;
+      border-radius: 7px;
+      border: 1px solid var(--fp-border);
+    }
+    .curr-btn {
+      padding: 7px 0;
+      border-radius: 5px;
+      border: none;
+      background: transparent;
+      color: var(--fp-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .curr-btn.active {
+      background: var(--fp-blue);
+      color: #ffffff;
+    }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .role-pill {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--fp-border);
+      background: var(--fp-subtle);
+      color: var(--fp-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .role-pill.active {
+      background: var(--fp-blue-light);
+      color: var(--fp-blue);
+      border-color: var(--fp-blue);
+    }
+
+    .partner-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: 5px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      color: var(--fp-blue);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .partner-chip:hover {
+      background: var(--fp-blue-light);
+    }
+
+    .stars-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .star-pack {
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: all 0.15s ease;
+    }
+    .star-pack:hover {
+      border-color: var(--fp-border-hover);
+      background: #ffffff;
+    }
+    .star-pack.active {
+      border-color: var(--fp-blue);
+      background: var(--fp-blue-light);
+    }
+    .star-pack-top {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--fp-text);
+    }
+    .star-icon { color: #f59e0b; }
+    .star-ton-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--fp-blue);
+    }
+    .star-fiat-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--fp-muted);
+    }
+
+    .status-pill {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-pill.pending { background: var(--fp-orange-bg); color: var(--fp-orange); }
+    .status-pill.funded { background: var(--fp-blue-light); color: var(--fp-blue); }
+    .status-pill.completed, .status-pill.approved, .status-pill.verified { background: var(--fp-green-bg); color: var(--fp-green); }
+    .status-pill.cancelled, .status-pill.rejected { background: var(--fp-red-bg); color: var(--fp-red); }
+
+    .chat-stream {
+      height: 52vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      margin-bottom: 10px;
+    }
+    .bubble {
+      max-width: 82%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .bubble.me {
+      align-self: flex-end;
+      background: var(--fp-blue);
+      color: #ffffff;
+    }
+    .bubble.other {
+      align-self: flex-start;
+      background: #ffffff;
+      border: 1px solid var(--fp-border);
+      color: var(--fp-text);
+    }
+    .bubble-meta {
+      font-size: 10px;
+      font-weight: 600;
+      opacity: 0.75;
+      margin-bottom: 2px;
+    }
+
+    .tab-pane { display: none; }
+    .tab-pane.active {
+      display: block;
+      animation: fpFade 0.2s ease;
+    }
+    @keyframes fpFade {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 250;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .fp-modal {
+      width: 100%;
+      max-width: 390px;
+      background: #ffffff;
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow-lg);
+      border-radius: 12px;
+      padding: 20px;
+      animation: modalPop 0.2s ease;
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-icon-ring {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--fp-red-bg);
+      color: var(--fp-red);
+    }
+    .modal-icon-ring.warning { background: var(--fp-orange-bg); color: var(--fp-orange); }
+    .modal-icon-ring.success { background: var(--fp-green-bg); color: var(--fp-green); }
+
+    .deficit-table {
+      background: var(--fp-subtle);
+      border: 1px solid var(--fp-border);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 12.5px;
+    }
+    .deficit-row { display: flex; justify-content: space-between; align-items: center; }
+    .deficit-row span:last-child { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+    .kyc-preview-box {
+      width: 100%;
+      height: 150px;
+      border-radius: 8px;
+      background: var(--fp-subtle);
+      border: 1.5px dashed #cbd2d9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 12px 0;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .kyc-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .kyc-steps-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
+    .kyc-step-dot {
+      width: 26px;
+      height: 5px;
+      border-radius: 4px;
+      background: var(--fp-border);
+    }
+    .kyc-step-dot.active { background: var(--fp-blue); width: 38px; }
+
+    .tour-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      display: none;
+    }
+    .tour-layer.active { display: block; }
+
+    .tour-spotlight {
+      position: fixed;
+      border-radius: 10px;
+      box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.58);
+      border: 2px solid var(--fp-blue);
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 901;
+    }
+
+    .tour-tooltip {
+      position: fixed;
+      width: calc(100vw - 32px);
+      max-width: 340px;
+      background: #ffffff;
+      border: 1px solid var(--fp-border);
+      box-shadow: var(--fp-shadow-lg);
+      border-radius: 10px;
+      padding: 16px;
+      z-index: 902;
+      transition: top 0.3s ease, left 0.3s ease;
+    }
+
+    .tour-step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .tour-step-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--fp-blue-light);
+      color: var(--fp-blue);
+    }
+    .tour-skip-link {
+      background: none;
+      border: none;
+      color: var(--fp-muted);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tour-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--fp-text);
+      margin-bottom: 5px;
+    }
+    .tour-desc {
+      font-size: 12.5px;
+      color: var(--fp-muted);
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+    .tour-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tour-dots { display: flex; gap: 4px; }
+    .tour-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--fp-border);
+    }
+    .tour-dot.active {
+      width: 16px;
+      border-radius: 4px;
+      background: var(--fp-blue);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="fp-header">
+    <div class="fp-header-inner">
+      <div class="fp-logo">
+        FunPay<span class="fp-logo-dot">.</span>
+        <span class="fp-logo-tag">Escrow</span>
+      </div>
+      <div class="header-right">
+        <button class="fp-help-btn" onclick="startOnboardingTour(true)" title="Инструкция">?</button>
+        <a onclick="openSupport()" class="fp-support-link" id="tour-support-btn">Помощь · @ssupppoortt</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="left-rail" id="tour-left-rail">
+      <button class="rail-btn active" onclick="switchTab('profile')" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Профиль</span>
+      </button>
+
+      <button class="rail-btn" onclick="switchTab('deals')" id="nav-deals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span>Сделки</span>
+      </button>
+
+      <button class="rail-btn" onclick="switchTab('create')" id="nav-create">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <span>Создать</span>
+      </button>
+
+      <button class="rail-btn" onclick="switchTab('swap')" id="nav-swap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        <span>Обмен</span>
+      </button>
+
+      <button class="rail-btn" onclick="switchTab('stars')" id="nav-stars">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Звезды</span>
+      </button>
+
+      <button class="rail-btn" onclick="switchTab('withdraw')" id="nav-withdraw">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 19V5"/><polyline points="5 12 12 5 19 12"/></svg>
+        <span>Вывод</span>
+      </button>
+
+      <button class="rail-btn" onclick="switchTab('chat')" id="nav-chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Чат</span>
+      </button>
+    </aside>
+
+    <main class="main-stage">
+      <div class="ticker-bar" id="ticker-bar-box">
+        <div>
+          <span class="live-dot"></span>
+          <b style="color:var(--fp-text);">Курс FunPay:</b>
+          <span id="live-ticker-text" style="font-family:'JetBrains Mono',monospace;">1 GRAM = 1.062 USDT · 1 USDT = 82.78₽</span>
+        </div>
+        <div id="live-updated-time" style="font-family:'JetBrains Mono',monospace; font-size:10.5px;">Live</div>
+      </div>
+
+      <!-- ВКЛАДКА 1: ПРОФИЛЬ -->
+      <section id="tab-profile" class="tab-pane active">
+        <div class="fp-card">
+          <div class="profile-top">
+            <div class="avatar-fp" id="prof-avatar">U</div>
+            <div class="user-meta">
+              <h2>
+                <span id="prof-username">@username</span>
+                <span id="prof-verified-icon" style="display:none;" class="verified-badge" title="Верифицированный продавец FunPay">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </h2>
+              <div><span class="id-chip">ID: <span id="prof-id">0</span></span></div>
+            </div>
+          </div>
+
+          <div class="balances-section-header">
+            <span class="balance-caption">Финансы и балансы счетов (4 валюты)</span>
+          </div>
+
+          <div class="escrow-grid-4" id="escrow-4-grid"></div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;" id="tour-wallet-actions">
+            <button class="btn-fp" onclick="toggleDepositInfo()">Пополнить баланс</button>
+            <button class="btn-fp btn-fp-secondary" onclick="switchTab('withdraw')">Вывести средства</button>
+          </div>
+
+          <div id="deposit-instructions" style="display:none; margin-top:12px; padding:12px; border-radius:8px; background:var(--fp-subtle); border:1px solid var(--fp-border); font-size:12px; line-height:1.5;">
+            <div style="font-weight:700; margin-bottom:4px;">Пополнение счета FunPay:</div>
+            <div style="color:var(--fp-muted); margin-bottom:10px;">
+              Для пополнения любого из ваших 4 счетов (GRAM, USDT, RUB или UAH) напишите саппорту <b>@ssupppoortt</b> и укажите ваш ID: <code id="dep-uid-code" style="color:var(--fp-text); font-weight:700;">0</code>.
+            </div>
+            <button class="btn-fp" onclick="openSupport()">Написать в @ssupppoortt</button>
+          </div>
+        </div>
+
+        <div class="metrics-row" id="tour-metrics-row">
+          <div class="metric-tile">
+            <div class="metric-label">Успешных сделок</div>
+            <div class="metric-value" id="prof-deals-count">0</div>
+          </div>
+          <div class="metric-tile">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; gap:4px; flex-wrap:wrap;">
+              <span class="metric-label" style="margin-bottom:0;">Общий оборот</span>
+              <div class="vol-curr-pills">
+                <button class="vol-pill" onclick="changeVolumeCurrency('GRAM')" id="vcurr-GRAM">GRAM</button>
+                <button class="vol-pill" onclick="changeVolumeCurrency('USDT')" id="vcurr-USDT">USDT</button>
+                <button class="vol-pill" onclick="changeVolumeCurrency('RUB')" id="vcurr-RUB">RUB</button>
+                <button class="vol-pill" onclick="changeVolumeCurrency('UAH')" id="vcurr-UAH">UAH</button>
+              </div>
+            </div>
+            <div class="metric-value" id="prof-volume">0.00 USDT</div>
+          </div>
+        </div>
+
+        <div class="fp-card" id="tour-kyc-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-size:14px; font-weight:700;">Верификация продавца FunPay</div>
+            <span class="status-pill" id="kyc-status-badge">Не верифицирован</span>
+          </div>
+          <div style="font-size:12px; color:var(--fp-muted); margin-bottom:12px; line-height:1.45;">
+            Подтвердите личность (фото паспорта с лицом прямо, затем поворот головы влево и вправо), чтобы получить синюю галочку верификации FunPay.
+          </div>
+          <button class="btn-fp" id="btn-start-kyc" onclick="openKycModal()">Верифицировать аккаунт</button>
+        </div>
+
+        <div class="fp-card">
+          <div style="font-size:13px; font-weight:700; margin-bottom:8px;">Проверить профиль пользователя</div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="lookup-user-input" class="fp-input" placeholder="@username или ID пользователя" />
+            <button class="btn-fp" style="width:auto; padding:0 18px; white-space:nowrap;" onclick="lookupCounterparty()">Найти</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 2: СДЕЛКИ -->
+      <section id="tab-deals" class="tab-pane">
+        <div id="deals-list"></div>
+      </section>
+
+      <!-- ВКЛАДКА 3: СОЗДАТЬ СДЕЛКУ -->
+      <section id="tab-create" class="tab-pane">
+        <div class="fp-card">
+          <div class="fp-section-title">Создание безопасной сделки FunPay</div>
+
+          <div class="role-selector">
+            <button class="role-pill active" id="role-seller" onclick="setRole('seller')">Я Продавец</button>
+            <button class="role-pill" id="role-buyer" onclick="setRole('buyer')">Я Покупатель</button>
+          </div>
+
+          <div class="field">
+            <label>Участник сделки (@username или Telegram ID)</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="deal-partner" class="fp-input" placeholder="@username или числовой ID" />
+              <button type="button" class="btn-fp btn-fp-secondary" style="width:auto; padding:0 14px; white-space:nowrap;" onclick="previewPartnerFromInput('deal-partner')">Профиль</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Название NFT / Цифрового товара</label>
+            <input type="text" id="deal-nft-name" class="fp-input" placeholder="Plush Pepe #412" />
+          </div>
+
+          <div class="field">
+            <label>Ссылка на товар или описание условий</label>
+            <input type="text" id="deal-nft-link" class="fp-input" placeholder="https://t.me/nft/..." />
+          </div>
+
+          <div class="field">
+            <label>Валюта сделки</label>
+            <div class="curr-segmented" style="margin-bottom:10px;">
+              <button type="button" class="curr-btn active" onclick="setDealCurrency('GRAM')" id="dcurr-GRAM">GRAM</button>
+              <button type="button" class="curr-btn" onclick="setDealCurrency('USDT')" id="dcurr-USDT">USDT</button>
+              <button type="button" class="curr-btn" onclick="setDealCurrency('RUB')" id="dcurr-RUB">RUB</button>
+              <button type="button" class="curr-btn" onclick="setDealCurrency('UAH')" id="dcurr-UAH">UAH</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Сумма сделки в <b id="create-curr-label">GRAM</b></label>
+            <input type="number" id="deal-price" class="fp-input" placeholder="100.00" oninput="updateDealPreview()" />
+            <div id="deal-usd-preview" style="font-size:11px; color:var(--fp-muted); margin-top:5px; font-family:'JetBrains Mono',monospace;">≈ 0.00 USDT · 0.00 RUB · 0.00 UAH</div>
+          </div>
+
+          <div style="font-size:11.5px; color:var(--fp-muted); margin: 12px 0; line-height:1.45; padding:10px 12px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border);">
+            Передача товара выполняется строго через сотрудника технической поддержки <b>@ssupppoortt</b> после резервирования оплаты.
+          </div>
+
+          <button class="btn-fp" onclick="createDeal()">Создать сделку и пригласить</button>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 4: ОБМЕН NFT -->
+      <section id="tab-swap" class="tab-pane">
+        <div class="fp-card">
+          <div class="fp-section-title" style="margin-bottom:4px;">Обмен NFT (Бартер FunPay)</div>
+          <div style="font-size:12px; color:var(--fp-muted); margin-bottom:14px;">
+            Безопасный обмен NFT на NFT (с доплатой или без) через проверку у <b>@ssupppoortt</b>.
+          </div>
+
+          <div class="field">
+            <label>Второй участник обмена (@username или Telegram ID)</label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="swap-partner" class="fp-input" placeholder="@username или ID" />
+              <button type="button" class="btn-fp btn-fp-secondary" style="width:auto; padding:0 14px; white-space:nowrap;" onclick="previewPartnerFromInput('swap-partner')">Профиль</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Ваш NFT (который вы отдаете)</label>
+            <input type="text" id="swap-my-nft" class="fp-input" placeholder="Например: Durov's Cap #12" />
+          </div>
+
+          <div class="field">
+            <label>Ссылка на ваш NFT</label>
+            <input type="text" id="swap-my-link" class="fp-input" placeholder="https://t.me/nft/..." />
+          </div>
+
+          <div class="field">
+            <label>NFT партнера (который вы получаете)</label>
+            <input type="text" id="swap-their-nft" class="fp-input" placeholder="Например: Plush Pepe #88" />
+          </div>
+
+          <div class="field">
+            <label>Ссылка на NFT партнера</label>
+            <input type="text" id="swap-their-link" class="fp-input" placeholder="https://t.me/nft/..." />
+          </div>
+
+          <div class="field">
+            <label>Валюта доплаты (если есть)</label>
+            <div class="curr-segmented" style="margin-bottom:8px;">
+              <button type="button" class="curr-btn active" onclick="setSwapCurrency('GRAM')" id="scurr-GRAM">GRAM</button>
+              <button type="button" class="curr-btn" onclick="setSwapCurrency('USDT')" id="scurr-USDT">USDT</button>
+              <button type="button" class="curr-btn" onclick="setSwapCurrency('RUB')" id="scurr-RUB">RUB</button>
+              <button type="button" class="curr-btn" onclick="setSwapCurrency('UAH')" id="scurr-UAH">UAH</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Сумма доплаты в <b id="swap-curr-label">GRAM</b> (0 — без доплаты)</label>
+            <input type="number" id="swap-surcharge" class="fp-input" value="0" placeholder="0" />
+          </div>
+
+          <button class="btn-fp" onclick="createSwapDeal()">Создать сделку обмена</button>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 5: ПОКУПКА ЗВЕЗД -->
+      <section id="tab-stars" class="tab-pane">
+        <div class="fp-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <div class="fp-section-title" style="margin-bottom:0;">Покупка Telegram Stars</div>
+            <span class="id-chip">Автовыдача</span>
+          </div>
+          <div style="font-size:12px; color:var(--fp-muted); margin-bottom:14px;">
+            Выберите валютный счет списания и нужный пакет звезд.
+          </div>
+
+          <div class="field">
+            <label>Счет оплаты</label>
+            <div class="curr-segmented" style="margin-bottom:10px;">
+              <button type="button" class="curr-btn active" onclick="setStarsCurrency('GRAM')" id="stcurr-GRAM">GRAM</button>
+              <button type="button" class="curr-btn" onclick="setStarsCurrency('USDT')" id="stcurr-USDT">USDT</button>
+              <button type="button" class="curr-btn" onclick="setStarsCurrency('RUB')" id="stcurr-RUB">RUB</button>
+              <button type="button" class="curr-btn" onclick="setStarsCurrency('UAH')" id="stcurr-UAH">UAH</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Получатель звезд (@username)</label>
+            <input type="text" id="stars-recipient" class="fp-input" placeholder="@username получателя" />
+          </div>
+
+          <div class="field">
+            <label>Пакет Telegram Stars</label>
+            <div class="stars-grid" id="stars-grid-container"></div>
+          </div>
+
+          <button class="btn-fp" onclick="buyStars()">Оплатить и получить звезды</button>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 6: ВЫВОД СРЕДСТВ -->
+      <section id="tab-withdraw" class="tab-pane">
+        <div class="fp-card">
+          <div class="fp-section-title" style="margin-bottom:4px;">Вывод средств</div>
+          <div style="font-size:12px; color:var(--fp-muted); margin-bottom:14px;">
+            Создайте заявку на вывод средств с выбранного валютного счета.
+          </div>
+
+          <div class="field">
+            <label>Счет списания</label>
+            <div class="curr-segmented" style="margin-bottom:10px;">
+              <button type="button" class="curr-btn active" onclick="setWithdrawCurrency('GRAM')" id="wcurr-GRAM">GRAM</button>
+              <button type="button" class="curr-btn" onclick="setWithdrawCurrency('USDT')" id="wcurr-USDT">USDT</button>
+              <button type="button" class="curr-btn" onclick="setWithdrawCurrency('RUB')" id="wcurr-RUB">RUB</button>
+              <button type="button" class="curr-btn" onclick="setWithdrawCurrency('UAH')" id="wcurr-UAH">UAH</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Сумма вывода в <b id="withdraw-curr-label">GRAM</b></label>
+            <input type="number" id="withdraw-amount" class="fp-input" placeholder="50.00" />
+          </div>
+
+          <div class="field">
+            <label>Реквизиты получателя (кошелек или карта)</label>
+            <input type="text" id="withdraw-requisites" class="fp-input" placeholder="UQ... / T... / 2200..." />
+          </div>
+
+          <button class="btn-fp" onclick="createWithdrawalRequest()">Создать заявку на вывод</button>
+        </div>
+
+        <div class="fp-card">
+          <div style="font-size:13.5px; font-weight:700; margin-bottom:10px;">История заявок на вывод</div>
+          <div id="withdrawals-list"></div>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 7: ЧАТ СДЕЛКИ -->
+      <section id="tab-chat" class="tab-pane">
+        <div class="fp-card">
+          <div style="font-size:14px; font-weight:700; margin-bottom:10px;" id="chat-title">Выберите сделку во вкладке «Сделки»</div>
+          <div class="chat-stream" id="chat-messages"></div>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="chat-input" class="fp-input" placeholder="Написать сообщение продавцу/покупателю..." />
+            <button class="btn-fp" style="width:auto; padding:0 18px;" onclick="sendChatMessage()">Отправить</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ИНТЕРАКТИВНЫЙ ОНБОРДИНГ ПРИ ПЕРВОМ ЗАПУСКЕ -->
+  <div class="tour-layer" id="onboarding-tour-layer">
+    <div class="tour-spotlight" id="tour-spotlight-box"></div>
+    <div class="tour-tooltip" id="tour-tooltip-card">
+      <div class="tour-step-header">
+        <span class="tour-step-badge" id="tour-step-counter">Шаг 1 из 7</span>
+        <button class="tour-skip-link" onclick="finishOnboardingTour()">Пропустить</button>
+      </div>
+      <div class="tour-title" id="tour-step-title">Добро пожаловать в FunPay!</div>
+      <div class="tour-desc" id="tour-step-desc">Описание шага</div>
+      <div class="tour-footer">
+        <div class="tour-dots" id="tour-dots-box"></div>
+        <button class="btn-fp" style="width:auto; padding:8px 16px; font-size:12.5px;" id="tour-next-btn" onclick="nextOnboardingStep()">Далее →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО 1: НЕХВАТКА БАЛАНСА -->
+  <div class="modal-backdrop" id="insufficient-modal" onclick="if(event.target===this) closeInsufficientModal()">
+    <div class="fp-modal">
+      <div class="modal-icon-ring">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+          <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+          <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+        </svg>
+      </div>
+      <div style="text-align:center; font-size:16px; font-weight:700; margin-bottom:4px;">Недостаточно средств</div>
+      <div style="text-align:center; font-size:12px; color:var(--fp-muted);">
+        На выбранном валютном счете не хватает средств для оплаты заказа.
+      </div>
+
+      <div class="deficit-table">
+        <div class="deficit-row">
+          <span style="color:var(--fp-muted);">Валютный счет:</span>
+          <span id="ins-account">GRAM</span>
+        </div>
+        <div class="deficit-row">
+          <span style="color:var(--fp-muted);">К оплате:</span>
+          <span id="ins-required">0.00 GRAM</span>
+        </div>
+        <div class="deficit-row">
+          <span style="color:var(--fp-muted);">Доступно на счете:</span>
+          <span id="ins-available">0.00 GRAM</span>
+        </div>
+        <div class="deficit-row" style="border-top:1px solid var(--fp-border); padding-top:7px; color:var(--fp-red);">
+          <span>Не хватает:</span>
+          <span id="ins-missing">0.00 GRAM</span>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-fp" onclick="goToDepositFromModal()">Пополнить счет</button>
+        <button class="btn-fp btn-fp-secondary" onclick="closeInsufficientModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО 2: УВЕДОМЛЕНИЯ И ОШИБКИ -->
+  <div class="modal-backdrop" id="notice-modal" onclick="if(event.target===this) closeNoticeModal()">
+    <div class="fp-modal">
+      <div class="modal-icon-ring warning" id="notice-icon-box"></div>
+      <div style="text-align:center; font-size:16px; font-weight:700; margin-bottom:6px;" id="notice-title">Внимание</div>
+      <div style="text-align:center; font-size:12.5px; color:var(--fp-muted); line-height:1.45; margin-bottom:16px;" id="notice-message"></div>
+      <button class="btn-fp" onclick="closeNoticeModal()">Понятно</button>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО 3: ПРОФИЛЬ УЧАСТНИКА СДЕЛКИ -->
+  <div class="modal-backdrop" id="partner-profile-modal" onclick="if(event.target===this) closePartnerModal()">
+    <div class="fp-modal">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div class="avatar-fp" id="modal-p-avatar">U</div>
+        <div>
+          <div style="font-size:16px; font-weight:700; display:flex; align-items:center; gap:5px;">
+            <span id="modal-p-username">@user</span>
+            <span id="modal-p-verified" style="display:none;" class="verified-badge" title="Верифицирован">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+          <span class="id-chip">Telegram ID: <span id="modal-p-id">—</span></span>
+        </div>
+      </div>
+
+      <div class="metrics-row" style="margin-bottom:14px;">
+        <div class="metric-tile" style="padding:12px; background:var(--fp-subtle);">
+          <div class="metric-label">Успешных сделок</div>
+          <div class="metric-value" id="modal-p-deals">0</div>
+        </div>
+        <div class="metric-tile" style="padding:12px; background:var(--fp-subtle);">
+          <div class="metric-label">Общий оборот</div>
+          <div class="metric-value" id="modal-p-vol">0.00 USDT</div>
+        </div>
+      </div>
+
+      <div style="font-size:11.5px; color:var(--fp-muted); text-align:center; margin-bottom:14px; padding:8px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border);">
+        Профиль проверен системой безопасности FunPay Escrow
+      </div>
+
+      <button class="btn-fp btn-fp-secondary" onclick="closePartnerModal()">Закрыть окно</button>
+    </div>
+  </div>
+
+  <!-- МОДАЛЬНОЕ ОКНО 4: 3-ЭТАПНАЯ ВЕРИФИКАЦИЯ -->
+  <div class="modal-backdrop" id="kyc-modal" onclick="if(event.target===this) closeKycModal()">
+    <div class="fp-modal">
+      <div class="kyc-steps-dots">
+        <div class="kyc-step-dot active" id="kyc-dot-1"></div>
+        <div class="kyc-step-dot" id="kyc-dot-2"></div>
+        <div class="kyc-step-dot" id="kyc-dot-3"></div>
+      </div>
+
+      <div style="text-align:center; font-size:15.5px; font-weight:700; margin-bottom:4px;" id="kyc-step-title">
+        Шаг 1 из 3: Паспорт и лицо прямо
+      </div>
+      <div style="text-align:center; font-size:12px; color:var(--fp-muted); line-height:1.4;" id="kyc-step-subtitle">
+        Держите паспорт рядом с лицом, смотрящим прямо в камеру.
+      </div>
+
+      <input type="file" id="kyc-file-input" accept="image/*" capture="user" style="display:none;" onchange="handleKycPhotoSelected(event)" />
+
+      <div class="kyc-preview-box" onclick="document.getElementById('kyc-file-input').click()" id="kyc-preview-area">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--fp-muted);">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        <span style="font-size:12px; color:var(--fp-muted); font-weight:600;">Нажмите, чтобы сделать фото или выбрать файл</span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-fp" id="kyc-next-btn" onclick="nextKycStep()">Далее</button>
+        <button class="btn-fp btn-fp-secondary" onclick="closeKycModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    function haptic(type = "light") {
+      try { tg.HapticFeedback?.impactOccurred(type); } catch (e) {}
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const API_BASE = urlParams.get("api") || "http://31.76.240.198:8080";
+    const BOT_USERNAME = urlParams.get("bot") || "";
+
+    const STAR_PACKS = [
+      { stars: 50, usdt: 0.75 },
+      { stars: 100, usdt: 1.50 },
+      { stars: 250, usdt: 3.75 },
+      { stars: 500, usdt: 7.50 },
+      { stars: 1000, usdt: 15.00 },
+      { stars: 2500, usdt: 37.50 },
+      { stars: 5000, usdt: 75.00 },
+      { stars: 10000, usdt: 150.00 }
+    ];
+
+    const tgUser = tg.initDataUnsafe?.user || {
+      id: parseInt(urlParams.get("uid")) || 100001,
+      username: urlParams.get("uname") || "funpay_user"
+    };
+
+    function parseUrlList(paramName, mapper) {
+      const p = urlParams.get(paramName);
+      if (!p) return null;
+      try {
+        const b64 = p.replace(/-/g, "+").replace(/_/g, "/");
+        const raw = JSON.parse(decodeURIComponent(escape(atob(b64))));
+        return raw.map(mapper);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const savedLocal = JSON.parse(localStorage.getItem(`fp_state_${tgUser.id}`) || "null");
+    const urlDeals = parseUrlList("d", x => ({
+      deal_id: x.id,
+      deal_type: x.tp || "sale",
+      seller_id: x.s,
+      seller_username: x.su || "",
+      seller_deals: x.sd || 0,
+      seller_vol: x.sv || 0.0,
+      seller_verified: x.svf || 0,
+      buyer_id: x.b,
+      buyer_username: x.bu || "",
+      buyer_deals: x.bd || 0,
+      buyer_vol: x.bv || 0.0,
+      buyer_verified: x.bvf || 0,
+      nft_name: x.n,
+      nft_link: x.l,
+      swap_nft_name: x.sn || "",
+      swap_nft_link: x.sl || "",
+      price_usd: x.p,
+      deal_currency: (x.dc === "TON" ? "GRAM" : x.dc) || "GRAM",
+      deal_amount: x.da || 0,
+      status: x.st
+    }));
+
+    const urlWithdrawals = parseUrlList("w", x => ({
+      withdraw_id: x.id,
+      amount_curr: x.ac,
+      currency: (x.c === "TON" ? "GRAM" : x.c) || "GRAM",
+      requisites: x.rq,
+      status: x.st
+    }));
+
+    const initCurrRaw = urlParams.get("curr") || (savedLocal?.user?.currency || "GRAM");
+    const normalizedCurr = initCurrRaw === "TON" ? "GRAM" : initCurrRaw;
+    const initVolCurr = urlParams.get("vcurr") || (savedLocal?.user?.volume_currency || "USDT");
+
+    let state = {
+      user: {
+        user_id: tgUser.id,
+        username: tgUser.username || urlParams.get("uname") || (savedLocal?.user?.username || ""),
+        bal_gram: urlParams.has("bg") ? parseFloat(urlParams.get("bg")) : (savedLocal?.user?.bal_gram || 0.0),
+        bal_usdt: urlParams.has("bu") ? parseFloat(urlParams.get("bu")) : (savedLocal?.user?.bal_usdt || 0.0),
+        bal_rub: urlParams.has("br") ? parseFloat(urlParams.get("br")) : (savedLocal?.user?.bal_rub || 0.0),
+        bal_uah: urlParams.has("bua") ? parseFloat(urlParams.get("bua")) : (savedLocal?.user?.bal_uah || 0.0),
+        deals_count: urlParams.has("deals") ? parseInt(urlParams.get("deals")) : (savedLocal?.user?.deals_count || 0),
+        total_volume_usd: urlParams.has("vol") ? parseFloat(urlParams.get("vol")) : (savedLocal?.user?.total_volume_usd || 0.0),
+        currency: normalizedCurr,
+        volume_currency: initVolCurr === "TON" ? "GRAM" : initVolCurr,
+        is_verified: urlParams.has("ver") ? parseInt(urlParams.get("ver")) : (savedLocal?.user?.is_verified || 0),
+        kyc_status: urlParams.get("kyc") || (savedLocal?.user?.kyc_status || "none")
+      },
+      deals: urlDeals || (savedLocal?.deals || []),
+      withdrawals: urlWithdrawals || (savedLocal?.withdrawals || []),
+      chats: savedLocal?.chats || {},
+      rates: { USDT: 1.0, GRAM: 0.9416, RUB: 82.78, UAH: 41.45 },
+      gramPriceUsdt: 1.062,
+      role: "seller",
+      dealCurrency: "GRAM",
+      swapCurrency: "GRAM",
+      starsCurrency: "GRAM",
+      withdrawCurrency: "GRAM",
+      selectedStarPack: 100,
+      activeChatDealId: null,
+      kycStep: 1,
+      kycPhotos: { 1: null, 2: null, 3: null }
+    };
+
+    const VERIFIED_SVG = `<span class="verified-badge" title="Верифицирован"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+
+    const ONBOARDING_STEPS = [
+      {
+        targetId: "escrow-4-grid",
+        tab: "profile",
+        title: "4 Валютных Счета FunPay",
+        desc: "Здесь находятся ваши независимые счета в GRAM, USDT, RUB и UAH. В каждой карточке виден баланс конкретной валюты и её пересчет в остальные."
+      },
+      {
+        targetId: "tour-wallet-actions",
+        tab: "profile",
+        title: "Пополнение и Вывод средств",
+        desc: "Пополняйте любой счет через поддержку или создавайте заявку на быстрый вывод средств на карту или криптокошелек."
+      },
+      {
+        targetId: "tour-metrics-row",
+        tab: "profile",
+        title: "Сделки и Валюта Оборота",
+        desc: "Отслеживайте успешные сделки и общий оборот. Переключать валюту отображения оборота можно прямо внутри карточки."
+      },
+      {
+        targetId: "tour-kyc-card",
+        tab: "profile",
+        title: "Верификация Продавца",
+        desc: "Загрузите 3 фото (паспорт с лицом прямо, затем поворот головы влево и вправо), чтобы получить синюю галочку верификации FunPay."
+      },
+      {
+        targetId: "nav-create",
+        tab: "profile",
+        title: "Создание Безопасной Сделки",
+        desc: "В разделе «Создать» укажите @username или ID партнера, выберите валюту сделки и заморозьте оплату в гаранте."
+      },
+      {
+        targetId: "nav-swap",
+        tab: "profile",
+        title: "Обмен NFT и Звезды",
+        desc: "Во вкладке «Обмен» можно провести бартер NFT на NFT, а в разделе «Звезды» — моментально купить Telegram Stars."
+      },
+      {
+        targetId: "tour-support-btn",
+        tab: "profile",
+        title: "Техническая Поддержка FunPay",
+        desc: "Проверка и передача всех товаров осуществляется строго через официальный саппорт @ssupppoortt."
+      }
+    ];
+
+    let currentTourIdx = 0;
+
+    function startOnboardingTour(force = false) {
+      const alreadyDone = localStorage.getItem("fp_onboarding_done_v1");
+      if (alreadyDone && !force) return;
+
+      currentTourIdx = 0;
+      switchTab("profile");
+      document.getElementById("onboarding-tour-layer").classList.add("active");
+      renderOnboardingStep();
+    }
+
+    function renderOnboardingStep() {
+      const step = ONBOARDING_STEPS[currentTourIdx];
+      if (!step) return finishOnboardingTour();
+
+      if (step.tab) switchTab(step.tab);
+      const el = document.getElementById(step.targetId);
+      if (!el) return finishOnboardingTour();
+
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      setTimeout(() => {
+        const rect = el.getBoundingClientRect();
+        const pad = 5;
+        const spot = document.getElementById("tour-spotlight-box");
+        spot.style.top = `${Math.max(4, rect.top - pad)}px`;
+        spot.style.left = `${Math.max(4, rect.left - pad)}px`;
+        spot.style.width = `${rect.width + pad * 2}px`;
+        spot.style.height = `${rect.height + pad * 2}px`;
+
+        document.getElementById("tour-step-counter").innerText = `Шаг ${currentTourIdx + 1} из ${ONBOARDING_STEPS.length}`;
+        document.getElementById("tour-step-title").innerText = step.title;
+        document.getElementById("tour-step-desc").innerText = step.desc;
+        document.getElementById("tour-next-btn").innerText =
+          currentTourIdx === ONBOARDING_STEPS.length - 1 ? "Готово ✓" : "Далее →";
+
+        const dotsContainer = document.getElementById("tour-dots-box");
+        dotsContainer.innerHTML = ONBOARDING_STEPS.map((_, i) =>
+          `<div class="tour-dot ${i === currentTourIdx ? 'active' : ''}"></div>`
+        ).join("");
+
+        const tooltip = document.getElementById("tour-tooltip-card");
+        const tipHeight = tooltip.offsetHeight || 185;
+        const viewportH = window.innerHeight;
+        const viewportW = window.innerWidth;
+
+        let topPos = rect.bottom + 12;
+        if (topPos + tipHeight > viewportH - 14) {
+          topPos = Math.max(14, rect.top - tipHeight - 12);
+        }
+
+        let leftPos = Math.max(14, Math.min(rect.left, viewportW - tooltip.offsetWidth - 14));
+        if (rect.left < 80) {
+          leftPos = Math.max(14, (viewportW - tooltip.offsetWidth) / 2);
+        }
+
+        tooltip.style.top = `${topPos}px`;
+        tooltip.style.left = `${leftPos}px`;
+      }, 220);
+    }
+
+    function nextOnboardingStep() {
+      haptic("light");
+      if (currentTourIdx < ONBOARDING_STEPS.length - 1) {
+        currentTourIdx += 1;
+        renderOnboardingStep();
+      } else {
+        finishOnboardingTour();
+      }
+    }
+
+    function finishOnboardingTour() {
+      haptic("medium");
+      localStorage.setItem("fp_onboarding_done_v1", "1");
+      document.getElementById("onboarding-tour-layer").classList.remove("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.addEventListener("resize", () => {
+      if (document.getElementById("onboarding-tour-layer").classList.contains("active")) {
+        renderOnboardingStep();
+      }
+    });
+
+    function showNoticeModal(title, message, type = "warning") {
+      haptic(type === "success" ? "light" : "heavy");
+      const iconBox = document.getElementById("notice-icon-box");
+      iconBox.className = `modal-icon-ring ${type === "error" ? "" : type}`;
+
+      if (type === "success") {
+        iconBox.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>`;
+      } else if (type === "error") {
+        iconBox.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+      } else {
+        iconBox.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+      }
+
+      document.getElementById("notice-title").innerText = title;
+      document.getElementById("notice-message").innerText = message;
+      document.getElementById("notice-modal").classList.add("open");
+    }
+
+    function closeNoticeModal() {
+      document.getElementById("notice-modal").classList.remove("open");
+    }
+
+    function getWalletBalance(curr) {
+      const c = curr === "TON" ? "GRAM" : curr;
+      const map = {
+        GRAM: state.user.bal_gram || 0,
+        USDT: state.user.bal_usdt || 0,
+        RUB: state.user.bal_rub || 0,
+        UAH: state.user.bal_uah || 0
+      };
+      return map[c] || 0;
+    }
+
+    function addWalletBalance(curr, delta) {
+      const c = curr === "TON" ? "GRAM" : curr;
+      if (c === "GRAM") state.user.bal_gram = Math.max(0, (state.user.bal_gram || 0) + delta);
+      if (c === "USDT") state.user.bal_usdt = Math.max(0, (state.user.bal_usdt || 0) + delta);
+      if (c === "RUB") state.user.bal_rub = Math.max(0, (state.user.bal_rub || 0) + delta);
+      if (c === "UAH") state.user.bal_uah = Math.max(0, (state.user.bal_uah || 0) + delta);
+    }
+
+    function convertAmount(amount, fromCurr, toCurr) {
+      const rFrom = state.rates[fromCurr] || 1;
+      const rTo = state.rates[toCurr] || 1;
+      const inUsdt = amount / rFrom;
+      return inUsdt * rTo;
+    }
+
+    function renderFourWalletsGrid() {
+      const grid = document.getElementById("escrow-4-grid");
+      if (!grid) return;
+
+      const currencies = ["GRAM", "USDT", "RUB", "UAH"];
+      grid.innerHTML = currencies.map(curr => {
+        const bal = getWalletBalance(curr);
+        const isSelected = state.user.currency === curr;
+
+        const otherEquivs = currencies
+          .filter(other => other !== curr)
+          .map(other => `${convertAmount(bal, curr, other).toFixed(2)} ${other}`)
+          .join(" · ");
+
+        return `
+          <div class="wallet-part-card ${isSelected ? 'active' : ''}" onclick="changeCurrency('${curr}')">
+            <div class="wallet-part-top">
+              <span class="wallet-curr-tag">Счет ${curr}</span>
+              <span class="wallet-active-dot"></span>
+            </div>
+            <div class="wallet-main-num">${bal.toFixed(2)} ${curr}</div>
+            <div class="wallet-equiv-sub">≈ ${otherEquivs}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function fetchLiveRates() {
+      try {
+        const res = await fetch("https://api.bybit.com/v5/market/tickers?category=spot&symbol=GRAMUSDT");
+        const json = await res.json();
+        const gramTicker = json?.result?.list?.[0];
+        if (gramTicker && parseFloat(gramTicker.lastPrice) > 0) {
+          const gramUsdt = parseFloat(gramTicker.lastPrice);
+          state.gramPriceUsdt = gramUsdt;
+          state.rates.GRAM = 1 / gramUsdt;
+        }
+      } catch (e) {}
+
+      try {
+        const fxRes = await fetch("https://open.er-api.com/v6/latest/USD");
+        const fxJson = await fxRes.json();
+        if (fxJson?.rates?.RUB) state.rates.RUB = parseFloat(fxJson.rates.RUB);
+        if (fxJson?.rates?.UAH) state.rates.UAH = parseFloat(fxJson.rates.UAH);
+      } catch (e) {}
+
+      const backendRates = await apiCall("/api/rates", "GET");
+      if (backendRates && backendRates.ok && backendRates.rates) {
+        if (backendRates.rates.GRAM) {
+          state.rates.GRAM = backendRates.rates.GRAM;
+          state.gramPriceUsdt = +(1 / state.rates.GRAM).toFixed(4);
+        }
+        if (backendRates.rates.RUB) state.rates.RUB = backendRates.rates.RUB;
+        if (backendRates.rates.UAH) state.rates.UAH = backendRates.rates.UAH;
+      }
+
+      const now = new Date();
+      document.getElementById("live-ticker-text").innerText =
+        `1 GRAM = ${state.gramPriceUsdt.toFixed(3)} USDT · 1 USDT = ${state.rates.RUB.toFixed(2)}₽`;
+      document.getElementById("live-updated-time").innerText =
+        now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+      const bar = document.getElementById("ticker-bar-box");
+      bar.classList.add("flash");
+      setTimeout(() => bar.classList.remove("flash"), 700);
+
+      renderAll();
+      renderStarsGrid();
+      updateDealPreview();
+    }
+
+    function formatOtherEquivalents(usd, primaryCurr) {
+      const allCurrs = ["GRAM", "USDT", "RUB", "UAH"];
+      return allCurrs
+        .filter(c => c !== primaryCurr)
+        .map(c => `${(usd * (state.rates[c] || 1)).toFixed(2)} ${c}`)
+        .join(" · ");
+    }
+
+    const KYC_STEP_INFO = {
+      1: {
+        title: "Шаг 1 из 3: Паспорт и лицо прямо",
+        sub: "Держите паспорт рядом с лицом, смотрящим прямо в камеру."
+      },
+      2: {
+        title: "Шаг 2 из 3: Поворот лица влево",
+        sub: "Сделайте четкое фото вашего лица, повернутого влево."
+      },
+      3: {
+        title: "Шаг 3 из 3: Поворот лица вправо",
+        sub: "Сделайте четкое фото вашего лица, повернутого вправо."
+      }
+    };
+
+    function openKycModal() {
+      haptic("medium");
+      if (state.user.is_verified) return;
+      state.kycStep = 1;
+      state.kycPhotos = { 1: null, 2: null, 3: null };
+      renderKycStep();
+      document.getElementById("kyc-modal").classList.add("open");
+    }
+
+    function closeKycModal() {
+      document.getElementById("kyc-modal").classList.remove("open");
+    }
+
+    function renderKycStep() {
+      const s = state.kycStep;
+      [1, 2, 3].forEach(i => {
+        document.getElementById(`kyc-dot-${i}`).classList.toggle("active", i <= s);
+      });
+      document.getElementById("kyc-step-title").innerText = KYC_STEP_INFO[s].title;
+      document.getElementById("kyc-step-subtitle").innerText = KYC_STEP_INFO[s].sub;
+      document.getElementById("kyc-next-btn").innerText = s < 3 ? "Далее (Следующий ракурс)" : "Отправить на проверку";
+
+      const area = document.getElementById("kyc-preview-area");
+      if (state.kycPhotos[s]) {
+        area.innerHTML = `<img src="${state.kycPhotos[s]}" alt="KYC Step ${s}" />`;
+      } else {
+        area.innerHTML = `
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--fp-muted);">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <span style="font-size:12px; color:var(--fp-muted); font-weight:600;">Нажмите, чтобы сделать или загрузить фото</span>
+        `;
+      }
+    }
+
+    function handleKycPhotoSelected(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement("canvas");
+          const maxDim = 900;
+          let w = img.width, h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+            else { w = Math.round(w * maxDim / h); h = maxDim; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, w, h);
+          state.kycPhotos[state.kycStep] = canvas.toDataURL("image/jpeg", 0.78);
+          renderKycStep();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      event.target.value = "";
+    }
+
+    async function nextKycStep() {
+      haptic("light");
+      if (!state.kycPhotos[state.kycStep]) {
+        return showNoticeModal("Фото не выбрано", "Сделайте снимок или прикрепите фотографию для текущего шага верификации.", "warning");
+      }
+      if (state.kycStep < 3) {
+        state.kycStep += 1;
+        renderKycStep();
+        return;
+      }
+
+      const res = await apiCall("/api/kyc/submit", "POST", {
+        user_id: state.user.user_id,
+        username: state.user.username,
+        photo_front: state.kycPhotos[1],
+        photo_left: state.kycPhotos[2],
+        photo_right: state.kycPhotos[3]
+      });
+
+      closeKycModal();
+      if (res && res.ok) {
+        state.user = res.user;
+        saveLocal();
+        renderAll();
+        showNoticeModal("Заявка отправлена", "Ваши фотографии переданы главному администратору FunPay. После проверки вам будет выдана галочка верификации.", "success");
+      } else {
+        state.user.kyc_status = "pending";
+        saveLocal();
+        renderAll();
+        if (BOT_USERNAME) {
+          tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=kyc`);
+        }
+      }
+    }
+
+    function showInsufficientFundsModal(requiredAmount, currency) {
+      haptic("heavy");
+      const curr = (currency === "TON" ? "GRAM" : currency) || "GRAM";
+      const avail = getWalletBalance(curr);
+      const missing = Math.max(0, requiredAmount - avail);
+
+      document.getElementById("ins-account").innerText = `Счет ${curr}`;
+      document.getElementById("ins-required").innerText = `${requiredAmount.toFixed(2)} ${curr}`;
+      document.getElementById("ins-available").innerText = `${avail.toFixed(2)} ${curr}`;
+      document.getElementById("ins-missing").innerText = `${missing.toFixed(2)} ${curr}`;
+
+      document.getElementById("insufficient-modal").classList.add("open");
+    }
+
+    function closeInsufficientModal() {
+      document.getElementById("insufficient-modal").classList.remove("open");
+    }
+
+    function goToDepositFromModal() {
+      closeInsufficientModal();
+      switchTab("profile");
+      const box = document.getElementById("deposit-instructions");
+      box.style.display = "block";
+      box.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function openPartnerProfileModal(userId, username, dealsCount, volumeUsd, isVerified = 0) {
+      haptic("medium");
+      const cleanName = (username || "").replace(/^@/, "");
+      document.getElementById("modal-p-avatar").innerText = (cleanName || "U")[0].toUpperCase();
+      document.getElementById("modal-p-username").innerText = cleanName ? `@${cleanName}` : `Участник #${userId || '—'}`;
+      document.getElementById("modal-p-verified").style.display = Number(isVerified) ? "inline-flex" : "none";
+      document.getElementById("modal-p-id").innerText = userId || "—";
+      document.getElementById("modal-p-deals").innerText = dealsCount || 0;
+      document.getElementById("modal-p-vol").innerText = formatCurr(volumeUsd || 0, state.user.volume_currency);
+      document.getElementById("partner-profile-modal").classList.add("open");
+    }
+
+    function closePartnerModal() {
+      document.getElementById("partner-profile-modal").classList.remove("open");
+    }
+
+    async function queryAndOpenPartnerModal(queryStr) {
+      const q = (queryStr || "").trim();
+      if (!q) {
+        return showNoticeModal("Введите данные", "Укажите @username или Telegram ID пользователя для просмотра профиля.", "warning");
+      }
+
+      const res = await apiCall("/api/profile_lookup", "POST", { query: q });
+      if (res && res.ok && res.profile) {
+        const p = res.profile;
+        return openPartnerProfileModal(p.user_id, p.username, p.deals_count, p.total_volume_usd, p.is_verified);
+      }
+
+      const cleanQ = q.replace(/^@/, "").toLowerCase();
+      for (const d of state.deals) {
+        if (String(d.seller_id) === cleanQ || (d.seller_username && d.seller_username.toLowerCase() === cleanQ)) {
+          return openPartnerProfileModal(d.seller_id, d.seller_username, d.seller_deals || 0, d.seller_vol || 0, d.seller_verified || 0);
+        }
+        if (String(d.buyer_id) === cleanQ || (d.buyer_username && d.buyer_username.toLowerCase() === cleanQ)) {
+          return openPartnerProfileModal(d.buyer_id, d.buyer_username, d.buyer_deals || 0, d.buyer_vol || 0, d.buyer_verified || 0);
+        }
+      }
+
+      openPartnerProfileModal(q.match(/^\d+$/) ? q : "—", cleanQ, 0, 0, 0);
+    }
+
+    function lookupCounterparty() {
+      const val = document.getElementById("lookup-user-input").value.trim();
+      queryAndOpenPartnerModal(val);
+    }
+
+    function previewPartnerFromInput(inputId) {
+      const val = document.getElementById(inputId).value.trim();
+      queryAndOpenPartnerModal(val);
+    }
+
+    function toggleDepositInfo() {
+      haptic("light");
+      const box = document.getElementById("deposit-instructions");
+      box.style.display = box.style.display === "none" ? "block" : "none";
+    }
+
+    function openSupport() {
+      if (tg.openTelegramLink) tg.openTelegramLink("https://t.me/ssupppoortt");
+      else window.open("https://t.me/ssupppoortt", "_blank");
+    }
+
+    function syncWithBotDb(payloadObj) {
+      try {
+        tg.sendData(JSON.stringify(payloadObj));
+      } catch (e) {
+        if (!BOT_USERNAME) return;
+        const jsonStr = JSON.stringify(payloadObj);
+        const b64 = btoa(unescape(encodeURIComponent(jsonStr))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+        tg.openTelegramLink(`https://t.me/${BOT_USERNAME}?start=sync_${b64}`);
+      }
+    }
+
+    function saveLocal() {
+      localStorage.setItem(`fp_state_${tgUser.id}`, JSON.stringify(state));
+    }
+
+    function formatCurr(usd, customCurr = null) {
+      const rawCurr = customCurr || state.user.currency || "GRAM";
+      const curr = rawCurr === "TON" ? "GRAM" : rawCurr;
+      const rate = state.rates[curr] || 1;
+      return `${(usd * rate).toFixed(2)} ${curr}`;
+    }
+
+    function toUsd(val, customCurr = null) {
+      const rawCurr = customCurr || state.user.currency || "GRAM";
+      const curr = rawCurr === "TON" ? "GRAM" : rawCurr;
+      const rate = state.rates[curr] || 1;
+      return val / rate;
+    }
+
+    async function apiCall(path, method = "POST", body = null) {
+      try {
+        const opts = { method, headers: { "Content-Type": "application/json" } };
+        if (body) opts.body = JSON.stringify(body);
+        const res = await fetch(`${API_BASE}${path}`, opts);
+        if (!res.ok) throw new Error("Offline");
+        return await res.json();
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function loadProfile() {
+      if (state.user.username) {
+        document.getElementById("stars-recipient").value = `@${state.user.username.replace(/^@/, "")}`;
+      }
+      await fetchLiveRates();
+
+      const data = await apiCall("/api/user", "POST", {
+        user_id: tgUser.id,
+        username: tgUser.username || state.user.username || ""
+      });
+      if (data && data.ok) {
+        if (data.user.currency === "TON") data.user.currency = "GRAM";
+        state.user = data.user;
+        state.deals = data.deals;
+        if (data.withdrawals) state.withdrawals = data.withdrawals;
+        if (data.rates) state.rates = data.rates;
+        saveLocal();
+        renderAll();
+      }
+
+      setTimeout(() => startOnboardingTour(false), 450);
+    }
+
+    function renderAll() {
+      const u = state.user;
+      const volCurr = u.volume_currency || "USDT";
+
+      document.getElementById("prof-avatar").innerText = (u.username || "U")[0].toUpperCase();
+      document.getElementById("prof-username").innerText = u.username ? `@${u.username.replace(/^@/, '')}` : `User #${u.user_id}`;
+      document.getElementById("prof-verified-icon").style.display = Number(u.is_verified) ? "inline-flex" : "none";
+      document.getElementById("prof-id").innerText = u.user_id;
+      document.getElementById("dep-uid-code").innerText = u.user_id;
+      document.getElementById("prof-deals-count").innerText = u.deals_count;
+      document.getElementById("prof-volume").innerText = formatCurr(u.total_volume_usd, volCurr);
+
+      renderFourWalletsGrid();
+
+      const kycBadge = document.getElementById("kyc-status-badge");
+      const kycBtn = document.getElementById("btn-start-kyc");
+      if (Number(u.is_verified)) {
+        kycBadge.className = "status-pill verified";
+        kycBadge.innerText = "Верифицирован ✓";
+        kycBtn.style.display = "none";
+      } else if (u.kyc_status === "pending") {
+        kycBadge.className = "status-pill pending";
+        kycBadge.innerText = "На проверке";
+        kycBtn.innerText = "Отправить фото повторно";
+        kycBtn.style.display = "inline-flex";
+      } else if (u.kyc_status === "rejected") {
+        kycBadge.className = "status-pill rejected";
+        kycBadge.innerText = "Отклонено";
+        kycBtn.innerText = "Пройти верификацию заново";
+        kycBtn.style.display = "inline-flex";
+      } else {
+        kycBadge.className = "status-pill funded";
+        kycBadge.innerText = "Не верифицирован";
+        kycBtn.innerText = "Верифицировать аккаунт";
+        kycBtn.style.display = "inline-flex";
+      }
+
+      ["GRAM", "USDT", "RUB", "UAH"].forEach(c => {
+        document.getElementById(`vcurr-${c}`)?.classList.toggle("active", volCurr === c);
+        document.getElementById(`dcurr-${c}`)?.classList.toggle("active", state.dealCurrency === c);
+        document.getElementById(`scurr-${c}`)?.classList.toggle("active", state.swapCurrency === c);
+        document.getElementById(`stcurr-${c}`)?.classList.toggle("active", state.starsCurrency === c);
+        document.getElementById(`wcurr-${c}`)?.classList.toggle("active", state.withdrawCurrency === c);
+      });
+
+      document.getElementById("create-curr-label").innerText = state.dealCurrency;
+      document.getElementById("swap-curr-label").innerText = state.swapCurrency;
+      document.getElementById("withdraw-curr-label").innerText = state.withdrawCurrency;
+
+      renderDeals();
+      renderStarsGrid();
+      renderWithdrawals();
+    }
+
+    async function changeVolumeCurrency(vcurr) {
+      haptic("light");
+      state.user.volume_currency = vcurr;
+      saveLocal();
+      renderAll();
+      await apiCall("/api/volume_currency", "POST", { user_id: state.user.user_id, volume_currency: vcurr });
+    }
+
+    function setDealCurrency(curr) {
+      haptic("light");
+      state.dealCurrency = curr;
+      renderAll();
+      updateDealPreview();
+    }
+
+    function setSwapCurrency(curr) {
+      haptic("light");
+      state.swapCurrency = curr;
+      renderAll();
+    }
+
+    function setStarsCurrency(curr) {
+      haptic("light");
+      state.starsCurrency = curr;
+      renderAll();
+    }
+
+    function setWithdrawCurrency(curr) {
+      haptic("light");
+      state.withdrawCurrency = curr;
+      renderAll();
+    }
+
+    function updateDealPreview() {
+      const val = parseFloat(document.getElementById("deal-price").value) || 0;
+      const usdt = toUsd(val, state.dealCurrency);
+      document.getElementById("deal-usd-preview").innerText =
+        `≈ ${formatOtherEquivalents(usdt, state.dealCurrency)}`;
+    }
+
+    function renderStarsGrid() {
+      const box = document.getElementById("stars-grid-container");
+      if (!box) return;
+      const payCurr = state.starsCurrency || "GRAM";
+      box.innerHTML = STAR_PACKS.map(p => {
+        const gramCost = p.usdt / state.gramPriceUsdt;
+        const payCurrStr = formatCurr(p.usdt, payCurr);
+        const isSelected = state.selectedStarPack === p.stars;
+
+        return `
+          <div class="star-pack ${isSelected ? 'active' : ''}" onclick="selectStarPack(${p.stars})">
+            <div class="star-pack-top">
+              <svg class="star-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>${p.stars.toLocaleString()} Stars</span>
+            </div>
+            <div class="star-ton-price">${payCurrStr}</div>
+            <div class="star-fiat-price">≈ ${gramCost.toFixed(2)} GRAM · ${p.usdt.toFixed(2)} USDT</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function selectStarPack(starsCount) {
+      haptic("light");
+      state.selectedStarPack = starsCount;
+      renderStarsGrid();
+    }
+
+    async function buyStars() {
+      const rcp = document.getElementById("stars-recipient").value.trim();
+      if (!rcp) {
+        return showNoticeModal("Укажите получателя", "Введите @username аккаунта, на который необходимо отправить Telegram Stars.", "warning");
+      }
+
+      const pack = STAR_PACKS.find(x => x.stars === state.selectedStarPack);
+      if (!pack) return;
+
+      const payCurr = state.starsCurrency || "GRAM";
+      const costUsdt = pack.usdt;
+      const neededInCurr = +(costUsdt * (state.rates[payCurr] || 1)).toFixed(4);
+      const gramAmount = +(costUsdt / state.gramPriceUsdt).toFixed(4);
+
+      if (getWalletBalance(payCurr) < neededInCurr) {
+        return showInsufficientFundsModal(neededInCurr, payCurr);
+      }
+
+      const data = await apiCall("/api/stars/buy", "POST", {
+        user_id: state.user.user_id,
+        recipient: rcp,
+        stars: pack.stars,
+        gram_amount: gramAmount,
+        cost_usd: costUsdt,
+        paid_currency: payCurr
+      });
+
+      if (data) {
+        if (!data.ok) {
+          if (data.error === "insufficient_funds") return showInsufficientFundsModal(neededInCurr, payCurr);
+          return showNoticeModal("Ошибка оплаты", data.error, "error");
+        }
+        state.user = data.user;
+      } else {
+        addWalletBalance(payCurr, -neededInCurr);
+        state.user.deals_count += 1;
+        state.user.total_volume_usd += costUsdt;
+        syncWithBotDb({ a: "stars", rcp, st: pack.stars, usd: costUsdt.toFixed(2), pc: payCurr });
+      }
+
+      saveLocal();
+      renderAll();
+      showNoticeModal("Заказ выполнен", `Пакет ${pack.stars} Telegram Stars для ${rcp} успешно оплачен со счета ${payCurr}!`, "success");
+    }
+
+    async function createWithdrawalRequest() {
+      const amountVal = parseFloat(document.getElementById("withdraw-amount").value);
+      const reqs = document.getElementById("withdraw-requisites").value.trim();
+      const curr = state.withdrawCurrency;
+
+      if (!amountVal || amountVal <= 0 || !reqs) {
+        return showNoticeModal("Проверьте поля", "Укажите корректную сумму вывода и реквизиты получателя.", "warning");
+      }
+
+      if (getWalletBalance(curr) < amountVal) {
+        return showInsufficientFundsModal(amountVal, curr);
+      }
+
+      const amountUsd = toUsd(amountVal, curr);
+      const data = await apiCall("/api/withdraw/create", "POST", {
+        user_id: state.user.user_id,
+        amount_curr: amountVal,
+        currency: curr,
+        amount_usd: amountUsd,
+        requisites: reqs
+      });
+
+      if (data) {
+        if (!data.ok) {
+          if (data.error === "insufficient_funds") return showInsufficientFundsModal(amountVal, curr);
+          return showNoticeModal("Ошибка вывода", data.error, "error");
+        }
+        state.user = data.user;
+        state.withdrawals = data.withdrawals;
+      } else {
+        const wid = state.withdrawals.length ? Math.max(...state.withdrawals.map(w => w.withdraw_id)) + 1 : 1;
+        addWalletBalance(curr, -amountVal);
+        state.withdrawals.unshift({
+          withdraw_id: wid,
+          amount_curr: amountVal,
+          currency: curr,
+          requisites: reqs,
+          status: "pending"
+        });
+        syncWithBotDb({ a: "wd", ac: amountVal, c: curr, usd: amountUsd.toFixed(2), rq: reqs });
+      }
+
+      document.getElementById("withdraw-amount").value = "";
+      document.getElementById("withdraw-requisites").value = "";
+      saveLocal();
+      renderAll();
+      showNoticeModal("Заявка создана", `Заявка на вывод ${amountVal.toFixed(2)} ${curr} отправлена в финансовый отдел FunPay.`, "success");
+    }
+
+    function renderWithdrawals() {
+      const box = document.getElementById("withdrawals-list");
+      if (!box) return;
+      if (!state.withdrawals.length) {
+        box.innerHTML = `<div style="font-size:12px; color:var(--fp-muted); text-align:center; padding:12px;">Заявок на вывод пока нет.</div>`;
+        return;
+      }
+      const stMap = { pending: "В обработке", approved: "Выплачено", rejected: "Отклонено" };
+      box.innerHTML = state.withdrawals.map(w => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border); margin-bottom:8px;">
+          <div>
+            <div style="font-weight:700; font-size:13px; font-family:'JetBrains Mono',monospace;">#${w.withdraw_id} · ${Number(w.amount_curr).toFixed(2)} ${w.currency}</div>
+            <div style="font-size:11px; color:var(--fp-muted);">${w.requisites}</div>
+          </div>
+          <span class="status-pill ${w.status}">${stMap[w.status] || w.status}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderDeals() {
+      const container = document.getElementById("deals-list");
+      if (!state.deals.length) {
+        container.innerHTML = `<div class="fp-card" style="text-align:center; color:var(--fp-muted); padding:30px 18px;">Активных сделок пока нет. Создайте сделку или обмен NFT в меню слева.</div>`;
+        return;
+      }
+
+      const stMap = {
+        pending: "Ожидает оплаты",
+        funded: "Проверка у @ssupppoortt",
+        completed: "Завершена",
+        cancelled: "Отменена"
+      };
+
+      container.innerHTML = state.deals.map(d => {
+        const isBuyer = Number(d.buyer_id) === Number(state.user.user_id);
+        const isSwap = d.deal_type === "swap";
+        const dealCurr = (d.deal_currency === "TON" ? "GRAM" : d.deal_currency) || "GRAM";
+        const dealAmtNum = d.deal_amount && d.deal_amount > 0
+          ? Number(d.deal_amount)
+          : +(d.price_usd * (state.rates[dealCurr] || 1)).toFixed(2);
+        const dealPrimaryAmount = `${dealAmtNum.toFixed(2)} ${dealCurr}`;
+        const otherEquivs = formatOtherEquivalents(d.price_usd, dealCurr);
+
+        const partnerId = isBuyer ? d.seller_id : d.buyer_id;
+        const partnerUname = isBuyer ? (d.seller_username || "") : (d.buyer_username || "");
+        const partnerDeals = isBuyer ? (d.seller_deals || 0) : (d.buyer_deals || 0);
+        const partnerVol = isBuyer ? (d.seller_vol || 0) : (d.buyer_vol || 0);
+        const partnerVer = isBuyer ? (d.seller_verified || 0) : (d.buyer_verified || 0);
+        const safePartnerUname = partnerUname.replace(/'/g, "");
+
+        let actions = `
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+            <button class="btn-fp btn-fp-secondary" onclick="openPartnerProfileModal('${partnerId}', '${safePartnerUname}', ${partnerDeals}, ${partnerVol}, ${partnerVer})">Профиль участника</button>
+            <button class="btn-fp btn-fp-secondary" onclick="openChat(${d.deal_id})">Чат заказа</button>
+          </div>
+        `;
+
+        if (d.status === "pending") {
+          if (isBuyer && d.price_usd > 0) {
+            actions = `<button class="btn-fp" onclick="dealAction(${d.deal_id}, 'pay')">Оплатить со счета ${dealCurr} (${dealPrimaryAmount})</button>` + actions;
+          }
+          actions += `<button class="btn-fp btn-fp-danger" style="margin-top:8px;" onclick="dealAction(${d.deal_id}, 'cancel')">Отменить заказ</button>`;
+        } else if (d.status === "funded") {
+          if (isBuyer) {
+            actions = `<button class="btn-fp" onclick="dealAction(${d.deal_id}, 'complete')">Подтвердить выполнение заказа</button>` + actions;
+          }
+        }
+
+        const sellerDisplay = d.seller_username ? `@${d.seller_username}` : `ID ${d.seller_id}`;
+        const buyerDisplay = d.buyer_username ? `@${d.buyer_username}` : `ID ${d.buyer_id}`;
+
+        const swapBlock = isSwap ? `
+          <div style="padding:8px 10px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border); margin-bottom:8px; font-size:12px;">
+            <div><b>Обмен на:</b> ${d.swap_nft_name || "NFT"}</div>
+            <div style="color:var(--fp-muted); font-size:11px;">${d.swap_nft_link || "—"}</div>
+          </div>
+        ` : "";
+
+        const priceSection = d.price_usd > 0 ? `
+          <div style="margin-bottom:12px; padding:10px 12px; border-radius:6px; background:var(--fp-subtle); border:1px solid var(--fp-border);">
+            <div style="font-size:18px; font-weight:800; font-family:'JetBrains Mono', monospace; color:var(--fp-blue);">${dealPrimaryAmount}</div>
+            <div style="font-size:11px; color:var(--fp-muted); font-family:'JetBrains Mono', monospace; margin-top:2px;">≈ ${otherEquivs}</div>
+          </div>
+        ` : `<div style="font-size:15px; font-weight:700; margin-bottom:12px;">Без доплаты (Бартер NFT)</div>`;
+
+        return `
+          <div class="fp-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-weight:700; font-size:14.5px;">Заказ #${d.deal_id} · ${d.nft_name}</span>
+              <span class="status-pill ${d.status}">${stMap[d.status] || d.status}</span>
+            </div>
+            <div style="font-size:12px; color:var(--fp-muted); margin-bottom:8px; word-break:break-all;">${d.nft_link || "—"}</div>
+            ${swapBlock}
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;">
+              <span class="partner-chip" onclick="openPartnerProfileModal('${d.seller_id}', '${(d.seller_username||'').replace(/'/g,'')}', ${d.seller_deals||0}, ${d.seller_vol||0}, ${d.seller_verified||0})">
+                Продавец: ${sellerDisplay} ${d.seller_verified ? VERIFIED_SVG : ''}
+              </span>
+              <span class="partner-chip" onclick="openPartnerProfileModal('${d.buyer_id}', '${(d.buyer_username||'').replace(/'/g,'')}', ${d.buyer_deals||0}, ${d.buyer_vol||0}, ${d.buyer_verified||0})">
+                Покупатель: ${buyerDisplay} ${d.buyer_verified ? VERIFIED_SVG : ''}
+              </span>
+            </div>
+            ${priceSection}
+            ${actions}
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function changeCurrency(curr) {
+      haptic("light");
+      state.user.currency = curr;
+      saveLocal();
+      renderAll();
+      await apiCall("/api/currency", "POST", { user_id: state.user.user_id, currency: curr });
+    }
+
+    function setRole(role) {
+      haptic("light");
+      state.role = role;
+      document.getElementById("role-seller").classList.toggle("active", role === "seller");
+      document.getElementById("role-buyer").classList.toggle("active", role === "buyer");
+    }
+
+    async function createDeal() {
+      const partner = document.getElementById("deal-partner").value.trim();
+      const nft_name = document.getElementById("deal-nft-name").value.trim();
+      const nft_link = document.getElementById("deal-nft-link").value.trim();
+      const priceVal = parseFloat(document.getElementById("deal-price").value);
+      const deal_currency = state.dealCurrency;
+
+      if (!partner || !nft_name || !priceVal || priceVal <= 0) {
+        return showNoticeModal("Заполните данные", "Укажите @username или ID второго участника, название NFT и корректную сумму сделки.", "warning");
+      }
+
+      const price_usd = toUsd(priceVal, deal_currency);
+      const data = await apiCall("/api/deals/create", "POST", {
+        creator_id: state.user.user_id,
+        role: state.role,
+        deal_type: "sale",
+        partner,
+        nft_name,
+        nft_link,
+        price_usd,
+        deal_currency,
+        deal_amount: priceVal
+      });
+
+      if (data) {
+        if (!data.ok) return showNoticeModal("Ошибка создания", data.error, "error");
+        state.deals = data.deals;
+      } else {
+        const newId = state.deals.length ? Math.max(...state.deals.map(d => d.deal_id)) + 1 : 101;
+        state.deals.unshift({
+          deal_id: newId,
+          deal_type: "sale",
+          seller_id: state.role === "seller" ? state.user.user_id : partner,
+          seller_username: state.role === "seller" ? state.user.username : partner.replace(/^@/, ""),
+          seller_deals: state.role === "seller" ? state.user.deals_count : 0,
+          seller_vol: state.role === "seller" ? state.user.total_volume_usd : 0,
+          seller_verified: state.role === "seller" ? state.user.is_verified : 0,
+          buyer_id: state.role === "buyer" ? state.user.user_id : partner,
+          buyer_username: state.role === "buyer" ? state.user.username : partner.replace(/^@/, ""),
+          buyer_deals: state.role === "buyer" ? state.user.deals_count : 0,
+          buyer_vol: state.role === "buyer" ? state.user.total_volume_usd : 0,
+          buyer_verified: state.role === "buyer" ? state.user.is_verified : 0,
+          nft_name,
+          nft_link,
+          price_usd,
+          deal_currency,
+          deal_amount: priceVal,
+          status: "pending"
+        });
+        syncWithBotDb({
+          a: "new", r: state.role, p: partner, n: nft_name, l: nft_link,
+          pr: price_usd.toFixed(2), dc: deal_currency, da: priceVal
+        });
+      }
+
+      saveLocal();
+      renderAll();
+      switchTab("deals");
+    }
+
+    async function createSwapDeal() {
+      const partner = document.getElementById("swap-partner").value.trim();
+      const nft_name = document.getElementById("swap-my-nft").value.trim();
+      const nft_link = document.getElementById("swap-my-link").value.trim();
+      const swap_nft_name = document.getElementById("swap-their-nft").value.trim();
+      const swap_nft_link = document.getElementById("swap-their-link").value.trim();
+      const surchargeVal = parseFloat(document.getElementById("swap-surcharge").value) || 0;
+      const deal_currency = state.swapCurrency;
+
+      if (!partner || !nft_name || !swap_nft_name) {
+        return showNoticeModal("Заполните поля обмена", "Укажите участника обмена, название вашего NFT и NFT партнера.", "warning");
+      }
+
+      const price_usd = surchargeVal > 0 ? toUsd(surchargeVal, deal_currency) : 0;
+      const data = await apiCall("/api/deals/create", "POST", {
+        creator_id: state.user.user_id,
+        role: "seller",
+        deal_type: "swap",
+        partner,
+        nft_name,
+        nft_link,
+        swap_nft_name,
+        swap_nft_link,
+        price_usd,
+        deal_currency,
+        deal_amount: surchargeVal
+      });
+
+      if (data) {
+        if (!data.ok) return showNoticeModal("Ошибка создания обмена", data.error, "error");
+        state.deals = data.deals;
+      } else {
+        const newId = state.deals.length ? Math.max(...state.deals.map(d => d.deal_id)) + 1 : 101;
+        state.deals.unshift({
+          deal_id: newId,
+          deal_type: "swap",
+          seller_id: state.user.user_id,
+          seller_username: state.user.username,
+          seller_deals: state.user.deals_count,
+          seller_vol: state.user.total_volume_usd,
+          seller_verified: state.user.is_verified,
+          buyer_id: partner,
+          buyer_username: partner.replace(/^@/, ""),
+          buyer_deals: 0,
+          buyer_vol: 0,
+          buyer_verified: 0,
+          nft_name,
+          nft_link,
+          swap_nft_name,
+          swap_nft_link,
+          price_usd,
+          deal_currency,
+          deal_amount: surchargeVal,
+          status: price_usd > 0 ? "pending" : "funded"
+        });
+        syncWithBotDb({
+          a: "swap", r: "seller", p: partner, n: nft_name, l: nft_link,
+          sn: swap_nft_name, sl: swap_nft_link, pr: price_usd.toFixed(2),
+          dc: deal_currency, da: surchargeVal
+        });
+      }
+
+      saveLocal();
+      renderAll();
+      switchTab("deals");
+    }
+
+    async function dealAction(deal_id, action) {
+      const deal = state.deals.find(d => d.deal_id === deal_id);
+      if (!deal) return;
+
+      const dealCurr = (deal.deal_currency === "TON" ? "GRAM" : deal.deal_currency) || "GRAM";
+      const reqAmt = deal.deal_amount && deal.deal_amount > 0
+        ? Number(deal.deal_amount)
+        : +(deal.price_usd * (state.rates[dealCurr] || 1)).toFixed(4);
+
+      if (action === "pay" && getWalletBalance(dealCurr) < reqAmt) {
+        return showInsufficientFundsModal(reqAmt, dealCurr);
+      }
+
+      const data = await apiCall("/api/deals/action", "POST", { user_id: state.user.user_id, deal_id, action });
+      if (data) {
+        if (!data.ok) {
+          if (data.error === "insufficient_funds") return showInsufficientFundsModal(reqAmt, dealCurr);
+          return showNoticeModal("Ошибка операции", data.error, "error");
+        }
+        state.user = data.user;
+        state.deals = data.deals;
+      } else {
+        if (action === "pay") {
+          addWalletBalance(dealCurr, -reqAmt);
+          deal.status = "funded";
+          syncWithBotDb({ a: "pay", id: deal_id });
+        } else if (action === "complete") {
+          deal.status = "completed";
+          state.user.deals_count += 1;
+          state.user.total_volume_usd += deal.price_usd;
+          syncWithBotDb({ a: "done", id: deal_id });
+        } else if (action === "cancel") {
+          deal.status = "cancelled";
+        }
+      }
+      saveLocal();
+      renderAll();
+    }
+
+    async function openChat(dealId) {
+      state.activeChatDealId = dealId;
+      switchTab("chat");
+      await fetchChat();
+    }
+
+    async function fetchChat() {
+      if (!state.activeChatDealId) return;
+      const deal = state.deals.find(d => d.deal_id === state.activeChatDealId);
+      if (deal) {
+        document.getElementById("chat-title").innerText = `Заказ #${deal.deal_id} · ${deal.nft_name}`;
+      }
+
+      const data = await apiCall(`/api/chat/${state.activeChatDealId}`, "GET");
+      const msgs = (data && data.ok) ? data.messages : (state.chats[state.activeChatDealId] || []);
+
+      const box = document.getElementById("chat-messages");
+      box.innerHTML = msgs.map(m => {
+        const isMe = Number(m.sender_id) === Number(state.user.user_id);
+        return `
+          <div class="bubble ${isMe ? 'me' : 'other'}">
+            <div class="bubble-meta">${m.sender_name}</div>
+            <div>${m.message_text}</div>
+          </div>
+        `;
+      }).join("");
+      box.scrollTop = box.scrollHeight;
+    }
+
+    async function sendChatMessage() {
+      if (!state.activeChatDealId) {
+        return showNoticeModal("Выберите заказ", "Сначала откройте нужный заказ во вкладке «Сделки» и нажмите «Чат заказа».", "warning");
+      }
+      const input = document.getElementById("chat-input");
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      haptic("light");
+
+      const sender_name = state.user.username ? `@${state.user.username.replace(/^@/, '')}` : `ID ${state.user.user_id}`;
+      const data = await apiCall("/api/chat/send", "POST", {
+        deal_id: state.activeChatDealId,
+        sender_id: state.user.user_id,
+        sender_name,
+        text
+      });
+
+      if (!data) {
+        if (!state.chats[state.activeChatDealId]) state.chats[state.activeChatDealId] = [];
+        state.chats[state.activeChatDealId].push({ sender_id: state.user.user_id, sender_name, message_text: text });
+        saveLocal();
+      }
+      await fetchChat();
+    }
+
+    function switchTab(tab) {
+      haptic("light");
+      ["profile", "deals", "create", "swap", "stars", "withdraw", "chat"].forEach(t => {
+        document.getElementById(`tab-${t}`)?.classList.toggle("active", t === tab);
+        document.getElementById(`nav-${t}`)?.classList.toggle("active", t === tab);
+      });
+    }
+
+    setInterval(fetchLiveRates, 60000);
+    loadProfile();
+  </script>
+</body>
+</html>
